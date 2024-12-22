@@ -36,7 +36,9 @@ void(*ijlRead_Proc) = ijlRead_Proc;
 void(*ijlWrite_Proc) = ijlWrite;
 
 void ijl15::CreateHook() {
-	if (Client::ijl15hook) {
+	struct stat sb;
+	if (stat("./2ijl15.dll", &sb) == 0) {
+		std::cout << "LoadLibrary 2ijl15.dll" << std::endl;
 		HMODULE hModule = LoadLibraryA("2ijl15.dll");
 		if (hModule == nullptr) {
 			MessageBox(NULL, L"Failed to find 2ijl15.dll file", L"Missing file", 0);

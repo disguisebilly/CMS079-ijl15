@@ -135,7 +135,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::speedMovementCap = reader.GetInteger("optional", "speedMovementCap", 140);
 			Client::jumpCap = reader.GetInteger("optional", "jumpCap", 123);
 			Client::debug = reader.GetBoolean("debug", "debug", false);
-			Client::ijl15hook = reader.GetBoolean("debug", "ijl15hook", false);
 			Client::noPassword = reader.GetBoolean("debug", "noPassword", false);
 			ownLoginFrame = reader.GetBoolean("optional", "ownLoginFrame", false);
 			ownCashShopFrame = reader.GetBoolean("optional", "ownCashShopFrame", false);

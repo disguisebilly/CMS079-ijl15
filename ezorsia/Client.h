@@ -44,7 +44,6 @@ public:
 	static bool ServerIP_Address_hook;
 	static bool canInjected;
 	static bool injected;
-	static bool ijl15hook;
 	static int serverIP_Port;
 	static bool talkRepeat;
 	static int talkTime;

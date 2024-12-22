@@ -30,7 +30,6 @@ bool Client::climbSpeedAuto = false;
 bool Client::canInjected = false;
 bool Client::injected = false;
 bool Client::ServerIP_Address_hook = true;
-bool Client::ijl15hook = false;
 float Client::climbSpeed = 1.0;
 std::string Client::ServerIP_AddressFromINI = "127.0.0.1";
 int Client::serverIP_Port = 8484;
