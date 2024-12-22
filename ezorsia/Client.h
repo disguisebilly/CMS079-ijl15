@@ -23,6 +23,8 @@ public:
 	static bool WindowedMode;
 	static bool RemoveLogos;
 	static bool RemoveLoginNxIdDialog;
+	static int ResManFlushCached;
+	static int SetProcessWorkingSetSize;
 	static int setDamageCap;
 	static int setMAtkCap;
 	static int setAccCap;

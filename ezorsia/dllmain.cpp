@@ -53,7 +53,7 @@ void EmptyMemory()
 	{
 		Sleep(1000);
 		int memory = GetCurrentMemoryUsage();
-		if (memory >= 512) {
+		if (memory >= Client::ResManFlushCached) {
 			if (Resman::getIWzResMan())
 			{
 				Resman::getIWzResMan()->raw_FlushCachedObjects(0);
@@ -63,7 +63,7 @@ void EmptyMemory()
 			//autoFlushCacheTime(10000);
 			std::cout << "flushcache:" << memory << std::endl;
 		}
-		if (memory >= 1024)
+		if (memory >= Client::SetProcessWorkingSetSize)
 		{
 			std::cout << "EmptyMemory:" << memory << std::endl;
 			SetProcessWorkingSetSize(GetCurrentProcess(), -1, -1);
@@ -121,6 +121,8 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::RemoveLogos = reader.GetBoolean("general", "RemoveLogos", true);
 			Client::RemoveLoginNxIdDialog = reader.GetBoolean("general", "RemoveLoginNxIdDialog", true);
 			Memory::UseVirtuProtect = reader.GetBoolean("general", "UseVirtuProtect", true);
+			Client::ResManFlushCached = reader.GetInteger("general", "ResManFlushCached", 512);
+			Client::SetProcessWorkingSetSize = reader.GetInteger("general", "SetProcessWorkingSetSize", 1024);
 			Client::setDamageCap = reader.GetReal("optional", "setDamageCap", 199999);
 			Client::setMAtkCap = reader.GetReal("optional", "setMAtkCap", 1999);
 			Client::setAccCap = reader.GetReal("optional", "setAccCap", 999);
