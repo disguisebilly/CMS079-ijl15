@@ -758,7 +758,8 @@ BOOL Resman::Hook_InitializeResMan() {
 		//bstr_constructor(&sPath, pData, sStartPath);
 		//auto iGameFS = IWzFileSystem__Init(pFileSystem, pData, sPath);
 
-		pFileSystem->raw_Init(CComBSTR(sStartPath));
+		//pFileSystem->raw_Init(CComBSTR(sStartPath));
+		pFileSystem->raw_Init(Ztl_bstr_t(sStartPath).m_Data->m_wstr);
 
 		boolean isWz = stat("./Base.wz", &sb) == 0;
 

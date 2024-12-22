@@ -337,8 +337,9 @@
     <ClInclude Include="MapleClientCollectionTypes\ZRefCountedDummy.h" />
     <ClInclude Include="MapleClientCollectionTypes\ZSocketBase.h" />
     <ClInclude Include="MapleClientCollectionTypes\ZSocketBuffer.h" />
+    <ClInclude Include="MapleClientCollectionTypes\ZtlBstT.h" />
     <ClInclude Include="MapleClientCollectionTypes\ZtlSecure.h" />
-    <ClInclude Include="MapleClientCollectionTypes\ZtlVariantT .h" />
+    <ClInclude Include="MapleClientCollectionTypes\ZtlVariantT.h" />
     <ClInclude Include="MapleClientCollectionTypes\ZXString.h" />
     <ClInclude Include="detours.h" />
     <ClInclude Include="detver.h" />

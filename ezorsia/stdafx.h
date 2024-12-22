@@ -64,7 +64,8 @@
 #include "ZInetAddr.h"
 #include "ZSocketBuffer.h"
 #include "ZSocketBase.h"
-#include "ZtlVariantT .h"
+#include "ZtlVariantT.h"
+#include "ZtlBstT.h"
 
 
 #include "CUser.h"

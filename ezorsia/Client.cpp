@@ -1031,7 +1031,7 @@ void Client::Skill() {
 		Memory::WriteByte(0x0097642E, 0xEB);
 	}
 	//Ò»³öË«»÷
-	if (Client::s4221001) {
+	if (Client::s4221007) {
 		byte s4221001[] = { 0xB8,0xFF,0xFF ,0xFF ,0xFF };
 		Memory::WriteByteArray(0x0097A28F, s4221001, sizeof(s4221001));
 	}
