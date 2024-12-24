@@ -155,9 +155,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::showItemID = reader.GetBoolean("ui", "showItemID", false);
 			Client::showWeaponSpeed = reader.GetBoolean("ui", "showWeaponSpeed", true);
 			Client::minimizeMaptitleColor = reader.GetBoolean("ui", "minimizeMaptitleColor", false);
-			Client::StatBackgrndWidth = reader.GetInteger("ui", "StatBackgrndWidth", 176);
-			Client::StatDetailBackgrndWidth = reader.GetInteger("ui", "StatDetailBackgrndWidth", 177);
-			Client::StatDetailBackgrndWidthRect = reader.GetInteger("ui", "StatDetailBackgrndWidthRect", 200);
+			Client::StatDetailBackgrndWidthEx = reader.GetInteger("ui", "StatDetailBackgrndWidthEx", 23);
 			Client::DamageSkin = reader.GetInteger("ui", "DamageSkin", 0);
 			Client::RemoteDamageSkin = reader.GetBoolean("ui", "RemoteDamageSkin", false);
 			Client::tamingMob198Effect = reader.GetBoolean("ui", "tamingMob198", false);

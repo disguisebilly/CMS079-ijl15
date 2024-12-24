@@ -669,39 +669,42 @@ VOID loadQuickSlotFile(boolean isWz) {
 VOID initResolution() {
 	unsigned int slotWidth;
 	unsigned int count;
-	if (quickSlot) {
+	IWzProperty* slot = quickSlot;
+	if (slot) {
 		IWzProperty* key;
 		switch (Client::longSlotsKey) {
 		case 2:
-			key = quickSlot->get_item<IWzProperty*>(L"key2");
+			key = slot->get_item<IWzProperty*>(L"key2");
 			break;
 		case 3:
-			key = quickSlot->get_item<IWzProperty*>(L"key3");
+			key = slot->get_item<IWzProperty*>(L"key3");
 			break;
 		default:
-			key = quickSlot->get_item<IWzProperty*>(L"key");
+			key = slot->get_item<IWzProperty*>(L"key");
 			break;
 		}
 		key->get_count(&count);
-		if (count < 26) {
-			Client::longSlots = false;
-		}
-		Client::LongQuickSlot();
-		quickSlot->get_item<IWzCanvas*>(L"CNQuickSlot")->Getwidth(&slotWidth);
-		Client::UpdateSlotPosition(slotWidth);
 	}
 	else {
-		auto base = getIWzPropertyForPath(L"UI/StatusBar.img/key");
-		base->get_count(&count);
-		if (count < 26) {
-			Client::longSlots = false;
-		}
-		Client::LongQuickSlot();
-		base = getIWzPropertyForPath(L"UI/StatusBar.img/base");
-		base->get_item<IWzCanvas*>(L"CNQuickSlot")->Getwidth(&slotWidth);
-		Client::UpdateSlotPosition(slotWidth);
+		slot = getIWzPropertyForPath(L"UI/StatusBar.img/key");
+		slot->get_count(&count);
+		slot = getIWzPropertyForPath(L"UI/StatusBar.img/base");
 	}
-
+	slot->get_item<IWzCanvas*>(L"CNQuickSlot")->Getwidth(&slotWidth);
+	if (count < 26) {
+		Client::longSlots = false;
+	}
+	Client::LongQuickSlot();
+	Client::UpdateSlotPosition(slotWidth);
+	//Stat
+	auto stat = getIWzPropertyForPath(L"UI/UIWindow.img/Stat");
+	unsigned int backgrndWidth;
+	unsigned int backgrnd2Width;
+	auto backgrnd = stat->get_item<IWzCanvas*>(L"backgrnd");
+	backgrnd->Getwidth(&backgrndWidth);
+	auto backgrnd2 = stat->get_item<IWzCanvas*>(L"backgrnd2");
+	backgrnd2->Getwidth(&backgrnd2Width);
+	Client::updateStatResolution(backgrndWidth, backgrnd2Width);
 }
 
 static inline IWzNameSpacePtr& get_sub(int nIdx) {

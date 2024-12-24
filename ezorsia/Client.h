@@ -12,6 +12,7 @@ public:
 	static void CRCBypass();
 	static void NoPassword();
 	static void MoreHook();
+	static void updateStatResolution(unsigned int backgrndWidth, unsigned int  backgrnd2Width);
 	static void Skill();
 	static void UpdateSlotPosition(int width);
 	static void UpdateBarWidth(int width);
@@ -55,9 +56,7 @@ public:
 	static bool meleePunching;
 	static bool holdAttack;
 	static bool spLimit;
-	static int StatBackgrndWidth;
-	static int StatDetailBackgrndWidth;
-	static int StatDetailBackgrndWidthRect;
+	static int StatDetailBackgrndWidthEx;
 	static int DamageSkin;
 	static bool RemoteDamageSkin;
 	static bool tamingMobUnlock;

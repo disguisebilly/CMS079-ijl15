@@ -25,17 +25,18 @@
 
 ## 主要额外添加的特殊功能
 
-- 支持WZ与IMG模式，WZ模式下支持[Custom.wz](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/Custom.wz)放置游戏根目录下加载长键盘与伤害皮肤
-- 双击跳跃键使用二段跳
-- 屏蔽了聊天室按钮弹窗仅发数据包（可用作解卡）
-- 角色等级突破Short类型，角色经验突破为Long类型
-- 伤害皮肤
-- 长键盘(支持加载外置长键盘文件[Custom.wz](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/Custom.wz)或[UI/QuickSlot.img](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/QuickSlot.img)，支持多种键位配置)
-- 解除坐骑模型限制，可爬绳，可二段跳，快速移动
+- 支持WZ与IMG模式
+- 支持伤害皮肤(支持加载外置文件[Effect/DamageSkin.img](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/DamageSkin.img)或[Custom.wz](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/Custom.wz)
+- 支持长键盘(支持加载外置文件[UI/QuickSlot.img](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/QuickSlot.img)或[Custom.wz](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/Custom.wz)，支持多种键位配置)
 - 支持198开头的的TamingMob
 - 支持新版发型脸型
 - 支持ItemEff.img里头的特效(可用0xAA包头或ItemEffect激活)
 - 支持简单的内存防炸
+- 支持快捷二段跳（双击跳跃键）
+- 屏蔽了聊天室按钮弹窗仅发数据包（可用作解卡）
+- 角色等级突破Short类型，角色经验突破为Long类型
+- 角色面板宽度自适应（跟随背景图宽度）
+- 解除坐骑模型限制，可爬绳，可二段跳，快速移动
 - 修复原版SetEff.img特定条件下会导致的特效错乱
 
 

@@ -43,9 +43,7 @@ bool Client::minimizeMaptitleColor = false;
 bool Client::meleePunching = true;
 bool Client::holdAttack = false;
 bool Client::spLimit = true;
-int Client::StatBackgrndWidth = 176;
-int Client::StatDetailBackgrndWidth = 177;
-int Client::StatDetailBackgrndWidthRect = 200;
+int Client::StatDetailBackgrndWidthEx = 23;
 int Client::DamageSkin = 0;
 bool Client::RemoteDamageSkin = false;
 bool Client::tamingMobUnlock = false;
@@ -944,20 +942,6 @@ void Client::MoreHook() {
 	}
 	Memory::WriteInt(0x00490127 + 2, talkTime);
 
-	Memory::WriteInt(0x008CA0C2 + 1, Client::StatBackgrndWidth - 20); // 面板关闭按钮x  176-20
-	Memory::WriteInt(0x008CA226 + 1, Client::StatBackgrndWidth); // 面板宽度       176
-	Memory::WriteInt(0x008CA780 + 1, Client::StatDetailBackgrndWidthRect); // 详情面板宽度
-	Memory::WriteInt(0x008CD155 + 1, Client::StatBackgrndWidth - 23); // 加属性按钮x    176-23
-	Memory::WriteInt(0x008C7FCF + 1, Client::StatDetailBackgrndWidth - 23); // 详情面板关闭按钮x    177 - 23
-	Memory::WriteInt(0x008CC2F5 + 1, Client::StatBackgrndWidth); // 移动时详情面板x
-	// 偏移面板位置
-	Memory::WriteInt(0x008CADD1 + 1, Client::StatBackgrndWidth);
-	Memory::WriteInt(0x008CA519 + 1, Client::StatBackgrndWidth);
-	statDetailBtnX = Client::StatBackgrndWidth - 52; // 详情按钮 176-52
-	Memory::CodeCave(apDetailBtn, 0x008CA489, 7);
-	statAutoBtnX = Client::StatBackgrndWidth - 79;   //自动加点 176-79
-	Memory::CodeCave(apAutoBtn, 0x008CD3DC, 7);
-
 	// 装备面板
 	//Memory::WriteInt(0x00815A5E + 1, Client::StatBackgrndWidth); // 装备面板面板初始x
 	//Memory::WriteInt(0x00816786 + 1, Client::StatBackgrndWidth); // 装备面板切换x
@@ -1018,6 +1002,23 @@ void Client::MoreHook() {
 	}
 
 	Memory::WriteByte(0x00942A01, 0xEB);
+}
+
+void Client::updateStatResolution(unsigned int  backgrndWidth, unsigned int  backgrnd2Width)
+{
+	Memory::WriteInt(0x008CA0C2 + 1, backgrndWidth - 20); // 面板关闭按钮x  176-20
+	Memory::WriteInt(0x008CA226 + 1, backgrndWidth); // 面板宽度       176
+	Memory::WriteInt(0x008CA780 + 1, backgrnd2Width + Client::StatDetailBackgrndWidthEx); // 详情面板Rect宽度
+	Memory::WriteInt(0x008CD155 + 1, backgrndWidth - 23); // 加属性按钮x    176-23
+	Memory::WriteInt(0x008C7FCF + 1, backgrnd2Width - 23); // 详情面板关闭按钮x    177 - 23
+	Memory::WriteInt(0x008CC2F5 + 1, backgrndWidth); // 移动时详情面板x
+	// 偏移面板位置
+	Memory::WriteInt(0x008CADD1 + 1, backgrndWidth);
+	Memory::WriteInt(0x008CA519 + 1, backgrndWidth);
+	statDetailBtnX = backgrndWidth - 52; // 详情按钮 176-52
+	Memory::CodeCave(apDetailBtn, 0x008CA489, 7);
+	statAutoBtnX = backgrndWidth - 79;   //自动加点 176-79
+	Memory::CodeCave(apAutoBtn, 0x008CD3DC, 7);
 }
 
 void Client::Skill() {
