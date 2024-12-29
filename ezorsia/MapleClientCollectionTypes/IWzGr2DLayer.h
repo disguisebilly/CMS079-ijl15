@@ -1,10 +1,25 @@
 #pragma once
+#include "stdafx.h"
 #undef  INTERFACE
-#define INTERFACE   IWzVector2D
+#define INTERFACE   IWzGr2DLayer
 
-DECLARE_INTERFACE_IID_(IWzVector2D, IUnknown, "F28BD1ED-3DEB-4F92-9EEC-10EF5A1C3FB4")
-{
-	BEGIN_INTERFACE;
+enum LAYER_BLENDTYPE {
+    LB_NORMAL = 0x0,
+    LB_ADD = 0x1,
+    LB_INVERSE = 0x2,
+    LB_ISOLATED = 0x4,
+};
+
+enum GR2D_ANITYPE {
+    GA_STOP = 0x0,
+    GA_WAIT = 0x100,
+    GA_NORMAL = 0x0,
+    GA_FIRST = 0x10,
+    GA_REPEAT = 0x20,
+};
+
+DECLARE_INTERFACE_IID_(IWzGr2DLayer, IWzShape2D, "6dc8c7ce-8e81-4420-b4f6-4b60b7d5fcdf") {
+    BEGIN_INTERFACE;
 
     /*** IUnknown methods ***/
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void** ppv) PURE;
@@ -38,18 +53,18 @@ DECLARE_INTERFACE_IID_(IWzVector2D, IUnknown, "F28BD1ED-3DEB-4F92-9EEC-10EF5A1C3
     STDMETHOD(get_currentTime)(THIS_ int* pnTime) PURE;
     STDMETHOD(put_currentTime)(THIS_ int nTime) PURE;
     STDMETHOD(get_origin)(THIS_ tagVARIANT * ppOrigin) PURE;
-    STDMETHOD(put_origin)(THIS_ tagVARIANT pOrigin) PURE;
+    STDMETHOD(put_origin)(THIS_ tagVARIANT * pOrigin) PURE;
     STDMETHOD(get_rx)(THIS_ int* pnX) PURE;
     STDMETHOD(put_rx)(THIS_ int nX) PURE;
     STDMETHOD(get_ry)(THIS_ int* pnY) PURE;
     STDMETHOD(put_ry)(THIS_ int nY) PURE;
     STDMETHOD(get_a)(THIS_ long double* pa) PURE;
     STDMETHOD(get_ra)(THIS_ long double* pra) PURE;
-    STDMETHOD(put_ra)(THIS_ long double ra) PURE;
+    STDMETHOD(put_rx)(THIS_ long double ra) PURE;
     STDMETHOD(get_flipX)(THIS_ int* pnFlipX) PURE;
     STDMETHOD(put_flipX)(THIS_ int nFlipX) PURE;
     STDMETHOD(raw__GetSnapshot)(THIS_ int* px, int* py, int* prx, int* pry, int* pxOrg, int* pyOrg, long double* pa, long double* paOrg, tagVARIANT vTime) PURE;
-    STDMETHOD(raw_RelMove)(THIS_ int nX, int nY, _variant_t nTime, _variant_t nType) PURE;
+    STDMETHOD(raw_RelMove)(THIS_ int nX, int nY, tagVARIANT nTime, tagVARIANT nType) PURE;
     STDMETHOD(raw_RelOffset)(THIS_ int nDX, int nDY, tagVARIANT nTime, tagVARIANT nType) PURE;
     STDMETHOD(raw_Ratio)(THIS_ IWzVector2D * pOrigin, int nOriginWidth, int nOriginHeight, int nScaleWidth, int nScaleHeight) PURE;
     STDMETHOD(raw_WrapClip)(THIS_ tagVARIANT pOrigin, int nWrapLeft, int nWrapTop, unsigned int uWrapWidth, unsigned int uWrapHeight, tagVARIANT bClip) PURE;
@@ -58,22 +73,36 @@ DECLARE_INTERFACE_IID_(IWzVector2D, IUnknown, "F28BD1ED-3DEB-4F92-9EEC-10EF5A1C3
     STDMETHOD(put_looseLevel)(THIS_ unsigned int uLevel) PURE;
     STDMETHOD(raw_Fly)(THIS_ tagVARIANT * aVar, int nArgs) PURE;
 
-	int get_x()//
-	{
-		int x;
-		this->get_x(&x);
+    /*** IWzGr2DLayer methods ***/
+    STDMETHOD(get_z)(THIS_ int* pnZ) PURE;
+    STDMETHOD(put_z)(THIS_ int nZ) PURE;
+    STDMETHOD(get_width)(THIS_ int* pnWidth) PURE;
+    STDMETHOD(put_width)(THIS_ int nWidth) PURE;
+    STDMETHOD(get_height)(THIS_ int* pnHeight) PURE;
+    STDMETHOD(put_height)(THIS_ int nHeight) PURE;
+    STDMETHOD(get_lt)(THIS_ IWzVector2D**) PURE;
+    STDMETHOD(get_rb)(THIS_ IWzVector2D**) PURE;
+    STDMETHOD(raw_InterLockedOffset)(THIS_ int, int, int, int) PURE;
+    STDMETHOD(get_flip)(THIS_ int* pnFlip) PURE;
+    STDMETHOD(put_flip)(THIS_ int nFlip) PURE;
+    STDMETHOD(get_color)(THIS_ unsigned int* puColor) PURE;
+    STDMETHOD(put_color)(THIS_ unsigned int uColor) PURE;
+    STDMETHOD(get_alpha)(THIS_ IWzVector2D**) PURE;
+    STDMETHOD(get_redTone)(THIS_ IWzVector2D**) PURE;
+    STDMETHOD(get_greenBlueTone)(THIS_ IWzVector2D**) PURE;
+    STDMETHOD(get_blend)(THIS_ LAYER_BLENDTYPE*) PURE;
+    STDMETHOD(put_blend)(THIS_ LAYER_BLENDTYPE) PURE;
+    STDMETHOD(get_overlay)(THIS_ tagVARIANT*) PURE;
+    STDMETHOD(put_overlay)(THIS_ tagVARIANT) PURE;
+    STDMETHOD(get_canvas)(THIS_ tagVARIANT, IWzCanvas**) PURE;
+    STDMETHOD(raw_InsertCanvas)(THIS_ IWzCanvas * pCanvas, tagVARIANT vDelay, tagVARIANT vAlpha0, tagVARIANT vAlpha1, tagVARIANT vZoom0, tagVARIANT vZoom1, tagVARIANT*) PURE;
+    STDMETHOD(raw_RemoveCanvas)(THIS_ tagVARIANT vIndex, IWzCanvas**) PURE;
+    STDMETHOD(raw_ShiftCanvas)(THIS_ tagVARIANT vValue) PURE;
+    STDMETHOD(raw_Animate)(THIS_ GR2D_ANITYPE nType, tagVARIANT vDelayRate, tagVARIANT vRepeat) PURE;
+    STDMETHOD(get_animationState)(THIS_ int*) PURE;
+    STDMETHOD(get_visible)(THIS_ int* pnVisible) PURE;
+    STDMETHOD(put_visible)(THIS_ int nVisible) PURE;
 
-		return x;
-	}
-
-	int get_y()
-	{
-		int y;
-		this->get_y(&y);
-
-		return y;
-	}
-
-	END_INTERFACE;
+    END_INTERFACE;
 };
-_COM_SMARTPTR_TYPEDEF(IWzVector2D, __uuidof(IWzVector2D));
+_COM_SMARTPTR_TYPEDEF(IWzGr2DLayer, __uuidof(IWzGr2DLayer));

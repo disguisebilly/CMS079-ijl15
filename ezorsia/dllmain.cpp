@@ -89,7 +89,7 @@ void Injected() {
 	CharacterEx::InitDamageSkinOverride(Client::DamageSkin > 0 || Client::RemoteDamageSkin);
 	CharacterEx::InitHypontizeFix(Client::s5221009);
 	Client::UpdateGameStartup();
-	Client::UpdateResolution();
+	Resolution::Init();
 	//Client::LongQuickSlot();
 	Client::FixMouseWheel();
 	Client::JumpCap();
@@ -119,6 +119,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::CustomLoginFrame = reader.GetBoolean("general", "CustomLoginFrame", true);
 			Client::WindowedMode = reader.GetBoolean("general", "WindowedMode", true);
 			Client::RemoveLogos = reader.GetBoolean("general", "RemoveLogos", true);
+			Client::SkipWorldSelect = reader.GetBoolean("general", "SkipWorldSelect", true);
 			Client::RemoveLoginNxIdDialog = reader.GetBoolean("general", "RemoveLoginNxIdDialog", true);
 			Memory::UseVirtuProtect = reader.GetBoolean("general", "UseVirtuProtect", true);
 			Client::ResManFlushCached = reader.GetInteger("general", "ResManFlushCached", 512);

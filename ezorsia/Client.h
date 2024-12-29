@@ -4,7 +4,6 @@ class Client
 public:
 	static void UpdateGameStartup();
 	static void EnableNewIGCipher();
-	static void UpdateResolution();
 	static void UpdateLogin();
 	static void FixMouseWheel();
 	static void LongQuickSlot();
@@ -12,10 +11,7 @@ public:
 	static void CRCBypass();
 	static void NoPassword();
 	static void MoreHook();
-	static void updateStatResolution(unsigned int backgrndWidth, unsigned int  backgrnd2Width);
 	static void Skill();
-	static void UpdateSlotPosition(int width);
-	static void UpdateBarWidth(int width);
 	static const int m_nIGCipherHash = 0XC65053F2;
 	static int m_nGameHeight;
 	static int m_nGameWidth;
@@ -23,6 +19,7 @@ public:
 	static bool CustomLoginFrame;
 	static bool WindowedMode;
 	static bool RemoveLogos;
+	static bool SkipWorldSelect;
 	static bool RemoveLoginNxIdDialog;
 	static int ResManFlushCached;
 	static int SetProcessWorkingSetSize;

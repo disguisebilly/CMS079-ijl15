@@ -306,6 +306,8 @@
     <ClInclude Include="MapleClientCollectionTypes\IWzCanvas.h" />
     <ClInclude Include="MapleClientCollectionTypes\IWzFileSystem.h" />
     <ClInclude Include="MapleClientCollectionTypes\IWzFont.h" />
+    <ClInclude Include="MapleClientCollectionTypes\IWzGr2D.h" />
+    <ClInclude Include="MapleClientCollectionTypes\IWzGr2DLayer.h" />
     <ClInclude Include="MapleClientCollectionTypes\IWzNameSpace.h" />
     <ClInclude Include="MapleClientCollectionTypes\IWzNameSpaceProperty.h" />
     <ClInclude Include="MapleClientCollectionTypes\IWzPackage.h" />
@@ -315,6 +317,7 @@
     <ClInclude Include="MapleClientCollectionTypes\IWzResMan.h" />
     <ClInclude Include="MapleClientCollectionTypes\IWzSeekableArchive.h" />
     <ClInclude Include="MapleClientCollectionTypes\IWzSerialize.h" />
+    <ClInclude Include="MapleClientCollectionTypes\IWzShape2D.h" />
     <ClInclude Include="MapleClientCollectionTypes\IWzUOL.h" />
     <ClInclude Include="MapleClientCollectionTypes\IWzVector2D.h" />
     <ClInclude Include="MapleClientCollectionTypes\IWzWritableNameSpace.h" />
@@ -368,6 +371,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-mt|Win32'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="codecaves.cpp" />
     <ClCompile Include="ijl15.cpp" />
     <ClCompile Include="MapleClientCollectionTypes\CAvatar.cpp" />
     <ClCompile Include="MapleClientCollectionTypes\CClientSocket.cpp" />
@@ -375,6 +379,10 @@
     <ClCompile Include="MapleClientCollectionTypes\COutPacket.cpp" />
     <ClCompile Include="MapleClientCollectionTypes\CUser.cpp" />
     <ClCompile Include="Resman.cpp" />
+    <ClCompile Include="Resolution.cpp" />
+    <ClInclude Include="Resolution.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClCompile Include="ZAllocEx.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Memory.cpp" />

@@ -13,7 +13,6 @@
 #include <robin_map.h>
 
 #include <iostream>
-#include "Client.h"
 #include "Memory.h"
 
 #include <atlstr.h>
@@ -37,6 +36,7 @@
 #include "IWzPackage.h"
 #include "IWzFileSystem.h"
 #include "IWzSerialize.h"
+#include "IWzShape2D.h"
 #include "IWzUOL.h"
 #include "IWzProperty.h"
 #include "IWzVector2D.h"
@@ -45,6 +45,8 @@
 #include "IWzRawCanvasAllocator.h"
 #include "IWzCanvas.h"
 #include "IWzResMan.h"
+#include "IWzGr2DLayer.h"
+#include "IWzGr2D.h"
 
 #include "ZXString.h"
 #include "ZAllocBase.h"
@@ -75,3 +77,8 @@
 
 #include "TSecType.h"
 #include "TSingleton.h"
+
+#include "codecaves.h"
+#include "AddyLocations.h"
+#include "Client.h"
+#include "Resolution.h"

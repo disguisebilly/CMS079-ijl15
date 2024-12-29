@@ -183,9 +183,6 @@
     <ClInclude Include="MapleClientCollectionTypes\ZMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="codecaves.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Resman.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -363,6 +360,21 @@
     <ClInclude Include="MapleClientCollectionTypes\ZtlBstT.h">
       <Filter>Header Files\MapleTypes</Filter>
     </ClInclude>
+    <ClInclude Include="Resolution.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\IWzGr2D.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\IWzGr2DLayer.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\IWzShape2D.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="codecaves.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -412,6 +424,12 @@
     </ClCompile>
     <ClCompile Include="MapleClientCollectionTypes\CUser.cpp">
       <Filter>Header Files\MapleTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="Resolution.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="codecaves.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

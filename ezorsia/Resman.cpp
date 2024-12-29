@@ -219,7 +219,7 @@ VARIANTARG* __fastcall IWzResMan__GetObjectA_Hook(DWORD* This, void* notuse, VAR
 	if (ret == nullptr)
 		ret = IWzResMan__GetObjectA(This, nullptr, pvargDest, sUOL, vParam, vAux);
 
-	//std::wstring findStr = L"key";
+	//std::wstring findStr = L"Login";
 
 	//if (strT.find(findStr) != std::wstring::npos) {
 	//	std::wcout << "IWzResMan__GetObjectA_Hook :" << This << " " << strT << " " << _ReturnAddress() << std::endl;
@@ -429,7 +429,7 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 		unsigned int width = 0;
 		((IWzCanvas*)pvargDest->ppunkVal)->Getwidth(&width);
 		//std::wcout << "IWzProperty__GetItem_Hook :" << width << std::endl;
-		Client::UpdateBarWidth(width);
+		Resolution::UpdateBarWidth(width);
 	}
 
 	//std::wstring findStr = L"key";
@@ -695,7 +695,7 @@ VOID initResolution() {
 		Client::longSlots = false;
 	}
 	Client::LongQuickSlot();
-	Client::UpdateSlotPosition(slotWidth);
+	Resolution::UpdateSlotPosition(slotWidth);
 	//Stat
 	auto stat = getIWzPropertyForPath(L"UI/UIWindow.img/Stat");
 	unsigned int backgrndWidth;
@@ -704,7 +704,7 @@ VOID initResolution() {
 	backgrnd->Getwidth(&backgrndWidth);
 	auto backgrnd2 = stat->get_item<IWzCanvas*>(L"backgrnd2");
 	backgrnd2->Getwidth(&backgrnd2Width);
-	Client::updateStatResolution(backgrndWidth, backgrnd2Width);
+	Resolution::updateStatResolution(backgrndWidth, backgrnd2Width);
 }
 
 static inline IWzNameSpacePtr& get_sub(int nIdx) {

@@ -1,17 +1,10 @@
-template<typename T>
+template<typename T, uintptr_t pInstance>
 class TSingleton {
 public:
-    static T &GetInstance() {
-        static T ms_pInstance;
-        return ms_pInstance;
+    static inline T* GetInstance() {
+        return *reinterpret_cast<T**>(pInstance);
     }
-
-private:
-    TSingleton() {}
-
-    TSingleton(const TSingleton &);
-    TSingleton &operator=(const TSingleton &);
-
-protected:
-    ~TSingleton() {}
+    static inline bool IsInstantiated() {
+        return *reinterpret_cast<T**>(pInstance) != nullptr;
+    }
 };
