@@ -10,6 +10,7 @@
 #include <CharacterEx.h>
 #include "psapi.h"
 #include "ChairRelMove.h"
+#include <HeapCreateEx.h>
 
 void CreateConsole() {
 	AllocConsole();
@@ -88,8 +89,8 @@ void Injected() {
 	CharacterEx::InitLevelOverride(Client::shortLevel);
 	CharacterEx::InitDamageSkinOverride(Client::DamageSkin > 0 || Client::RemoteDamageSkin);
 	CharacterEx::InitHypontizeFix(Client::s5221009);
+	HeapCreateEx::MemoryOptimization();
 	Client::UpdateGameStartup();
-	Resolution::Init();
 	//Client::LongQuickSlot();
 	Client::FixMouseWheel();
 	Client::JumpCap();
@@ -168,6 +169,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 		if (Client::debug)
 			CreateConsole();	//console for devs, use this to log stuff if you want
 		Hook_CreateMutexA(true); //multiclient //ty darter, angel, and alias!
+		HeapCreateEx::HOOK_HeapCreate();
 		Hook_gethostbyname(true);
 		CreateThread(NULL, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(&Injected), NULL, 0, NULL);
 		break;

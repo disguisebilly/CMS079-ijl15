@@ -55,7 +55,6 @@ bool Client::s4221007 = false;
 bool Client::s5221009 = false;
 
 void Client::UpdateGameStartup() {
-
 	Resolution::Init();
 	//Memory::CodeCave(cc0x0044E550, dw0x0044E550, dw0x0044E550Nops); //run from packed client //skip //sub_44E546
 	//Memory::CodeCave(cc0x0044E5BE, dw0x0044E5BE, dw0x0044E5BENops); //run from packed client //skip

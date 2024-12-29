@@ -372,16 +372,21 @@
     </ClCompile>
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="codecaves.cpp" />
+    <ClInclude Include="HeapCreateEx.h">
+      <FileType>CppHeader</FileType>
+    </ClInclude>
+    <ClCompile Include="HeapCreateEx.cpp" />
     <ClCompile Include="ijl15.cpp" />
     <ClCompile Include="MapleClientCollectionTypes\CAvatar.cpp" />
     <ClCompile Include="MapleClientCollectionTypes\CClientSocket.cpp" />
     <ClCompile Include="MapleClientCollectionTypes\CInpacket.cpp" />
     <ClCompile Include="MapleClientCollectionTypes\COutPacket.cpp" />
     <ClCompile Include="MapleClientCollectionTypes\CUser.cpp" />
+    <ClCompile Include="ReplacementFuncs.cpp" />
     <ClCompile Include="Resman.cpp" />
     <ClCompile Include="Resolution.cpp" />
     <ClInclude Include="Resolution.h">
-      <FileType>CppCode</FileType>
+      <FileType>CppHeader</FileType>
     </ClInclude>
     <ClCompile Include="ZAllocEx.cpp" />
     <ClCompile Include="dllmain.cpp" />

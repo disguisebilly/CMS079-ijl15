@@ -147,9 +147,6 @@
     <ClInclude Include="ijl.h">
       <Filter>Header Files\ijl15</Filter>
     </ClInclude>
-    <ClInclude Include="ReplacementFuncs.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="MapleClientCollectionTypes\CClientSocket.h">
       <Filter>Header Files\MapleTypes</Filter>
     </ClInclude>
@@ -375,6 +372,12 @@
     <ClInclude Include="codecaves.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HeapCreateEx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ReplacementFuncs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -429,6 +432,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="codecaves.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HeapCreateEx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ReplacementFuncs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

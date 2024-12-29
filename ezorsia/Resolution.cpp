@@ -50,8 +50,8 @@ void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 	m_nGameHeight = nScreenHeight;
 	m_nGameWidth = nScreenWidth;
 
-	//byte temp[] = { 157, 97, 139, 13, 216, 14, 216, 0, 104, 113, 247, 182, 0, 195 };
-	//Memory::WriteByteArray(0x00400D88, temp, sizeof(temp));
+	//byte tempTest[] = { 96, 156,157, 97, 184, 156, 28, 196, 0, 104, 90, 79, 132, 0, 195,137, 93, 252,139, 53, 80, 121, 216, 0, 139, 6, 106, 0, 86, 255, 80, 36 };
+	//Memory::WriteByteArray(0x00400D88, tempTest, sizeof(tempTest));
 	if (Client::minimizeMaptitleColor)
 		Memory::WriteInt(0x00864524 + 1, 0xFFFFFFFF);  //minimize map title color white
 	Memory::CodeCave(SaveD3D, 0x009EC607, 5);

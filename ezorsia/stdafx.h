@@ -79,6 +79,7 @@
 #include "TSingleton.h"
 
 #include "codecaves.h"
+#include "ReplacementFuncs.h"
 #include "AddyLocations.h"
 #include "Client.h"
 #include "Resolution.h"
