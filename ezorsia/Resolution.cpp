@@ -45,12 +45,46 @@ __declspec(naked) void enterGame()
 	}
 }
 
+void _backgroundHook(DWORD* eax) {
+	//std::cout << "backgroundHook eax" << *eax << std::endl;
+	DWORD* IWzGr2DPtr = reinterpret_cast<DWORD*>(0x00BE2788);
+	if (*eax == 0x008D6557) {  //ÇÐÍ¼
+		if (*IWzGr2DPtr != NULL)
+			Memory::WriteInt(*IWzGr2DPtr + 32, 1920);
+	}
+	if (*eax == 0x00669BF0) {//ÍË³ö
+		if (*IWzGr2DPtr != NULL)
+			Memory::WriteInt(*IWzGr2DPtr + 32, 1920);
+	}
+}
+
+__declspec(naked) void backgroundHook()
+{
+	__asm {
+		pushad
+		pushfd
+		mov eax, esp
+		add eax, 0x24
+		push eax
+		call _backgroundHook
+		pop eax
+		popfd
+		popad
+		push ebp
+		mov ebp, esp
+		push ecx
+		push ebx
+		push 0x00427EB8
+		ret
+	}
+}
+
 void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 
 	m_nGameHeight = nScreenHeight;
 	m_nGameWidth = nScreenWidth;
 
-	//byte tempTest[] = { 96, 156,157, 97, 184, 156, 28, 196, 0, 104, 90, 79, 132, 0, 195,137, 93, 252,139, 53, 80, 121, 216, 0, 139, 6, 106, 0, 86, 255, 80, 36 };
+	//byte tempTest[] = { 96, 156, 139, 196, 131, 192, 36,157, 97, 85, 137, 229, 81, 83, 104, 202, 186, 66, 0, 195,137, 69, 252 };
 	//Memory::WriteByteArray(0x00400D88, tempTest, sizeof(tempTest));
 	if (Client::minimizeMaptitleColor)
 		Memory::WriteInt(0x00864524 + 1, 0xFFFFFFFF);  //minimize map title color white
@@ -644,6 +678,7 @@ class CWndMan : public TSingleton<CWndMan, 0x00BDD6F4> {
 void Resolution::Init()
 {
 	//Memory::CodeCave(enterGame, 0x00A1D906, 5);
+	////Memory::CodeCave(backgroundHook, 0x00427EB3, 5);
 	//_UpdateResolution(800, 600);
 	_UpdateResolution(Client::m_nGameWidth, Client::m_nGameHeight);
 }
@@ -682,7 +717,7 @@ void Resolution::UpdateResolution(unsigned int nScreenWidth, unsigned int nScree
 	Memory::WriteInt(*IWzGr2DPtr + 156, 2289436777);
 	Memory::WriteInt(*D3DPtr + 32, -floor(nScreenWidth / 2));
 	Memory::WriteInt(*D3DPtr + 36, -floor(nScreenHeight / 2));
-	SetWindowPos(FindWindow(L"MapleStoryClass", L"MapleStory"), HWND(-2), 0, 0, nScreenWidth, nScreenHeight, SWP_NOMOVE | SWP_FRAMECHANGED);
+	SetWindowPos(FindWindow(L"MapleStoryClass", L"MapleStory"), HWND(-2), 0, 0, nScreenWidth, nScreenHeight, SWP_NOMOVE | SWP_DRAWFRAME);
 	//refreshMap();
 	int full = 0;
 	//getIWzGr2DPtr()->put_fullScreen(0);

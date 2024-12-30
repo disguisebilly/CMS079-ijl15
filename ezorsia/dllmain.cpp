@@ -52,23 +52,33 @@ void EmptyMemory()
 {
 	while (true)
 	{
-		Sleep(1000);
-		int memory = GetCurrentMemoryUsage();
-		if (memory >= Client::ResManFlushCached) {
-			if (Resman::getIWzResMan())
-			{
-				Resman::getIWzResMan()->raw_FlushCachedObjects(0);
+		try {
+			Sleep(1000);
+			int memory = GetCurrentMemoryUsage();
+			if (memory >= Client::ResManFlushCached) {
+				//if (Resman::getIWzResMan())
+				//{
+				//	Resman::getIWzResMan()->raw_FlushCachedObjects(0);
+				//}
+				autoFlushCacheTime(0);
+				callFlushcache();
+				autoFlushCacheTime(10000);
+				std::cout << "Try flushcache:" << memory << std::endl;
 			}
-			//autoFlushCacheTime(0);
-			//callFlushcache();
-			//autoFlushCacheTime(10000);
-			std::cout << "flushcache:" << memory << std::endl;
+			if (memory >= Client::SetProcessWorkingSetSize)
+			{
+				HANDLE hProcess = OpenProcess(2035711, 0, GetCurrentProcessId());
+				if (hProcess) {
+					std::cout << "Save Memory:" << memory << " " << GetCurrentProcessId()
+						<< " " << SetProcessWorkingSetSize(hProcess, -1, -1) << std::endl;
+					CloseHandle(hProcess);
+				}
+				else {
+					std::cerr << "Save Memory OpenProcess error!" << std::endl;
+				}
+			}
 		}
-		if (memory >= Client::SetProcessWorkingSetSize)
-		{
-			std::cout << "EmptyMemory:" << memory << std::endl;
-			SetProcessWorkingSetSize(GetCurrentProcess(), -1, -1);
-		}
+		catch (...) {}
 	}
 };
 
@@ -114,57 +124,57 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 	{
 		INIReader reader("config.ini");
 		if (reader.ParseError() == 0) {
-			Client::m_nGameWidth = reader.GetInteger("general", "width", 1280);
-			Client::m_nGameHeight = reader.GetInteger("general", "height", 720);
-			Client::MsgAmount = reader.GetInteger("general", "MsgAmount", 26);
-			Client::CustomLoginFrame = reader.GetBoolean("general", "CustomLoginFrame", true);
-			Client::WindowedMode = reader.GetBoolean("general", "WindowedMode", true);
-			Client::RemoveLogos = reader.GetBoolean("general", "RemoveLogos", true);
-			Client::SkipWorldSelect = reader.GetBoolean("general", "SkipWorldSelect", true);
-			Client::RemoveLoginNxIdDialog = reader.GetBoolean("general", "RemoveLoginNxIdDialog", true);
-			Memory::UseVirtuProtect = reader.GetBoolean("general", "UseVirtuProtect", true);
-			Client::ResManFlushCached = reader.GetInteger("general", "ResManFlushCached", 512);
-			Client::SetProcessWorkingSetSize = reader.GetInteger("general", "SetProcessWorkingSetSize", 1024);
-			Client::setDamageCap = reader.GetReal("optional", "setDamageCap", 199999);
-			Client::setMAtkCap = reader.GetReal("optional", "setMAtkCap", 1999);
-			Client::setAccCap = reader.GetReal("optional", "setAccCap", 999);
-			Client::setAvdCap = reader.GetReal("optional", "setAvdCap", 999);
-			Client::setAtkOutCap = reader.GetReal("optional", "setAtkOutCap", 199999);
-			Client::longEXP = reader.GetBoolean("optional", "longEXP", false);
-			Client::shortLevel = reader.GetBoolean("optional", "shortLevel", false);
-			Client::useTubi = reader.GetBoolean("optional", "useTubi", false);
-			Client::bigLoginFrame = reader.GetBoolean("general", "bigLoginFrame", false);
-			Client::speedMovementCap = reader.GetInteger("optional", "speedMovementCap", 140);
-			Client::jumpCap = reader.GetInteger("optional", "jumpCap", 123);
-			Client::debug = reader.GetBoolean("debug", "debug", false);
-			Client::noPassword = reader.GetBoolean("debug", "noPassword", false);
-			ownLoginFrame = reader.GetBoolean("optional", "ownLoginFrame", false);
-			ownCashShopFrame = reader.GetBoolean("optional", "ownCashShopFrame", false);
-			EzorsiaV2WzIncluded = reader.GetBoolean("general", "EzorsiaV2WzIncluded", true);
-			Client::ServerIP_AddressFromINI = reader.Get("general", "ServerIP_Address", "127.0.0.1");
-			Client::ServerIP_Address_hook = reader.GetBoolean("general", "ServerIP_Address_hook", true);
-			Client::climbSpeedAuto = reader.GetBoolean("optional", "climbSpeedAuto", false);
-			Client::climbSpeed = reader.GetFloat("optional", "climbSpeed", 1.0);
-			Client::serverIP_Port = reader.GetInteger("general", "serverIP_Port", 8484);
-			Client::talkRepeat = reader.GetBoolean("optional", "talkRepeat", false);
-			Client::talkTime = reader.GetInteger("optional", "talkTime", 2000);
-			Client::meleePunching = reader.GetBoolean("optional", "meleePunching", true);
-			Client::holdAttack = reader.GetBoolean("optional", "holdAttack", false);
-			Client::spLimit = reader.GetBoolean("optional", "spLimit", true);
-			Client::tamingMobUnlock = reader.GetBoolean("optional", "tamingMobUnlock", false);
-			Client::longSlots = reader.GetBoolean("ui", "LongSlots", false);
-			Client::longSlotsKey = reader.GetInteger("ui", "longSlotsKey", 1);
-			Client::showItemID = reader.GetBoolean("ui", "showItemID", false);
-			Client::showWeaponSpeed = reader.GetBoolean("ui", "showWeaponSpeed", true);
-			Client::minimizeMaptitleColor = reader.GetBoolean("ui", "minimizeMaptitleColor", false);
-			Client::StatDetailBackgrndWidthEx = reader.GetInteger("ui", "StatDetailBackgrndWidthEx", 23);
-			Client::DamageSkin = reader.GetInteger("ui", "DamageSkin", 0);
-			Client::RemoteDamageSkin = reader.GetBoolean("ui", "RemoteDamageSkin", false);
-			Client::tamingMob198Effect = reader.GetBoolean("ui", "tamingMob198", false);
-			Client::s4221001 = reader.GetBoolean("skill", "s4221001", false);
-			Client::s4221007 = reader.GetBoolean("skill", "s4221007", false);
-			Client::s14101004 = reader.GetBoolean("skill", "s14101004", true);
-			Client::s5221009 = reader.GetBoolean("skill", "s5221009", false);
+			Client::m_nGameWidth = reader.GetInteger("general", "width", Client::m_nGameWidth);
+			Client::m_nGameHeight = reader.GetInteger("general", "height", Client::m_nGameHeight);
+			Client::MsgAmount = reader.GetInteger("general", "MsgAmount", Client::MsgAmount);
+			Client::CustomLoginFrame = reader.GetBoolean("general", "CustomLoginFrame", Client::CustomLoginFrame);
+			Client::WindowedMode = reader.GetBoolean("general", "WindowedMode", Client::WindowedMode);
+			Client::RemoveLogos = reader.GetBoolean("general", "RemoveLogos", Client::RemoveLogos);
+			Client::SkipWorldSelect = reader.GetBoolean("general", "SkipWorldSelect", Client::SkipWorldSelect);
+			Client::RemoveLoginNxIdDialog = reader.GetBoolean("general", "RemoveLoginNxIdDialog", Client::RemoveLoginNxIdDialog);
+			Memory::UseVirtuProtect = reader.GetBoolean("general", "UseVirtuProtect", Memory::UseVirtuProtect);
+			Client::ResManFlushCached = reader.GetInteger("general", "ResManFlushCached", Client::ResManFlushCached);
+			Client::SetProcessWorkingSetSize = reader.GetInteger("general", "SetProcessWorkingSetSize", Client::SetProcessWorkingSetSize);
+			Client::setDamageCap = reader.GetReal("optional", "setDamageCap", Client::setDamageCap);
+			Client::setMAtkCap = reader.GetReal("optional", "setMAtkCap", Client::setMAtkCap);
+			Client::setAccCap = reader.GetReal("optional", "setAccCap", Client::setAccCap);
+			Client::setAvdCap = reader.GetReal("optional", "setAvdCap", Client::setAvdCap);
+			Client::setAtkOutCap = reader.GetReal("optional", "setAtkOutCap", Client::setAtkOutCap);
+			Client::longEXP = reader.GetBoolean("optional", "longEXP", Client::longEXP);
+			Client::shortLevel = reader.GetBoolean("optional", "shortLevel", Client::shortLevel);
+			Client::useTubi = reader.GetBoolean("optional", "useTubi", Client::useTubi);
+			Client::bigLoginFrame = reader.GetBoolean("general", "bigLoginFrame", Client::bigLoginFrame);
+			Client::speedMovementCap = reader.GetInteger("optional", "speedMovementCap", Client::speedMovementCap);
+			Client::jumpCap = reader.GetInteger("optional", "jumpCap", Client::jumpCap);
+			Client::debug = reader.GetBoolean("debug", "debug", Client::debug);
+			Client::noPassword = reader.GetBoolean("debug", "noPassword", Client::noPassword);
+			ownLoginFrame = reader.GetBoolean("optional", "ownLoginFrame", ownLoginFrame);
+			ownCashShopFrame = reader.GetBoolean("optional", "ownCashShopFrame", ownCashShopFrame);
+			EzorsiaV2WzIncluded = reader.GetBoolean("general", "EzorsiaV2WzIncluded", EzorsiaV2WzIncluded);
+			Client::ServerIP_AddressFromINI = reader.Get("general", "ServerIP_Address", Client::ServerIP_AddressFromINI);
+			Client::ServerIP_Address_hook = reader.GetBoolean("general", "ServerIP_Address_hook", Client::ServerIP_Address_hook);
+			Client::climbSpeedAuto = reader.GetBoolean("optional", "climbSpeedAuto", Client::climbSpeedAuto);
+			Client::climbSpeed = reader.GetFloat("optional", "climbSpeed", Client::climbSpeed);
+			Client::serverIP_Port = reader.GetInteger("general", "serverIP_Port", Client::serverIP_Port);
+			Client::talkRepeat = reader.GetBoolean("optional", "talkRepeat", Client::talkRepeat);
+			Client::talkTime = reader.GetInteger("optional", "talkTime", Client::talkTime);
+			Client::meleePunching = reader.GetBoolean("optional", "meleePunching", Client::meleePunching);
+			Client::holdAttack = reader.GetBoolean("optional", "holdAttack", Client::holdAttack);
+			Client::spLimit = reader.GetBoolean("optional", "spLimit", Client::spLimit);
+			Client::tamingMobUnlock = reader.GetBoolean("optional", "tamingMobUnlock", Client::tamingMobUnlock);
+			Client::longSlots = reader.GetBoolean("ui", "LongSlots", Client::longSlots);
+			Client::longSlotsKey = reader.GetInteger("ui", "longSlotsKey", Client::longSlotsKey);
+			Client::showItemID = reader.GetBoolean("ui", "showItemID", Client::showItemID);
+			Client::showWeaponSpeed = reader.GetBoolean("ui", "showWeaponSpeed", Client::showWeaponSpeed);
+			Client::minimizeMaptitleColor = reader.GetBoolean("ui", "minimizeMaptitleColor", Client::minimizeMaptitleColor);
+			Client::StatDetailBackgrndWidthEx = reader.GetInteger("ui", "StatDetailBackgrndWidthEx", Client::StatDetailBackgrndWidthEx);
+			Client::DamageSkin = reader.GetInteger("ui", "DamageSkin", Client::DamageSkin);
+			Client::RemoteDamageSkin = reader.GetBoolean("ui", "RemoteDamageSkin", Client::RemoteDamageSkin);
+			Client::tamingMob198Effect = reader.GetBoolean("ui", "tamingMob198", Client::tamingMob198Effect);
+			Client::s4221001 = reader.GetBoolean("skill", "s4221001", Client::s4221001);
+			Client::s4221007 = reader.GetBoolean("skill", "s4221007", Client::s4221007);
+			Client::s14101004 = reader.GetBoolean("skill", "s14101004", Client::s14101004);
+			Client::s5221009 = reader.GetBoolean("skill", "s5221009", Client::s5221009);
 		}
 		if (Client::debug)
 			CreateConsole();	//console for devs, use this to log stuff if you want
