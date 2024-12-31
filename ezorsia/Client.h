@@ -16,7 +16,6 @@ public:
 	static int m_nGameHeight;
 	static int m_nGameWidth;
 	static int MsgAmount;
-	static bool CustomLoginFrame;
 	static bool WindowedMode;
 	static bool RemoveLogos;
 	static bool SkipWorldSelect;
@@ -31,7 +30,6 @@ public:
 	static bool longEXP;
 	static bool shortLevel;
 	static bool useTubi;
-	static bool bigLoginFrame;
 	static bool debug;
 	static bool noPassword;
 	static bool climbSpeedAuto;

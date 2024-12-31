@@ -127,7 +127,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::m_nGameWidth = reader.GetInteger("general", "width", Client::m_nGameWidth);
 			Client::m_nGameHeight = reader.GetInteger("general", "height", Client::m_nGameHeight);
 			Client::MsgAmount = reader.GetInteger("general", "MsgAmount", Client::MsgAmount);
-			Client::CustomLoginFrame = reader.GetBoolean("general", "CustomLoginFrame", Client::CustomLoginFrame);
 			Client::WindowedMode = reader.GetBoolean("general", "WindowedMode", Client::WindowedMode);
 			Client::RemoveLogos = reader.GetBoolean("general", "RemoveLogos", Client::RemoveLogos);
 			Client::SkipWorldSelect = reader.GetBoolean("general", "SkipWorldSelect", Client::SkipWorldSelect);
@@ -143,14 +142,10 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::longEXP = reader.GetBoolean("optional", "longEXP", Client::longEXP);
 			Client::shortLevel = reader.GetBoolean("optional", "shortLevel", Client::shortLevel);
 			Client::useTubi = reader.GetBoolean("optional", "useTubi", Client::useTubi);
-			Client::bigLoginFrame = reader.GetBoolean("general", "bigLoginFrame", Client::bigLoginFrame);
 			Client::speedMovementCap = reader.GetInteger("optional", "speedMovementCap", Client::speedMovementCap);
 			Client::jumpCap = reader.GetInteger("optional", "jumpCap", Client::jumpCap);
 			Client::debug = reader.GetBoolean("debug", "debug", Client::debug);
 			Client::noPassword = reader.GetBoolean("debug", "noPassword", Client::noPassword);
-			ownLoginFrame = reader.GetBoolean("optional", "ownLoginFrame", ownLoginFrame);
-			ownCashShopFrame = reader.GetBoolean("optional", "ownCashShopFrame", ownCashShopFrame);
-			EzorsiaV2WzIncluded = reader.GetBoolean("general", "EzorsiaV2WzIncluded", EzorsiaV2WzIncluded);
 			Client::ServerIP_AddressFromINI = reader.Get("general", "ServerIP_Address", Client::ServerIP_AddressFromINI);
 			Client::ServerIP_Address_hook = reader.GetBoolean("general", "ServerIP_Address_hook", Client::ServerIP_Address_hook);
 			Client::climbSpeedAuto = reader.GetBoolean("optional", "climbSpeedAuto", Client::climbSpeedAuto);

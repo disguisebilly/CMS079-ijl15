@@ -30,12 +30,6 @@ __declspec(naked) void mapStruct() {
 	}
 }
 
-__declspec(naked) void freeMap() {
-	__asm {
-
-	}
-}
-
 void heapCompact(int ebx) {
 	//if (ebx != 0)
 	//	std::cout << "进入商城" << std::endl;
@@ -54,7 +48,7 @@ __declspec(naked) void environmentSwitch() {
 		mov eax, [esi]
 		push 0
 		push esi
-		call dword ptr[eax + 0x24]
+		call dword ptr[eax + 0x24] //freeMap
 		push ebx
 		call heapCompact
 		pop ebx

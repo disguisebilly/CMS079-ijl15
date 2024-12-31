@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "d3d9.h"
 #include <Resolution.h>
 
 int m_slotXPos = 0;
@@ -28,6 +29,44 @@ __declspec(naked) void refreshMap()
 	}
 }
 
+__declspec(naked) void reloadMap()   // error! Waiting for repair
+{
+	__asm {
+		pushad
+		pushfd
+		//mov ebx, 0x00D8B50C
+		//mov ecx, ebx
+		//mov eax, 0x007B99E2
+		//call eax
+		mov ecx, [0x00BD9028]
+		mov ecx, [ecx]
+		lea eax, [ecx + 0x2FE4]
+		mov esi, 0x1
+		mov[eax], esi
+		push 0x0
+		mov eax, 0x00A1BD8F
+		call eax
+		mov ecx, [0x00BD9028]
+		mov ecx, [ecx]
+		lea eax, [ecx + 0x2FE4]
+		mov esi, 0x0
+		mov[eax], esi
+		push 0x1
+		mov eax, 0x00A1BD8F
+		call eax
+		mov ecx, [0x00BDD6F0]
+		mov ecx, [ecx]
+		mov edi, [0x00400FF4]
+		mov edi, [edi]
+		push edi
+		mov eax, 0x008E4603
+		call eax
+		popfd
+		popad
+		ret
+	}
+}
+
 __declspec(naked) void enterGame()
 {
 	__asm {
@@ -45,16 +84,50 @@ __declspec(naked) void enterGame()
 	}
 }
 
+__declspec(naked) void exitGame()
+{
+	__asm {
+		pushad
+		push 600
+		push 800
+		call Resolution::UpdateResolution
+		pop eax
+		pop eax
+		popad
+		mov ecx, [0x00BDD8AC]
+		mov ecx, [ecx]
+		push 0x00A0DA5E
+		ret
+	}
+}
+
+__declspec(naked) void enterShop()
+{
+	__asm {
+		pushad
+		push 600
+		push 800
+		call Resolution::UpdateResolution
+		pop eax
+		pop eax
+		popad
+		mov eax, [0x00AD5801]
+		mov eax, [eax]
+		push 0x00863BC8
+		ret
+	}
+}
+
 void _backgroundHook(DWORD* eax) {
 	//std::cout << "backgroundHook eax" << *eax << std::endl;
 	DWORD* IWzGr2DPtr = reinterpret_cast<DWORD*>(0x00BE2788);
 	if (*eax == 0x008D6557) {  //切图
 		if (*IWzGr2DPtr != NULL)
-			Memory::WriteInt(*IWzGr2DPtr + 32, 1920);
+			Memory::WriteInt(*IWzGr2DPtr + 32, Client::m_nGameWidth);
 	}
 	if (*eax == 0x00669BF0) {//退出
 		if (*IWzGr2DPtr != NULL)
-			Memory::WriteInt(*IWzGr2DPtr + 32, 1920);
+			Memory::WriteInt(*IWzGr2DPtr + 32, Client::m_nGameWidth);
 	}
 }
 
@@ -84,11 +157,12 @@ void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 	m_nGameHeight = nScreenHeight;
 	m_nGameWidth = nScreenWidth;
 
-	//byte tempTest[] = { 96, 156, 139, 196, 131, 192, 36,157, 97, 85, 137, 229, 81, 83, 104, 202, 186, 66, 0, 195,137, 69, 252 };
+	//byte tempTest[] = { 131, 248, 1, 116, 103, 187, 12, 181, 216, 0, 137, 217, 184, 89, 75, 137, 0, 255, 208, 139, 13, 108, 196, 215, 0, 141, 129, 0, 54, 0, 0, 190, 1, 0, 0, 0, 137, 48, 106, 0, 184, 0, 243, 183, 0, 255, 208, 139, 13, 108, 196, 215, 0, 141, 129, 0, 54, 0, 0, 190, 0, 0, 0, 0, 137, 48, 106, 1, 184, 0, 243, 183, 0, 255, 208, 139, 13, 100, 11, 216, 0, 139, 61, 244, 15, 64, 0, 87, 184, 200, 90, 160, 0, 255, 208, 157, 97, 184, 16, 160, 194, 0, 104, 150, 71, 111, 0, 195, 157, 97, 199, 5, 168, 15, 64, 0, 0, 0, 0, 0, 184, 16, 160, 194, 0, 104, 150, 71, 111, 0, 195 };
 	//Memory::WriteByteArray(0x00400D88, tempTest, sizeof(tempTest));
 	if (Client::minimizeMaptitleColor)
 		Memory::WriteInt(0x00864524 + 1, 0xFFFFFFFF);  //minimize map title color white
 	Memory::CodeCave(SaveD3D, 0x009EC607, 5);
+	Memory::CodeCave(gameRect, 0x009FFEFB, 6);
 
 	nStatusBarY = nScreenHeight - 578;
 
@@ -246,7 +320,7 @@ void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 	Memory::WriteInt(0x00758C19 + 1, nScreenHeight);                           //->079 00758C19
 	Memory::WriteInt(0x0066E860 + 1, nScreenHeight);                          // CSoundMan::PlayBGM         //->079 0066E860
 	Memory::WriteInt(0x00634BB1 + 1, nScreenHeight);                          //->079 00634BB1
-	Memory::WriteInt(0x00634BBB + 1, floor(-nScreenHeight / 2));                                 //->079 00634BBB
+	//Memory::WriteInt(0x00634BBB + 1, floor(-nScreenHeight / 2));                                 //->079 00634BBB 选人界面底图
 	Memory::WriteInt(0x0061ACCE + 1, nScreenWidth - 136);                           //->079 0061ACCE  nScreenHeight? 664? 
 	Memory::WriteInt(0x005D4261 + 1, nScreenHeight);                          // CSoundMan::PlayBGM
 	Memory::WriteInt(0x008D7458 + 1, nScreenHeight - 33);                     // IWzVector2D::RelMove
@@ -515,36 +589,36 @@ void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 	myAlwaysViewRestoreFixOffset = myHeight; //parameters for fix view restore all maps number ?????working????!!!
 	Memory::CodeCave(AlwaysViewRestoreFix, dwAlwaysViewRestoreFix, dwAlwaysViewRestoreFixNOPs);
 
-	if (Client::CustomLoginFrame) {
-		Memory::WriteInt(0x00629120 + 1, (unsigned int)floor(-nScreenHeight / 2));//push -300				!!game login frame!! turn this on if you edit UI.wz and use a frame that matches your res
-		Memory::WriteInt(0x0062912F + 1, (unsigned int)floor(-nScreenWidth / 2));	//push -400 ; RelMove?				!!game login frame!! turn this on if you edit UI.wz and use a frame that matches your res
-	}
+	//if (Client::CustomLoginFrame) {
+	//	Memory::WriteInt(0x00629120 + 1, (unsigned int)floor(-nScreenHeight / 2));//push -300				!!game login frame!! turn this on if you edit UI.wz and use a frame that matches your res
+	//	Memory::WriteInt(0x0062912F + 1, (unsigned int)floor(-nScreenWidth / 2));	//push -400 ; RelMove?				!!game login frame!! turn this on if you edit UI.wz and use a frame that matches your res
+	//}
 
-	if (Client::bigLoginFrame) {
-		Memory::WriteInt(0x00628EFB + 1, nScreenWidth - 145);	// 145?? mov eax,800 ; RelMove?	//game version number for login frames that hug the side of the screen //you will still need to offset ntop, and that may require a code cave if your height resolution is too big
-	}
-	else {
-		nTopOfsettedVerFix = 10 + myHeight; nLeftOfsettedVerFix = 665 + myWidth; //parameters for fix version number
-		Memory::CodeCave(VersionNumberFix, dwVersionNumberFix, dwVersionNumberFixNOPs);	//game version number fix //use this if you use no frame or default client frame
-	}
+	//if (Client::bigLoginFrame) {
+	//	Memory::WriteInt(0x00628EFB + 1, nScreenWidth - 145);	// 145?? mov eax,800 ; RelMove?	//game version number for login frames that hug the side of the screen //you will still need to offset ntop, and that may require a code cave if your height resolution is too big
+	//}
+	//else {
+	//	nTopOfsettedVerFix = 10 + myHeight; nLeftOfsettedVerFix = 665 + myWidth; //parameters for fix version number
+	//	Memory::CodeCave(VersionNumberFix, dwVersionNumberFix, dwVersionNumberFixNOPs);	//game version number fix //use this if you use no frame or default client frame
+	//}
 
-	if (!Client::bigLoginFrame) {
-		nHeightOfsettedLoginBackCanvasFix = 122 + myHeight; nWidthOfsettedLoginBackCanvasFix = 85 + myWidth;//para for world select buttonsViewRec
-		nTopOfsettedLoginBackCanvasFix = 452 + myHeight; nLeftOfsettedLoginBackCanvasFix = 76 + myWidth;
-		Memory::CodeCave(ccLoginBackCanvasFix, dwLoginBackCanvasFix, LoginBackCanvasFixNOPs);	//world select buttons fix		//thank you teto for pointing out my error in finding the constructor
+	//if (!Client::bigLoginFrame) {
+	//	nHeightOfsettedLoginBackCanvasFix = 122 + myHeight; nWidthOfsettedLoginBackCanvasFix = 85 + myWidth;//para for world select buttonsViewRec
+	//	nTopOfsettedLoginBackCanvasFix = 452 + myHeight; nLeftOfsettedLoginBackCanvasFix = 76 + myWidth;
+	//	Memory::CodeCave(ccLoginBackCanvasFix, dwLoginBackCanvasFix, LoginBackCanvasFixNOPs);	//world select buttons fix		//thank you teto for pointing out my error in finding the constructor
 
-		//yOffsetOfLoginBackBtnFix = 300 + myHeight; xOffsetOfLoginBackBtnFix = 0 + myWidth;	//para for back button
-		//Memory::CodeCave(ccLoginBackBtnFix, dwLoginBackBtnFix, LoginBackBtnFixNOPs); //back button on world select //unnecessary as buttons move with canvas
+	//	//yOffsetOfLoginBackBtnFix = 300 + myHeight; xOffsetOfLoginBackBtnFix = 0 + myWidth;	//para for back button
+	//	//Memory::CodeCave(ccLoginBackBtnFix, dwLoginBackBtnFix, LoginBackBtnFixNOPs); //back button on world select //unnecessary as buttons move with canvas
 
-		nHeightOfsettedLoginViewRecFix = 122 + myHeight; nWidthOfsettedLoginViewRecFix = 85 + myWidth;//para for ViewRec fix
-		nTopOfsettedLoginViewRecFix = 452 + myHeight; nLeftOfsettedLoginViewRecFix = 76 + myWidth;
-		Memory::CodeCave(ccLoginViewRecFix, dwLoginViewRecFix, LoginViewRecFixNOPs);	//world ViewRec fix	
+	//	nHeightOfsettedLoginViewRecFix = 122 + myHeight; nWidthOfsettedLoginViewRecFix = 85 + myWidth;//para for ViewRec fix
+	//	nTopOfsettedLoginViewRecFix = 452 + myHeight; nLeftOfsettedLoginViewRecFix = 76 + myWidth;
+	//	Memory::CodeCave(ccLoginViewRecFix, dwLoginViewRecFix, LoginViewRecFixNOPs);	//world ViewRec fix	
 
-		a1x = 0 + myWidth; a2x = -149 + myWidth; a2y = 0 + myHeight; a3 = 25; a1y = -250; //a4 = 0;	//LoginDescriptor params
-		Memory::WriteInt(0x0063ABC4 + 1, 300 + a1y); //speed 1	//temporary fix by increasing the speed of display until i get good enough at procedural programming 
-		//and memory management and reverse engineering to use nexon's own functions to put a black layer with greater z value to cover the tabs being shown off screen at origin
-		Memory::CodeCave(ccLoginDescriptorFix, dwLoginDescriptorFix, LoginDescriptorFixNOPs);	//world LoginDescriptor fix	
-	}
+	//	a1x = 0 + myWidth; a2x = -149 + myWidth; a2y = 0 + myHeight; a3 = 25; a1y = -250; //a4 = 0;	//LoginDescriptor params
+	//	Memory::WriteInt(0x0063ABC4 + 1, 300 + a1y); //speed 1	//temporary fix by increasing the speed of display until i get good enough at procedural programming 
+	//	//and memory management and reverse engineering to use nexon's own functions to put a black layer with greater z value to cover the tabs being shown off screen at origin
+	//	Memory::CodeCave(ccLoginDescriptorFix, dwLoginDescriptorFix, LoginDescriptorFixNOPs);	//world LoginDescriptor fix	
+	//}
 
 	int customEngY = -62, customEngX = -22, dojangYoffset = 0;	//myHeight //-55-35 (myHeight*250/100)	-(myWidth*53/100) 140 -130
 	yOffsetOfMuruengraidPlayer = 50 + dojangYoffset; xOffsetOfMuruengraidPlayer = 169 + myWidth; //params
@@ -677,10 +751,12 @@ class CWndMan : public TSingleton<CWndMan, 0x00BDD6F4> {
 
 void Resolution::Init()
 {
-	//Memory::CodeCave(enterGame, 0x00A1D906, 5);
+	Memory::CodeCave(enterGame, 0x00A1D906, 5);
+	Memory::CodeCave(exitGame, 0x00A0DA58, 6);
+	Memory::CodeCave(enterShop, 0x00863BC3, 5);
 	////Memory::CodeCave(backgroundHook, 0x00427EB3, 5);
-	//_UpdateResolution(800, 600);
-	_UpdateResolution(Client::m_nGameWidth, Client::m_nGameHeight);
+	_UpdateResolution(800, 600);
+	//_UpdateResolution(Client::m_nGameWidth, Client::m_nGameHeight);
 }
 
 void Resolution::UpdateResolution(unsigned int nScreenWidth, unsigned int nScreenHeight)
@@ -708,18 +784,17 @@ void Resolution::UpdateResolution(unsigned int nScreenWidth, unsigned int nScree
 		UpdateBarWidth(m_nBarWidth);
 
 	//分辨率无限制
-	Memory::WriteByte(0x60E082, 0xEB);   //0x7E
-	//Memory::WriteInt(*IWzGr2DPtr + 20, nScreenHeight);
+	//Memory::WriteByte(0x60E082, 0xEB);   //0x7E
 	Memory::WriteInt(*IWzGr2DPtr + 48, nScreenWidth);
 	Memory::WriteInt(*IWzGr2DPtr + 32, nScreenWidth);
 	Memory::WriteInt(*IWzGr2DPtr + 52, nScreenHeight);
 	Memory::WriteInt(*IWzGr2DPtr + 36, nScreenHeight);
-	Memory::WriteInt(*IWzGr2DPtr + 156, 2289436777);
+	Memory::WriteInt(*IWzGr2DPtr + 148, D3DERR_DEVICENOTRESET);  // 0x88760869  D3DERR_DEVICENOTRESET
 	Memory::WriteInt(*D3DPtr + 32, -floor(nScreenWidth / 2));
 	Memory::WriteInt(*D3DPtr + 36, -floor(nScreenHeight / 2));
-	SetWindowPos(FindWindow(L"MapleStoryClass", L"MapleStory"), HWND(-2), 0, 0, nScreenWidth, nScreenHeight, SWP_NOMOVE | SWP_DRAWFRAME);
+	SetWindowPos(FindWindow(L"MapleStoryClass", nullptr), HWND(-2), 0, 0, Client::m_nGameWidth, Client::m_nGameHeight, SWP_NOMOVE);
 	//refreshMap();
 	int full = 0;
-	//getIWzGr2DPtr()->put_fullScreen(0);
+	//getIWzGr2DPtr()->raw_RenderFrame();
 }
 

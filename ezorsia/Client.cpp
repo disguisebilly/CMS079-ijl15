@@ -7,7 +7,6 @@
 int Client::m_nGameHeight = 720;
 int Client::m_nGameWidth = 1280;
 int Client::MsgAmount = 26;
-bool Client::CustomLoginFrame = true;
 bool Client::WindowedMode = true;
 bool Client::RemoveLogos = true;
 bool Client::SkipWorldSelect = true;
@@ -22,7 +21,6 @@ double Client::setAtkOutCap = 199999;
 bool Client::longEXP = false;
 bool Client::shortLevel = false;
 bool Client::useTubi = false;
-bool Client::bigLoginFrame = false;
 int Client::speedMovementCap = 140;
 bool Client::noPassword = false;
 bool Client::debug = false;

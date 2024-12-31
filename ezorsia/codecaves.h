@@ -363,6 +363,8 @@ extern int isInit;
 
 void _updateBarBackgrndWidth();
 
+void gameRect();
+
 void skipWorldSelect();
 
 
