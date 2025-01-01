@@ -1487,6 +1487,28 @@ __declspec(naked) void DefaultQuickslotKeyMap79_cave()
 		jmp keyMapDefaultRtn
 	}
 }
+
+__declspec(naked) void removeKeyToolTips()
+{
+	__asm {
+		pushad
+		pushfd
+		mov eax, esp
+		add eax, 0x24
+		mov ebx, 0x008DCA25
+		cmp[eax], ebx
+		jne label_ret
+		cmp[eax + 4], 0x5
+		jne label_ret
+		mov dword ptr[eax], 0x008DCB9A
+		label_ret:
+		popfd
+			popad
+			mov eax, 0x00AA203C
+			push 0x005CAF37
+			ret
+	}
+}
 // ³¤¼üÅÌ½áÊø
 
 

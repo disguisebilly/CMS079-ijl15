@@ -306,6 +306,8 @@ extern DWORD slotKeyMap;
 
 void DefaultQuickslotKeyMap79_cave();
 
+void removeKeyToolTips();
+
 void fixDateFormat();
 
 void fixDateFormat2();

@@ -123,7 +123,7 @@ bool Hook_StringPool__GetString(bool bEnable)	//hook stringpool modification //t
 		{
 			auto ret = _StringPool__GetString(pThis, edx, result, nIdx, formal);
 			auto str = static_cast<const char*>(*ret);
-			//if (strstr(str, "error") != nullptr) {
+			//if (strstr(str, "Ã°ÏÕµºON") != nullptr) {
 			//	std::cout << "StringPool__GetString id = " << nIdx << " " << str << " " << _ReturnAddress() << std::endl;
 			//}
 			//if (nIdx == 1163)
@@ -184,7 +184,7 @@ bool Hook_StringPool__GetStringW(bool bEnable)	//hook stringpool modification //
 		{
 			auto ret = _StringPool__GetStringW(pThis, edx, result, nIdx, formal);
 			const wchar_t* str = static_cast<const wchar_t*>(*ret);
-			//if (wcsstr(str, L"error") != nullptr || nIdx == 5432 || nIdx == 1259) {
+			//if (wcsstr(str, L"×ÀÃæ") != nullptr) {
 			//	std::wcout << "StringPool__GetStringW id = " << nIdx << " " << str << " " << _ReturnAddress() << std::endl;
 			//}
 			//if (nIdx == 1163)

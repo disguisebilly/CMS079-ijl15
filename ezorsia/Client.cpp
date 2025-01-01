@@ -265,7 +265,9 @@ void Client::LongQuickSlot() {
 
 	//CUIStatusBar::GetShortCutIndexByPos
 	Memory::WriteInt(0x008E33CF + 1, (DWORD)&Array_ptShortKeyPos_Fixed_Tooltips + 4);
-	Memory::WriteByte(0x008E3401 + 1, 0x3E);
+	Memory::WriteInt(0x008E3401 + 2, (DWORD)&Array_ptShortKeyPos_Fixed_Tooltips + 416);//26*2*8
+	//Memory::WriteByte(0x008E3401 + 1, 0x3E);
+	//Memory::CodeCave(removeKeyToolTips, 0x005CAF32, 5); ÆÁ±ÎTooltips
 
 	//CUIStatusBar::CQuickSlot::DrawSkillCooltime
 	Memory::WriteByte(0x008E5BE8 + 3, 0x1A);

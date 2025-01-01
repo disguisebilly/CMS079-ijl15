@@ -6,9 +6,12 @@ int m_slotXPos = 0;
 int m_nGameHeight = 720;
 int m_nGameWidth = 1280;
 int m_nBarWidth = 0;
+int m_nMaplePoint = 0;
 int m_nSlotWidth;
+int m_needFreshBackground = 0;
 unsigned int m_nBackgrndWidth;
 unsigned int  m_nBackgrnd2Width;
+int reloading = 0;
 
 __declspec(naked) void refreshMap()
 {
@@ -18,26 +21,29 @@ __declspec(naked) void refreshMap()
 		mov ecx, esi
 		mov eax, 0x0066E59E
 		call eax
-		mov esi, 0x00BDD490
-		mov esi, [esi]
-		push[esi + 0x00000F28]
-		mov ecx, 0x00BDD460
-		mov ecx, [ecx]
-		mov eax, 0x00437717
-		call eax
+		//mov esi, 0x00BDD490    //crash
+		//mov esi, [esi]
+		//push[esi + 0x00000F28]   //???
+		//mov ecx, 0x00BDD460
+		//mov ecx, [ecx]
+		// eax, 0x00437717
+		//call eax
 		ret
 	}
 }
 
-__declspec(naked) void reloadMap()   // error! Waiting for repair
+__declspec(naked) void reloadMap()
 {
 	__asm {
 		pushad
 		pushfd
-		//mov ebx, 0x00D8B50C
-		//mov ecx, ebx
-		//mov eax, 0x007B99E2
-		//call eax
+		cmp reloading, 0x1
+		jz label_ret
+		mov reloading, 0x1
+		mov ebx, 0x00BE5C5C
+		mov ecx, ebx
+		mov eax, 0x007B99E2
+		call eax
 		mov ecx, [0x00BD9028]
 		mov ecx, [ecx]
 		lea eax, [ecx + 0x2FE4]
@@ -54,28 +60,95 @@ __declspec(naked) void reloadMap()   // error! Waiting for repair
 		push 0x1
 		mov eax, 0x00A1BD8F
 		call eax
-		mov ecx, [0x00BDD6F0]
+		mov ecx, [0x00BDD6F0]  //抵用卷
 		mov ecx, [ecx]
-		mov edi, [0x00400FF4]
-		mov edi, [edi]
-		push edi
+		//mov edi, [0x0001E799]
+		//push edi
+		push m_nMaplePoint
 		mov eax, 0x008E4603
 		call eax
+		mov reloading, 0x0
+		label_ret:
 		popfd
-		popad
-		ret
+			popad
+			ret
 	}
+}
+
+int checkClick() {
+	auto setting = reinterpret_cast<DWORD*>(0x00BDD494);
+	if (*setting != NULL) {
+		auto option = (int)*reinterpret_cast<DWORD*>(*setting + 0x7C);
+		switch (option) {
+		case 0:
+			if (m_nGameWidth != 800) {
+				Client::m_nGameHeight = 600;
+				Client::m_nGameWidth = 800;
+				Resolution::UpdateResolution(Client::m_nGameWidth, Client::m_nGameHeight);
+				return 1;
+			}
+			break;
+		case 1:
+			if (m_nGameWidth != 1024) {
+				Client::m_nGameHeight = 768;
+				Client::m_nGameWidth = 1024;
+				Resolution::UpdateResolution(Client::m_nGameWidth, Client::m_nGameHeight);
+				return 1;
+			}
+			break;
+		case 2:
+			if (m_nGameWidth != 1280) {
+				Client::m_nGameHeight = 720;
+				Client::m_nGameWidth = 1280;
+				Resolution::UpdateResolution(Client::m_nGameWidth, Client::m_nGameHeight);
+				return 1;
+			}
+			break;
+		case 3:
+			if (m_nGameWidth != 1366) {
+				Client::m_nGameHeight = 768;
+				Client::m_nGameWidth = 1366;
+				Resolution::UpdateResolution(Client::m_nGameWidth, Client::m_nGameHeight);
+				return 1;
+			}
+			break;
+		case 4:
+			if (m_nGameWidth != 1600) {
+				Client::m_nGameHeight = 900;
+				Client::m_nGameWidth = 1600;
+				Resolution::UpdateResolution(Client::m_nGameWidth, Client::m_nGameHeight);
+				return 1;
+			}
+			break;
+		case 5:
+			if (m_nGameWidth != 1920) {
+				Client::m_nGameHeight = 1080;
+				Client::m_nGameWidth = 1920;
+				Resolution::UpdateResolution(Client::m_nGameWidth, Client::m_nGameHeight);
+				return 1;
+			}
+			break;
+		default:
+			if (m_nGameWidth != Client::m_nGameWidth) {
+				Resolution::UpdateResolution(Client::m_nGameWidth, Client::m_nGameHeight);
+				return 1;
+			}
+			break;
+		}
+	}
+	return 0;
 }
 
 __declspec(naked) void enterGame()
 {
 	__asm {
 		pushad
-		push Client::m_nGameHeight
-		push Client::m_nGameWidth
-		call Resolution::UpdateResolution
-		pop eax
-		pop eax
+		//push Client::m_nGameHeight
+		//push Client::m_nGameWidth
+		//call Resolution::UpdateResolution
+		//pop eax
+		//pop eax
+		call checkClick
 		popad
 		mov eax, 0x008D49F0
 		call eax
@@ -114,6 +187,103 @@ __declspec(naked) void enterShop()
 		mov eax, [0x00AD5801]
 		mov eax, [eax]
 		push 0x00863BC8
+		ret
+	}
+}
+
+__declspec(naked) void settingClick()
+{
+	__asm {
+		pushad
+		pushfd
+		call checkClick
+		cmp eax, 0x1
+		jne label_ret
+		mov m_needFreshBackground, 0x1
+		call refreshMap
+		call reloadMap
+		label_ret :
+		popfd
+			popad
+			mov eax, 0x00AAFED0
+			push 0x0066EF42
+			ret
+	}
+}
+
+const char* resolution[] = {
+	"800 * 600\n",
+	"1024 * 768\n",
+	"1280 * 720\n",
+	"1366 * 768\n",
+	"1600 * 900\n",
+	"1920 * 1080\n",
+};
+
+DWORD settingAddItem = 0x004D26F8;
+__declspec(naked) void createSetting()
+{
+	__asm {
+		mov ecx, [ebx + 0x0A8]
+		push 0
+		push resolution
+		call settingAddItem
+		mov ecx, [ebx + 0x0A8]
+		push 1
+		push resolution + 4
+		call settingAddItem
+		mov ecx, [ebx + 0x0A8]
+		push 2
+		push resolution + 8
+		call settingAddItem
+		mov ecx, [ebx + 0x0A8]
+		push 3
+		push resolution + 12
+		call settingAddItem
+		mov ecx, [ebx + 0x0A8]
+		push 4
+		push resolution + 16
+		call settingAddItem
+		mov ecx, [ebx + 0x0A8]
+		push 5
+		push resolution + 20
+		call settingAddItem
+		push 0x009A1703
+		ret
+	}
+}
+
+__declspec(naked) void refreshBg()
+{
+	__asm {
+		cmp[edi + 0x0EC], ecx
+		jne label_ret
+		cmp m_needFreshBackground, 0x0
+		label_ret :
+		mov m_needFreshBackground, 0x0
+			push 0x0066EFFD
+			ret
+	}
+}
+
+__declspec(naked) void saveMaplePoint()
+{
+	__asm {
+		mov eax, 0x004066FF
+		call eax
+		mov m_nMaplePoint, eax
+		push 0x00A348A7
+		ret
+	}
+}
+
+__declspec(naked) void settingPosition()
+{
+	__asm {
+		push 0x134
+		push 0x43
+		push 0x0
+		push 0x009A13E8
 		ret
 	}
 }
@@ -157,7 +327,8 @@ void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 	m_nGameHeight = nScreenHeight;
 	m_nGameWidth = nScreenWidth;
 
-	//byte tempTest[] = { 131, 248, 1, 116, 103, 187, 12, 181, 216, 0, 137, 217, 184, 89, 75, 137, 0, 255, 208, 139, 13, 108, 196, 215, 0, 141, 129, 0, 54, 0, 0, 190, 1, 0, 0, 0, 137, 48, 106, 0, 184, 0, 243, 183, 0, 255, 208, 139, 13, 108, 196, 215, 0, 141, 129, 0, 54, 0, 0, 190, 0, 0, 0, 0, 137, 48, 106, 1, 184, 0, 243, 183, 0, 255, 208, 139, 13, 100, 11, 216, 0, 139, 61, 244, 15, 64, 0, 87, 184, 200, 90, 160, 0, 255, 208, 157, 97, 184, 16, 160, 194, 0, 104, 150, 71, 111, 0, 195, 157, 97, 199, 5, 168, 15, 64, 0, 0, 0, 0, 0, 184, 16, 160, 194, 0, 104, 150, 71, 111, 0, 195 };
+	//byte tempTest[] = { 104, 211, 14, 64, 0, 139, 13, 104, 196, 215, 0, 184, 7, 18, 75, 0, 255, 208 };
+	//byte tempTest[] = { 233, 227, 100, 145, 255, 144,104, 52, 1, 0, 0, 106, 67, 106, 0, 104, 126, 169, 174, 0, 195 };
 	//Memory::WriteByteArray(0x00400D88, tempTest, sizeof(tempTest));
 	if (Client::minimizeMaptitleColor)
 		Memory::WriteInt(0x00864524 + 1, 0xFFFFFFFF);  //minimize map title color white
@@ -595,10 +766,10 @@ void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 	//}
 
 	//if (Client::bigLoginFrame) {
-	//	Memory::WriteInt(0x00628EFB + 1, nScreenWidth - 145);	// 145?? mov eax,800 ; RelMove?	//game version number for login frames that hug the side of the screen //you will still need to offset ntop, and that may require a code cave if your height resolution is too big
+	Memory::WriteInt(0x00628EFB + 1, nScreenWidth - 145);	// 145?? mov eax,800 ; RelMove?	//game version number for login frames that hug the side of the screen //you will still need to offset ntop, and that may require a code cave if your height resolution is too big
 	//}
 	//else {
-	//	nTopOfsettedVerFix = 10 + myHeight; nLeftOfsettedVerFix = 665 + myWidth; //parameters for fix version number
+	//nTopOfsettedVerFix = 10 + myHeight; nLeftOfsettedVerFix = 665 + myWidth; //parameters for fix version number
 	//	Memory::CodeCave(VersionNumberFix, dwVersionNumberFix, dwVersionNumberFixNOPs);	//game version number fix //use this if you use no frame or default client frame
 	//}
 
@@ -660,20 +831,33 @@ void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 
 void Resolution::UpdateSlotPosition(int width) {
 	m_nSlotWidth = width;
+	Memory::WriteInt(0x008D6547 + 1, width); //快捷面板宽度
 	//std::cout << "UpdateSlotPosition width = " << width << std::endl;
 	if (m_nGameWidth <= 800) {
 		m_slotXPos = m_nGameWidth;
+		Memory::WriteInt(dwQuickSlotInitVPos + 1, 533);
 		Memory::WriteInt(dwQuickSlotInitHPos + 1, 580); //push 647 //hd800
+		Memory::WriteInt(dwQuickSlotVPos + 2, 533);//add esi,533
 		Memory::WriteInt(dwQuickSlotHPos + 1, 580); //push 647 //hd800
-		Memory::WriteInt(dwQuickSlotCWndHPos + 2, -580); //lea ebx,[eax-647]
+		Memory::WriteInt(dwQuickSlotCWndVPos + 2, -427);
+		Memory::WriteInt(dwQuickSlotCWndHPos + 2, -580);
+		Memory::WriteInt(0x008E4443 + 1, 440);  //装备按鈕高度
 		Memory::WriteInt(0x008E4448 + 1, 587);  //装备按钮宽度
+		Memory::WriteInt(0x008E53F6 + 1, 440);  //装备闪烁高度
 		Memory::WriteInt(0x008E53FB + 1, 587);  //装备闪烁宽度
+		Memory::WriteInt(0x008E44C0 + 1, 440);  //背包按鈕高度
 		Memory::WriteInt(0x008E44C5 + 1, 621);  //背包按钮宽度
+		Memory::WriteInt(0x008E5499 + 1, 440);  //背包闪烁高度
 		Memory::WriteInt(0x008E549E + 1, 621);  //背包闪烁宽度
+		Memory::WriteInt(0x008E453D + 1, 473);  //能力值按鈕高度
 		Memory::WriteInt(0x008E4542 + 1, 587);  //能力值按钮宽度
+		Memory::WriteInt(0x008E5353 + 1, 473);  //能力值闪烁图标高度
 		Memory::WriteInt(0x008E5358 + 1, 587);  //能力值闪烁图标宽度
+		Memory::WriteInt(0x008E45BA + 1, 473);  //技能按鈕高度
 		Memory::WriteInt(0x008E45BF + 1, 621);  //技能按钮宽度
+		Memory::WriteInt(0x008E5152 + 1, 473);  //技能按鈕高度
 		Memory::WriteInt(0x008E5157 + 1, 621);  //技能按钮宽度
+		Memory::WriteInt(0x008D6547 + 1, 540); //快捷面板宽度
 	}
 	else {
 		m_slotXPos = m_nGameWidth - width;
@@ -686,7 +870,6 @@ void Resolution::UpdateSlotPosition(int width) {
 		Memory::WriteInt(dwQuickSlotHPos + 1, m_slotXPos); //push 647 //hd800
 		Memory::WriteInt(dwQuickSlotCWndVPos + 2, -500); //lea edi,[eax-427]6
 		Memory::WriteInt(dwQuickSlotCWndHPos + 2, -m_slotXPos); //lea ebx,[eax-647]
-		Memory::WriteInt(0x008D6547 + 1, 540); //快捷面板宽度
 		//4个快捷按钮位置
 		Memory::WriteInt(0x008E4443 + 1, 506);  //装备按鈕高度
 		Memory::WriteInt(0x008E4448 + 1, m_slotXPos + 7);  //装备按鈕寬度
@@ -754,7 +937,13 @@ void Resolution::Init()
 	Memory::CodeCave(enterGame, 0x00A1D906, 5);
 	Memory::CodeCave(exitGame, 0x00A0DA58, 6);
 	Memory::CodeCave(enterShop, 0x00863BC3, 5);
-	////Memory::CodeCave(backgroundHook, 0x00427EB3, 5);
+	Memory::CodeCave(settingClick, 0x0066EF3D, 5);
+	Memory::CodeCave(settingPosition, 0x009A13E2, 5);
+	Memory::CodeCave(createSetting, 0x009A1688, 5);
+	Memory::CodeCave(refreshBg, 0x0066EFF7, 5);
+	Memory::CodeCave(saveMaplePoint, 0x00A348A2, 5);
+	Memory::WriteByte(0x0049D517 + 1, 5);     //config
+	//Memory::CodeCave(backgroundHook, 0x00427EB3, 5);
 	_UpdateResolution(800, 600);
 	//_UpdateResolution(Client::m_nGameWidth, Client::m_nGameHeight);
 }
@@ -777,7 +966,6 @@ void Resolution::UpdateResolution(unsigned int nScreenWidth, unsigned int nScree
 	//	<< " " << Client::m_nGameHeight << "->" << nScreenHeight
 	//	<< std::endl;
 
-	unsigned int width = 0;
 	_UpdateResolution(nScreenWidth, nScreenHeight);
 	UpdateSlotPosition(m_nSlotWidth);
 	if (m_nBarWidth != 0)
@@ -792,9 +980,7 @@ void Resolution::UpdateResolution(unsigned int nScreenWidth, unsigned int nScree
 	Memory::WriteInt(*IWzGr2DPtr + 148, D3DERR_DEVICENOTRESET);  // 0x88760869  D3DERR_DEVICENOTRESET
 	Memory::WriteInt(*D3DPtr + 32, -floor(nScreenWidth / 2));
 	Memory::WriteInt(*D3DPtr + 36, -floor(nScreenHeight / 2));
-	SetWindowPos(FindWindow(L"MapleStoryClass", nullptr), HWND(-2), 0, 0, Client::m_nGameWidth, Client::m_nGameHeight, SWP_NOMOVE);
-	//refreshMap();
-	int full = 0;
+	//SetWindowPos(FindWindow(L"MapleStoryClass", nullptr), HWND(-2), 0, 0, Client::m_nGameWidth, Client::m_nGameHeight, SWP_NOMOVE);
 	//getIWzGr2DPtr()->raw_RenderFrame();
 }
 
