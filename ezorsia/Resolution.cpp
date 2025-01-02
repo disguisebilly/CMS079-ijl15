@@ -12,6 +12,7 @@ int m_needFreshBackground = 0;
 unsigned int m_nBackgrndWidth;
 unsigned int  m_nBackgrnd2Width;
 int reloading = 0;
+bool isSetting = false;
 
 tsl::robin_map<int, std::vector<int>> resolutionOption;
 
@@ -28,7 +29,7 @@ __declspec(naked) void refreshMap()
 		//push[esi + 0x00000F28]   //???
 		//mov ecx, 0x00BDD460
 		//mov ecx, [ecx]
-		// eax, 0x00437717
+		//mov eax, 0x00437717
 		//call eax
 		ret
 	}
@@ -179,6 +180,7 @@ __declspec(naked) void settingClick()
 	__asm {
 		pushad
 		pushfd
+		mov isSetting, 0x1
 		call checkUpdateResolution
 		cmp eax, 0x1
 		jne label_ret
@@ -187,7 +189,8 @@ __declspec(naked) void settingClick()
 		call reloadMap
 		call checkMoveWindow
 		label_ret :
-		popfd
+		mov isSetting, 0x0
+			popfd
 			popad
 			mov eax, 0x00AAFED0
 			push 0x0066EF42
@@ -311,8 +314,7 @@ void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 	Resolution::m_nGameHeight = nScreenHeight;
 	Resolution::m_nGameWidth = nScreenWidth;
 
-	//byte tempTest[] = { 104, 211, 14, 64, 0, 139, 13, 104, 196, 215, 0, 184, 7, 18, 75, 0, 255, 208 };
-	//byte tempTest[] = { 233, 227, 100, 145, 255, 144,104, 52, 1, 0, 0, 106, 67, 106, 0, 104, 126, 169, 174, 0, 195 };
+	//byte tempTest[] = { 139, 53, 180, 61, 216, 0, 137, 241, 184, 220, 61, 111, 0, 255, 208, 139, 53, 228, 8, 216, 0, 255, 182, 40, 23, 0, 0, 139, 13, 172, 8, 216, 0, 184, 192, 216, 67, 0, 255, 208 };
 	//Memory::WriteByteArray(0x00400D88, tempTest, sizeof(tempTest));
 	if (Client::minimizeMaptitleColor)
 		Memory::WriteInt(0x00864524 + 1, 0xFFFFFFFF);  //minimize map title color white
@@ -506,7 +508,8 @@ void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 	Memory::WriteInt(0x0066CC56 + 2, floor(-nScreenWidth / 2));
 	Memory::WriteInt(0x0066D6AD + 1, floor(-nScreenHeight / 2));
 	Memory::WriteInt(0x0066D6B5 + 1, floor(-nScreenWidth / 2));
-	Memory::WriteInt(0x006BF359 + 1, floor(-nScreenWidth / 2));
+	if (!isSetting)
+		Memory::WriteInt(0x006BF359 + 1, floor(-nScreenWidth / 2));   //SCRIPT_PROGRESS_MESSAGE »Æ×ÖÏûÏ¢
 	Memory::WriteInt(0x009EC61A + 1, floor(-nScreenHeight / 2));
 	Memory::WriteInt(0x009EC620 + 1, floor(-nScreenWidth / 2));
 	Memory::WriteInt(0x0093B675 + 1, floor(-nScreenHeight / 2));
@@ -932,7 +935,7 @@ void initResolutionOption() {
 	if (width >= 1920)
 		resolutionOption[5] = { 1920 ,1080 };
 	settingCount = resolutionOption.size();
-	if (Client::DefaultResolution >= settingCount || Client::DefaultResolution < 0 
+	if (Client::DefaultResolution >= settingCount || Client::DefaultResolution < 0
 		|| resolutionOption.find(Client::DefaultResolution) == resolutionOption.end()) {
 		Client::DefaultResolution = 0;
 	}
