@@ -4,8 +4,7 @@
 #include "FixBuddy.h"
 #include <Resman.h>
 
-int Client::m_nGameHeight = 720;
-int Client::m_nGameWidth = 1280;
+int Client::DefaultResolution = 2;
 int Client::MsgAmount = 26;
 bool Client::WindowedMode = true;
 bool Client::RemoveLogos = true;

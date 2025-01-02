@@ -87,8 +87,8 @@ __declspec(naked) void PositionBossBarY2() {
 	}
 }
 
-int myHeight = -(Client::m_nGameHeight - 600) / 2;
-int myWidth = -(Client::m_nGameWidth - 800) / 2;
+int myHeight = -(Resolution::m_nGameHeight - 600) / 2;
+int myWidth = -(Resolution::m_nGameWidth - 800) / 2;
 
 __declspec(naked) void CashShopFix() {
 	__asm {
@@ -1786,13 +1786,13 @@ __declspec(naked) void CodeCave_CWorldMapDlg__OnCreate()
 		push    666; dialogue width
 
 		// push -> (screenHeight / 2) - 262
-		mov        eax, [Client::m_nGameHeight]
+		mov        eax, [Resolution::m_nGameHeight]
 		shr        eax, 1
 		sub        eax, 262
 		push    eax
 
 		// push -> (screenWidth / 2) - 333
-		mov        eax, [Client::m_nGameWidth]
+		mov        eax, [Resolution::m_nGameWidth]
 		shr        eax, 1
 		sub        eax, 333
 		push    eax

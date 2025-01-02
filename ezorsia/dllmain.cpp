@@ -124,9 +124,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 	{
 		INIReader reader("config.ini");
 		if (reader.ParseError() == 0) {
-			Client::m_nGameWidth = reader.GetInteger("general", "width", Client::m_nGameWidth);
-			Client::m_nGameHeight = reader.GetInteger("general", "height", Client::m_nGameHeight);
-			Client::MsgAmount = reader.GetInteger("general", "MsgAmount", Client::MsgAmount);
+			Client::DefaultResolution = reader.GetInteger("general", "DefaultResolution", Client::DefaultResolution);
 			Client::WindowedMode = reader.GetBoolean("general", "WindowedMode", Client::WindowedMode);
 			Client::RemoveLogos = reader.GetBoolean("general", "RemoveLogos", Client::RemoveLogos);
 			Client::SkipWorldSelect = reader.GetBoolean("general", "SkipWorldSelect", Client::SkipWorldSelect);

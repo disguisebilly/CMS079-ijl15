@@ -3,8 +3,8 @@
 #include <Resolution.h>
 
 int m_slotXPos = 0;
-int m_nGameHeight = 720;
-int m_nGameWidth = 1280;
+int Resolution::m_nGameHeight = 720;
+int Resolution::m_nGameWidth = 1280;
 int m_nBarWidth = 0;
 int m_nMaplePoint = 0;
 int m_nSlotWidth;
@@ -12,6 +12,8 @@ int m_needFreshBackground = 0;
 unsigned int m_nBackgrndWidth;
 unsigned int  m_nBackgrnd2Width;
 int reloading = 0;
+
+tsl::robin_map<int, std::vector<int>> resolutionOption;
 
 __declspec(naked) void refreshMap()
 {
@@ -75,65 +77,21 @@ __declspec(naked) void reloadMap()
 	}
 }
 
-int checkClick() {
+int checkUpdateResolution() {
 	auto setting = reinterpret_cast<DWORD*>(0x00BDD494);
 	if (*setting != NULL) {
 		auto option = (int)*reinterpret_cast<DWORD*>(*setting + 0x7C);
-		switch (option) {
-		case 0:
-			if (m_nGameWidth != 800) {
-				Client::m_nGameHeight = 600;
-				Client::m_nGameWidth = 800;
-				Resolution::UpdateResolution(Client::m_nGameWidth, Client::m_nGameHeight);
-				return 1;
+		if (resolutionOption.find(option) == resolutionOption.end()) {
+			option = Client::DefaultResolution;
+			if (option < 0 || option >= resolutionOption.size() || resolutionOption.find(option) == resolutionOption.end()) {
+				Client::DefaultResolution = 0;
+				option = Client::DefaultResolution;
 			}
-			break;
-		case 1:
-			if (m_nGameWidth != 1024) {
-				Client::m_nGameHeight = 768;
-				Client::m_nGameWidth = 1024;
-				Resolution::UpdateResolution(Client::m_nGameWidth, Client::m_nGameHeight);
-				return 1;
-			}
-			break;
-		case 2:
-			if (m_nGameWidth != 1280) {
-				Client::m_nGameHeight = 720;
-				Client::m_nGameWidth = 1280;
-				Resolution::UpdateResolution(Client::m_nGameWidth, Client::m_nGameHeight);
-				return 1;
-			}
-			break;
-		case 3:
-			if (m_nGameWidth != 1366) {
-				Client::m_nGameHeight = 768;
-				Client::m_nGameWidth = 1366;
-				Resolution::UpdateResolution(Client::m_nGameWidth, Client::m_nGameHeight);
-				return 1;
-			}
-			break;
-		case 4:
-			if (m_nGameWidth != 1600) {
-				Client::m_nGameHeight = 900;
-				Client::m_nGameWidth = 1600;
-				Resolution::UpdateResolution(Client::m_nGameWidth, Client::m_nGameHeight);
-				return 1;
-			}
-			break;
-		case 5:
-			if (m_nGameWidth != 1920) {
-				Client::m_nGameHeight = 1080;
-				Client::m_nGameWidth = 1920;
-				Resolution::UpdateResolution(Client::m_nGameWidth, Client::m_nGameHeight);
-				return 1;
-			}
-			break;
-		default:
-			if (m_nGameWidth != Client::m_nGameWidth) {
-				Resolution::UpdateResolution(Client::m_nGameWidth, Client::m_nGameHeight);
-				return 1;
-			}
-			break;
+		}
+		std::vector<int> resolution = resolutionOption[option];
+		if (Resolution::m_nGameWidth != resolution[0]) {
+			Resolution::UpdateResolution(resolution[0], resolution[1]);
+			return 1;
 		}
 	}
 	return 0;
@@ -148,7 +106,7 @@ __declspec(naked) void enterGame()
 		//call Resolution::UpdateResolution
 		//pop eax
 		//pop eax
-		call checkClick
+		call checkUpdateResolution
 		popad
 		mov eax, 0x008D49F0
 		call eax
@@ -191,17 +149,43 @@ __declspec(naked) void enterShop()
 	}
 }
 
+void checkMoveWindow() {
+	int width = GetSystemMetrics(SM_CXSCREEN);
+	int height = GetSystemMetrics(SM_CYSCREEN);
+	HWND hWnd = FindWindow(L"MapleStoryClass", nullptr);
+	if (hWnd) {
+		RECT rect;
+		GetWindowRect(hWnd, &rect);
+		int left = rect.left;
+		int top = rect.top;
+		if (left + Resolution::m_nGameWidth > width)
+			left = width - Resolution::m_nGameWidth;
+		if (top + Resolution::m_nGameHeight > height)
+			top = height - Resolution::m_nGameHeight;
+		if (left < 0)
+			left = 0;
+		if (top < 0)
+			top = 0;
+		if (left != rect.left || top != rect.top) {
+			SetWindowPos(hWnd, HWND(-2), left, top
+				, Resolution::m_nGameWidth, Resolution::m_nGameHeight, SWP_NOSIZE);
+		}
+		CloseHandle(hWnd);
+	}
+}
+
 __declspec(naked) void settingClick()
 {
 	__asm {
 		pushad
 		pushfd
-		call checkClick
+		call checkUpdateResolution
 		cmp eax, 0x1
 		jne label_ret
 		mov m_needFreshBackground, 0x1
 		call refreshMap
 		call reloadMap
+		call checkMoveWindow
 		label_ret :
 		popfd
 			popad
@@ -221,35 +205,23 @@ const char* resolution[] = {
 };
 
 DWORD settingAddItem = 0x004D26F8;
+int settingCount = 6;
 __declspec(naked) void createSetting()
 {
 	__asm {
+		push esi
+		mov esi, 0x0
+		label_loop:
 		mov ecx, [ebx + 0x0A8]
-		push 0
-		push resolution
-		call settingAddItem
-		mov ecx, [ebx + 0x0A8]
-		push 1
-		push resolution + 4
-		call settingAddItem
-		mov ecx, [ebx + 0x0A8]
-		push 2
-		push resolution + 8
-		call settingAddItem
-		mov ecx, [ebx + 0x0A8]
-		push 3
-		push resolution + 12
-		call settingAddItem
-		mov ecx, [ebx + 0x0A8]
-		push 4
-		push resolution + 16
-		call settingAddItem
-		mov ecx, [ebx + 0x0A8]
-		push 5
-		push resolution + 20
-		call settingAddItem
-		push 0x009A1703
-		ret
+			push esi
+			push[resolution + 4 * esi]
+			call settingAddItem
+			inc esi
+			cmp esi, settingCount
+			jne label_loop
+			pop esi
+			push 0x009A1703
+			ret
 	}
 }
 
@@ -277,6 +249,18 @@ __declspec(naked) void saveMaplePoint()
 	}
 }
 
+__declspec(naked) void loadingSettingConfig()
+{
+	__asm {
+		push settingCount
+		push edi
+		push Client::DefaultResolution
+		push eax
+		push 0x0049D51C
+		ret
+	}
+}
+
 __declspec(naked) void settingPosition()
 {
 	__asm {
@@ -293,11 +277,11 @@ void _backgroundHook(DWORD* eax) {
 	DWORD* IWzGr2DPtr = reinterpret_cast<DWORD*>(0x00BE2788);
 	if (*eax == 0x008D6557) {  //ÇÐÍ¼
 		if (*IWzGr2DPtr != NULL)
-			Memory::WriteInt(*IWzGr2DPtr + 32, Client::m_nGameWidth);
+			Memory::WriteInt(*IWzGr2DPtr + 32, Resolution::m_nGameWidth);
 	}
 	if (*eax == 0x00669BF0) {//ÍË³ö
 		if (*IWzGr2DPtr != NULL)
-			Memory::WriteInt(*IWzGr2DPtr + 32, Client::m_nGameWidth);
+			Memory::WriteInt(*IWzGr2DPtr + 32, Resolution::m_nGameWidth);
 	}
 }
 
@@ -324,8 +308,8 @@ __declspec(naked) void backgroundHook()
 
 void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 
-	m_nGameHeight = nScreenHeight;
-	m_nGameWidth = nScreenWidth;
+	Resolution::m_nGameHeight = nScreenHeight;
+	Resolution::m_nGameWidth = nScreenWidth;
 
 	//byte tempTest[] = { 104, 211, 14, 64, 0, 139, 13, 104, 196, 215, 0, 184, 7, 18, 75, 0, 255, 208 };
 	//byte tempTest[] = { 233, 227, 100, 145, 255, 144,104, 52, 1, 0, 0, 106, 67, 106, 0, 104, 126, 169, 174, 0, 195 };
@@ -932,8 +916,31 @@ void Resolution::updateStatResolution(unsigned int  backgrndWidth, unsigned int 
 class CWndMan : public TSingleton<CWndMan, 0x00BDD6F4> {
 };
 
+void initResolutionOption() {
+	int width = GetSystemMetrics(SM_CXSCREEN);
+	int height = GetSystemMetrics(SM_CYSCREEN);
+	if (width >= 800)
+		resolutionOption[0] = { 800 ,600 };
+	if (width >= 1024)
+		resolutionOption[1] = { 1024 ,768 };
+	if (width >= 1280)
+		resolutionOption[2] = { 1280 ,720 };
+	if (width >= 1366)
+		resolutionOption[3] = { 1366 ,768 };
+	if (width >= 1600)
+		resolutionOption[4] = { 1600 ,900 };
+	if (width >= 1920)
+		resolutionOption[5] = { 1920 ,1080 };
+	settingCount = resolutionOption.size();
+	if (Client::DefaultResolution >= settingCount || Client::DefaultResolution < 0 
+		|| resolutionOption.find(Client::DefaultResolution) == resolutionOption.end()) {
+		Client::DefaultResolution = 0;
+	}
+}
+
 void Resolution::Init()
 {
+	initResolutionOption();
 	Memory::CodeCave(enterGame, 0x00A1D906, 5);
 	Memory::CodeCave(exitGame, 0x00A0DA58, 6);
 	Memory::CodeCave(enterShop, 0x00863BC3, 5);
@@ -942,7 +949,8 @@ void Resolution::Init()
 	Memory::CodeCave(createSetting, 0x009A1688, 5);
 	Memory::CodeCave(refreshBg, 0x0066EFF7, 5);
 	Memory::CodeCave(saveMaplePoint, 0x00A348A2, 5);
-	Memory::WriteByte(0x0049D517 + 1, 5);     //config
+	Memory::CodeCave(loadingSettingConfig, 0x0049D517, 5);
+	//Memory::WriteByte(0x0049D517 + 1, 5);     //config
 	//Memory::CodeCave(backgroundHook, 0x00427EB3, 5);
 	_UpdateResolution(800, 600);
 	//_UpdateResolution(Client::m_nGameWidth, Client::m_nGameHeight);
@@ -954,17 +962,6 @@ void Resolution::UpdateResolution(unsigned int nScreenWidth, unsigned int nScree
 	if (*IWzGr2DPtr == NULL)
 		return;
 	DWORD* D3DPtr = reinterpret_cast<DWORD*>(*reinterpret_cast<DWORD*>(Resolution::D3Dptr) + 36);
-
-	//std::cout << *reinterpret_cast<DWORD*>((*IWzGr2DPtr)) << " " << *D3DPtr << " " << *reinterpret_cast<DWORD*>(Resolution::D3Dptr)
-	//	<< " " << *reinterpret_cast<DWORD*>((*IWzGr2DPtr + 48))
-	//	<< " " << *reinterpret_cast<DWORD*>((*IWzGr2DPtr + 32))
-	//	<< " " << *reinterpret_cast<DWORD*>((*IWzGr2DPtr + 52))
-	//	<< " " << *reinterpret_cast<DWORD*>((*IWzGr2DPtr + 36))
-	//	<< " " << (int)(*reinterpret_cast<DWORD*>((*D3DPtr + 32)))
-	//	<< " " << (int)(*reinterpret_cast<DWORD*>((*D3DPtr + 36)))
-	//	<< " " << Client::m_nGameWidth << "->" << nScreenWidth
-	//	<< " " << Client::m_nGameHeight << "->" << nScreenHeight
-	//	<< std::endl;
 
 	_UpdateResolution(nScreenWidth, nScreenHeight);
 	UpdateSlotPosition(m_nSlotWidth);
@@ -980,7 +977,6 @@ void Resolution::UpdateResolution(unsigned int nScreenWidth, unsigned int nScree
 	Memory::WriteInt(*IWzGr2DPtr + 148, D3DERR_DEVICENOTRESET);  // 0x88760869  D3DERR_DEVICENOTRESET
 	Memory::WriteInt(*D3DPtr + 32, -floor(nScreenWidth / 2));
 	Memory::WriteInt(*D3DPtr + 36, -floor(nScreenHeight / 2));
-	//SetWindowPos(FindWindow(L"MapleStoryClass", nullptr), HWND(-2), 0, 0, Client::m_nGameWidth, Client::m_nGameHeight, SWP_NOMOVE);
 	//getIWzGr2DPtr()->raw_RenderFrame();
 }
 

@@ -123,13 +123,13 @@ bool Hook_StringPool__GetString(bool bEnable)	//hook stringpool modification //t
 		{
 			auto ret = _StringPool__GetString(pThis, edx, result, nIdx, formal);
 			auto str = static_cast<const char*>(*ret);
-			//if (strstr(str, "√∞œ’µ∫ON") != nullptr) {
+			//if (strstr(str, "√∞œ’µ∫ON") != nullptr || nIdx == 2219) {
 			//	std::cout << "StringPool__GetString id = " << nIdx << " " << str << " " << _ReturnAddress() << std::endl;
 			//}
-			//if (nIdx == 1163)
-			//{
-			//    *ret = "BeiDou";
-			//}
+			if (nIdx == 2219)
+			{
+			   *ret = "soResolution";
+			}
 			switch (nIdx)
 			{
 				//case 233:
