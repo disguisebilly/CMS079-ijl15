@@ -981,5 +981,24 @@ void Resolution::UpdateResolution(unsigned int nScreenWidth, unsigned int nScree
 	Memory::WriteInt(*D3DPtr + 32, -floor(nScreenWidth / 2));
 	Memory::WriteInt(*D3DPtr + 36, -floor(nScreenHeight / 2));
 	//getIWzGr2DPtr()->raw_RenderFrame();
+	if (isSetting) {
+		DWORD* topMsg = reinterpret_cast<DWORD*>(0x00BE20EC);  //¶¥²¿¹ö¶¯¿ò
+		if (*topMsg) {
+			topMsg = reinterpret_cast<DWORD*>(*topMsg + 0x68);
+			if (*topMsg) {
+				topMsg = reinterpret_cast<DWORD*>(*topMsg + 0x30);
+				if (*topMsg) {
+					topMsg = reinterpret_cast<DWORD*>(*topMsg + 0x40);
+					if (*topMsg) {
+						topMsg = reinterpret_cast<DWORD*>(*topMsg + 0x24);
+						if (*topMsg) {
+							topMsg = reinterpret_cast<DWORD*>(*topMsg + 0x20);
+							*topMsg = nScreenWidth;
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
