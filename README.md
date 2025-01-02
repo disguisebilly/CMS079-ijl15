@@ -157,4 +157,8 @@ https://github.com/Chronicle20/gms-83-dll
 
 https://github.com/v3921358/MapleRoot
 
+## 友情链接
+
+悠悠下载器：https://github.com/uuuu233/downloader
+
 # 仅供学习交流使用!!!
