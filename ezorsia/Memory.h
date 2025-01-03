@@ -13,6 +13,7 @@ public:
 	static void CodeCave(void* ptrCodeCave, DWORD dwOriginAddress, int nNOPCount);
 	static void PatchCall(DWORD address, void* dst);
 	static void WriteByteArray(DWORD dwOriginAddress, unsigned char* ucValue, const int ucValueSize);
+	static DWORD* getAddress(DWORD dwOriginAddress, std::initializer_list<int> ls);
 	static bool UseVirtuProtect;
 };
 

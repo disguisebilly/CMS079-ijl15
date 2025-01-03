@@ -15,6 +15,14 @@ int reloading = 0;
 bool isSetting = false;
 
 tsl::robin_map<int, std::vector<int>> resolutionOption;
+const char* resolution[] = {
+	"800 * 600\n",
+	"1024 * 768\n",
+	"1280 * 720\n",
+	"1366 * 768\n",
+	"1600 * 900\n",
+	"1920 * 1080\n",
+};
 
 __declspec(naked) void refreshMap()
 {
@@ -198,15 +206,6 @@ __declspec(naked) void settingClick()
 	}
 }
 
-const char* resolution[] = {
-	"800 * 600\n",
-	"1024 * 768\n",
-	"1280 * 720\n",
-	"1366 * 768\n",
-	"1600 * 900\n",
-	"1920 * 1080\n",
-};
-
 DWORD settingAddItem = 0x004D26F8;
 int settingCount = 6;
 __declspec(naked) void createSetting()
@@ -248,6 +247,64 @@ __declspec(naked) void saveMaplePoint()
 		call eax
 		mov m_nMaplePoint, eax
 		push 0x00A348A7
+		ret
+	}
+}
+
+static ZXString<char>* m_nTopMsg;
+
+void _saveTopMsg(ZXString<char>* eax) {
+	if (m_nTopMsg != nullptr) {
+		delete m_nTopMsg;
+		m_nTopMsg = nullptr;
+	}
+	m_nTopMsg = new ZXString<char>(eax);
+}
+
+ZXString<char>* getSaveTopMsg() {
+	if (m_nTopMsg != nullptr) {
+		return new ZXString<char>(m_nTopMsg);
+	}
+	return nullptr;
+}
+
+__declspec(naked) void restoreTopMsg()
+{
+	__asm {
+		call getSaveTopMsg
+		cmp eax, 0x0
+		jz lable_empty
+		mov eax, [eax]
+		lable_empty:
+		push eax
+			mov eax, 0x00A34DEE
+			call eax
+			cmp eax, 0x0
+			jz label_ret2
+			mov ecx, eax
+			mov eax, 0x007F7C4E
+			call eax
+			jmp label_ret
+			label_ret2 :
+		pop eax
+			label_ret :
+		ret
+	}
+}
+
+__declspec(naked) void saveTopMsg()
+{
+	__asm {
+		mov eax, 0x00418F94
+		call eax
+		pushad
+		pushfd
+		push eax
+		call _saveTopMsg
+		pop eax
+		popfd
+		popad
+		push 0x00A2CA54
 		ret
 	}
 }
@@ -534,8 +591,8 @@ void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 	//Memory::WriteInt(0x00992BA7 + 1, (unsigned int)floor(nScreenWidth / 2));//??unknown cwnd function, possibly related to cutildlg
 	//Memory::WriteInt(0x00992BAC + 1, (unsigned int)floor(nScreenHeight / 2));//??unknown cwnd function, possibly related to cutildlg
 
-	Memory::WriteInt(0x007F8357 + 2, nScreenWidth);//related to displaying server message at top of screen
-	Memory::WriteInt(0x007F7F1A + 2, nScreenWidth);//related to displaying server message at top of screen
+	Memory::WriteInt(0x007F8357 + 2, nScreenWidth);//related to displaying server message at top of screen  
+	Memory::WriteInt(0x007F7F1A + 2, nScreenWidth);//related to displaying server message at top of screen  顶部滚动消息
 
 	Memory::WriteInt(0x005462B2 + 1, (nScreenWidth / 2) - 129);//related to boss bar
 	//Memory::WriteInt(0x005364AA + 2, (nScreenWidth / 2) - 128);//??related to boss bar
@@ -953,6 +1010,7 @@ void Resolution::Init()
 	Memory::CodeCave(refreshBg, 0x0066EFF7, 5);
 	Memory::CodeCave(saveMaplePoint, 0x00A348A2, 5);
 	Memory::CodeCave(loadingSettingConfig, 0x0049D517, 5);
+	Memory::CodeCave(saveTopMsg, 0x00A2CA4F, 5);
 	//Memory::WriteByte(0x0049D517 + 1, 5);     //config
 	//Memory::CodeCave(backgroundHook, 0x00427EB3, 5);
 	_UpdateResolution(800, 600);
@@ -982,23 +1040,18 @@ void Resolution::UpdateResolution(unsigned int nScreenWidth, unsigned int nScree
 	Memory::WriteInt(*D3DPtr + 36, -floor(nScreenHeight / 2));
 	//getIWzGr2DPtr()->raw_RenderFrame();
 	if (isSetting) {
-		DWORD* topMsg = reinterpret_cast<DWORD*>(0x00BE20EC);  //顶部滚动框
-		if (*topMsg) {
-			topMsg = reinterpret_cast<DWORD*>(*topMsg + 0x68);
-			if (*topMsg) {
-				topMsg = reinterpret_cast<DWORD*>(*topMsg + 0x30);
-				if (*topMsg) {
-					topMsg = reinterpret_cast<DWORD*>(*topMsg + 0x40);
-					if (*topMsg) {
-						topMsg = reinterpret_cast<DWORD*>(*topMsg + 0x24);
-						if (*topMsg) {
-							topMsg = reinterpret_cast<DWORD*>(*topMsg + 0x20);
-							*topMsg = nScreenWidth;
-						}
-					}
-				}
+		DWORD* topMsg = Memory::getAddress(0x00BE20EC, { 0x68,0x30,0x40,0x24,0x20 });
+		if (topMsg) {
+			*topMsg = nScreenWidth;
+			if (m_nTopMsg != nullptr) {
+				restoreTopMsg();
 			}
 		}
+	}
+	DWORD* topMsg = reinterpret_cast<DWORD*>(0x00BE20EC);
+	if (!*topMsg && m_nTopMsg != nullptr) {
+		delete m_nTopMsg;
+		m_nTopMsg = nullptr;
 	}
 }
 
