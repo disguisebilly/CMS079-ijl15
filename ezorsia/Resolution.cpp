@@ -871,6 +871,9 @@ void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 	Memory::CodeCave(darkMap1cc, 0x00576456, 9);
 	Memory::CodeCave(darkMap2cc, 0x005765EF, 12);
 	Memory::CodeCave(darkMap3cc, 0x00576735, 13);
+
+	//NPC¶Ô»°¿ò
+	Memory::WriteInt(0x009AFEEE + 1, nScreenHeight - 600 + 300);
 }
 
 void Resolution::UpdateSlotPosition(int width) {

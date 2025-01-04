@@ -371,8 +371,6 @@ void Client::MoreHook() {
 		Memory::WriteByteArray(0x0095C4F1, holdAttackBytes, sizeof(holdAttackBytes));
 	}
 
-	Memory::WriteInt(0x009AFEEE + 1, 480);
-
 	Memory::CodeCave(faceHairCave, 0x005FCEFF, 10);
 	Memory::CodeCave(faceHairNpcCave, 0x009B7E99, 18);
 	Memory::CodeCave(canSendPkgTimeCave, 0x00485169, 10);
