@@ -125,10 +125,12 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 		INIReader reader("config.ini");
 		if (reader.ParseError() == 0) {
 			Client::DefaultResolution = reader.GetInteger("general", "DefaultResolution", Client::DefaultResolution);
+			Client::MsgAmount = reader.GetInteger("general", "MsgAmount", Client::MsgAmount);
 			Client::WindowedMode = reader.GetBoolean("general", "WindowedMode", Client::WindowedMode);
 			Client::RemoveLogos = reader.GetBoolean("general", "RemoveLogos", Client::RemoveLogos);
 			Client::SkipWorldSelect = reader.GetBoolean("general", "SkipWorldSelect", Client::SkipWorldSelect);
 			Client::RemoveLoginNxIdDialog = reader.GetBoolean("general", "RemoveLoginNxIdDialog", Client::RemoveLoginNxIdDialog);
+			Client::RemoveSystemMsg = reader.GetBoolean("general", "RemoveSystemMsg", Client::RemoveSystemMsg);
 			Memory::UseVirtuProtect = reader.GetBoolean("general", "UseVirtuProtect", Memory::UseVirtuProtect);
 			Client::ResManFlushCached = reader.GetInteger("general", "ResManFlushCached", Client::ResManFlushCached);
 			Client::SetProcessWorkingSetSize = reader.GetInteger("general", "SetProcessWorkingSetSize", Client::SetProcessWorkingSetSize);

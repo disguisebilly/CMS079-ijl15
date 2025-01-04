@@ -5,10 +5,11 @@
 #include <Resman.h>
 
 int Client::DefaultResolution = 2;
-int Client::MsgAmount = 26;
+int Client::MsgAmount = 10;
 bool Client::WindowedMode = true;
 bool Client::RemoveLogos = true;
 bool Client::SkipWorldSelect = true;
+bool Client::RemoveSystemMsg = true;
 bool Client::RemoveLoginNxIdDialog = true;
 int Client::ResManFlushCached = 512;
 int Client::SetProcessWorkingSetSize = 768;
@@ -445,6 +446,11 @@ void Client::MoreHook() {
 	}
 
 	Memory::WriteByte(0x00942A01, 0xEB);
+
+	if (Client::RemoveSystemMsg) {
+		Memory::FillBytes(0x00A0CD7D, 0x90, 5);
+		Memory::FillBytes(0x00A0C8CA, 0x90, 5);
+	}
 }
 
 void Client::Skill() {

@@ -18,6 +18,7 @@ public:
 	static bool WindowedMode;
 	static bool RemoveLogos;
 	static bool SkipWorldSelect;
+	static bool RemoveSystemMsg;
 	static bool RemoveLoginNxIdDialog;
 	static int ResManFlushCached;
 	static int SetProcessWorkingSetSize;
