@@ -1017,7 +1017,7 @@ void Resolution::Init()
 	//Memory::WriteByte(0x0049D517 + 1, 5);     //config
 	//Memory::CodeCave(backgroundHook, 0x00427EB3, 5);
 	_UpdateResolution(800, 600);
-	//_UpdateResolution(Client::m_nGameWidth, Client::m_nGameHeight);
+	//_UpdateResolution(Resolution::m_nGameWidth, Resolution::m_nGameHeight);
 }
 
 void Resolution::UpdateResolution(unsigned int nScreenWidth, unsigned int nScreenHeight)

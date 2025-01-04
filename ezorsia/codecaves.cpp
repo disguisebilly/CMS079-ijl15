@@ -1910,20 +1910,20 @@ __declspec(naked) void SaveD3D()
 	__asm {
 		mov Resolution::D3Dptr, esi
 		lea esi, [ebp - 0x40]
-		//push eax
-		//mov eax, 0x009FFF02
-		//mov word ptr [eax], 0x00000438
-		//mov eax, 0x009FFF07
-		//mov word ptr [eax], 0x00000780
-		//mov eax, [0x00BE2788]
-		//mov eax, [eax]
-		//add eax, 0x20
-		//mov  word ptr [eax], 0x00000780
-		//add eax, 0x4
-		//mov  word ptr[eax], 0x00000438
-		//mov eax, 0x007F7AD6
-		//mov  word ptr [eax], 0x00000780
-		//pop eax
+		push eax
+		mov eax, 0x009FFF02
+		mov word ptr [eax], 0x00000438
+		mov eax, 0x009FFF07
+		mov word ptr [eax], 0x00000780
+		mov eax, [0x00BE2788]
+		mov eax, [eax]
+		add eax, 0x20
+		mov  word ptr [eax], 0x00000780
+		add eax, 0x4
+		mov  word ptr[eax], 0x00000438
+		mov eax, 0x007F7AD6
+		mov  word ptr [eax], 0x00000780
+		pop eax
 		movsd
 		movsd
 		push 0x009EC60C
