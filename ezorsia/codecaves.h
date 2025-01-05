@@ -447,3 +447,5 @@ void tamingMob198_28();
 void tamingMob198_29();
 
 void tamingMob198_30();
+
+void screenShotPath();

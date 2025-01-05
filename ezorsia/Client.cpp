@@ -11,6 +11,7 @@ bool Client::RemoveLogos = true;
 bool Client::SkipWorldSelect = true;
 bool Client::RemoveSystemMsg = true;
 bool Client::RemoveLoginNxIdDialog = true;
+int Client::ScreenShotPath = 0;
 int Client::ResManFlushCached = 512;
 int Client::SetProcessWorkingSetSize = 768;
 int Client::setDamageCap = 199999;
@@ -192,6 +193,11 @@ void Client::UpdateGameStartup() {
 	Memory::FillBytes(0x009FB8AD, 0x90, 5);     //移除启动广告(remove start ads )
 	Memory::WriteByte(0x009FC0CB, 0xEB);	//jz 009FC13A ; jmp 移除退出广告(remove exit ads)
 	Memory::CodeCave(unlockPacket, 0x007DADB8, 5);
+
+	//修改截图位置
+	if (Client::ScreenShotPath < 0 || Client::ScreenShotPath > 2)
+		Client::ScreenShotPath = 0;
+	Memory::CodeCave(screenShotPath, 0x00751AD9, 5);
 }
 
 void Client::EnableNewIGCipher() {//??not called //no idea what cipher is

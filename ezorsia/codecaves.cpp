@@ -2522,3 +2522,13 @@ __declspec(naked) void tamingMob198_30()
 		jmp _tamingMob198_30
 	}
 }
+
+__declspec(naked) void screenShotPath()
+{
+	__asm {
+		mov eax,Client::ScreenShotPath
+		sub eax, edi
+		push 0x00751ADE
+		ret
+	}
+}

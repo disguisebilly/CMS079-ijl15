@@ -20,6 +20,7 @@ public:
 	static bool SkipWorldSelect;
 	static bool RemoveSystemMsg;
 	static bool RemoveLoginNxIdDialog;
+	static int ScreenShotPath;
 	static int ResManFlushCached;
 	static int SetProcessWorkingSetSize;
 	static int setDamageCap;

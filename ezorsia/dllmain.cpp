@@ -130,6 +130,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::RemoveLogos = reader.GetBoolean("general", "RemoveLogos", Client::RemoveLogos);
 			Client::SkipWorldSelect = reader.GetBoolean("general", "SkipWorldSelect", Client::SkipWorldSelect);
 			Client::RemoveLoginNxIdDialog = reader.GetBoolean("general", "RemoveLoginNxIdDialog", Client::RemoveLoginNxIdDialog);
+			Client::ScreenShotPath = reader.GetBoolean("general", "ScreenShotPath", Client::ScreenShotPath);
 			Client::RemoveSystemMsg = reader.GetBoolean("general", "RemoveSystemMsg", Client::RemoveSystemMsg);
 			Memory::UseVirtuProtect = reader.GetBoolean("general", "UseVirtuProtect", Memory::UseVirtuProtect);
 			Client::ResManFlushCached = reader.GetInteger("general", "ResManFlushCached", Client::ResManFlushCached);
