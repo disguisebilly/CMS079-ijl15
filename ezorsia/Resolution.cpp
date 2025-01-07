@@ -110,11 +110,6 @@ __declspec(naked) void enterGame()
 {
 	__asm {
 		pushad
-		//push Client::m_nGameHeight
-		//push Client::m_nGameWidth
-		//call Resolution::UpdateResolution
-		//pop eax
-		//pop eax
 		call checkUpdateResolution
 		popad
 		mov eax, 0x008D49F0
@@ -128,11 +123,7 @@ __declspec(naked) void exitGame()
 {
 	__asm {
 		pushad
-		push 600
-		push 800
-		call Resolution::UpdateResolution
-		pop eax
-		pop eax
+		call Resolution::ResetResolution
 		popad
 		mov ecx, [0x00BDD8AC]
 		mov ecx, [ecx]
@@ -145,11 +136,7 @@ __declspec(naked) void enterShop()
 {
 	__asm {
 		pushad
-		push 600
-		push 800
-		call Resolution::UpdateResolution
-		pop eax
-		pop eax
+		call Resolution::ResetResolution
 		popad
 		mov eax, [0x00AD5801]
 		mov eax, [eax]
@@ -375,7 +362,6 @@ void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 	//Memory::WriteByteArray(0x00400D88, tempTest, sizeof(tempTest));
 	if (Client::minimizeMaptitleColor)
 		Memory::WriteInt(0x00864524 + 1, 0xFFFFFFFF);  //minimize map title color white
-	Memory::CodeCave(SaveD3D, 0x009EC607, 5);
 	Memory::CodeCave(gameRect, 0x009FFEFB, 6);
 
 	nStatusBarY = nScreenHeight - 578;
@@ -591,9 +577,6 @@ void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 	//Memory::WriteInt(0x00992BA7 + 1, (unsigned int)floor(nScreenWidth / 2));//??unknown cwnd function, possibly related to cutildlg
 	//Memory::WriteInt(0x00992BAC + 1, (unsigned int)floor(nScreenHeight / 2));//??unknown cwnd function, possibly related to cutildlg
 
-	Memory::WriteInt(0x007F8357 + 2, nScreenWidth);//related to displaying server message at top of screen  
-	Memory::WriteInt(0x007F7F1A + 2, nScreenWidth);//related to displaying server message at top of screen  顶部滚动消息
-
 	Memory::WriteInt(0x005462B2 + 1, (nScreenWidth / 2) - 129);//related to boss bar
 	//Memory::WriteInt(0x005364AA + 2, (nScreenWidth / 2) - 128);//??related to boss bar
 	Memory::WriteInt(0x00A2E4F9 + 1, (nScreenWidth / 2) - 129); //??
@@ -696,7 +679,10 @@ void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 	Memory::WriteInt(0x00804E8F + 1, nScreenWidth);
 	Memory::WriteInt(0x00804E7E + 1, nScreenHeight);
 
+	//顶部黄色消息框大小
 	Memory::WriteInt(0x007F7AD5 + 1, nScreenWidth);
+	Memory::WriteInt(0x007F8357 + 2, nScreenWidth);//related to displaying server message at top of screen  
+	Memory::WriteInt(0x007F7F1A + 2, nScreenWidth);//related to displaying server message at top of screen  
 
 	Memory::WriteInt(0x0065A8E8 + 1, nScreenWidth);   //未知
 	Memory::WriteInt(0x0065A8E3 + 1, nScreenHeight);
@@ -1004,6 +990,7 @@ void initResolutionOption() {
 void Resolution::Init()
 {
 	initResolutionOption();
+	Memory::CodeCave(SaveD3D, 0x009EC607, 5);
 	Memory::CodeCave(enterGame, 0x00A1D906, 5);
 	Memory::CodeCave(exitGame, 0x00A0DA58, 6);
 	Memory::CodeCave(enterShop, 0x00863BC3, 5);
@@ -1016,8 +1003,17 @@ void Resolution::Init()
 	Memory::CodeCave(saveTopMsg, 0x00A2CA4F, 5);
 	//Memory::WriteByte(0x0049D517 + 1, 5);     //config
 	//Memory::CodeCave(backgroundHook, 0x00427EB3, 5);
-	_UpdateResolution(800, 600);
 	//_UpdateResolution(Resolution::m_nGameWidth, Resolution::m_nGameHeight);
+}
+
+void Resolution::InitResolution()
+{
+	_UpdateResolution(800, 600);
+}
+
+void Resolution::ResetResolution()
+{
+	Resolution::UpdateResolution(800, 600);
 }
 
 void Resolution::UpdateResolution(unsigned int nScreenWidth, unsigned int nScreenHeight)
@@ -1042,17 +1038,24 @@ void Resolution::UpdateResolution(unsigned int nScreenWidth, unsigned int nScree
 	Memory::WriteInt(*D3DPtr + 32, -floor(nScreenWidth / 2));
 	Memory::WriteInt(*D3DPtr + 36, -floor(nScreenHeight / 2));
 	//getIWzGr2DPtr()->raw_RenderFrame();
-	if (isSetting) {
-		DWORD* topMsg = Memory::getAddress(0x00BE20EC, { 0x68,0x30,0x40,0x24,0x20 });
-		if (topMsg) {
-			*topMsg = nScreenWidth;
+	//DWORD* topMsgbg = Memory::getAddress(0x00BE20EC, { 0x68,0x30,0x40,0x24,0x20 });
+	//if (topMsgbg) {
+	//	*topMsgbg = nScreenWidth;
+	//	if (m_nTopMsg != nullptr) {
+	//		restoreTopMsg();
+	//	}
+	//}
+	DWORD* topMsg = reinterpret_cast<DWORD*>(0x00BE20EC);
+	if (*topMsg) {
+		DWORD* topMsgbg = Memory::getAddress(0x00BE20EC, { 0x68,0x30,0x40,0x24,0x20 });
+		if (topMsgbg) {
+			*topMsgbg = nScreenWidth;
 			if (m_nTopMsg != nullptr) {
 				restoreTopMsg();
 			}
 		}
 	}
-	DWORD* topMsg = reinterpret_cast<DWORD*>(0x00BE20EC);
-	if (!*topMsg && m_nTopMsg != nullptr) {
+	else if (m_nTopMsg != nullptr) {
 		delete m_nTopMsg;
 		m_nTopMsg = nullptr;
 	}

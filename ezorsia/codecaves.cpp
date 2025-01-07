@@ -1910,7 +1910,9 @@ __declspec(naked) void SaveD3D()
 	__asm {
 		mov Resolution::D3Dptr, esi
 		lea esi, [ebp - 0x40]
-		push eax
+		pushad
+		pushfd
+		call Resolution::InitResolution
 		mov eax, 0x009FFF02
 		mov word ptr[eax], 0x00000438
 		mov eax, 0x009FFF07
@@ -1921,9 +1923,10 @@ __declspec(naked) void SaveD3D()
 		mov  word ptr[eax], 0x00000780
 		add eax, 0x4
 		mov  word ptr[eax], 0x00000438
-		mov eax, 0x007F7AD6
-		mov  word ptr[eax], 0x00000780
-		pop eax
+		//mov eax, 0x007F7AD6
+		//mov  word ptr[eax], 0x00000320
+		popfd
+		popad
 		movsd
 		movsd
 		push 0x009EC60C
@@ -2042,12 +2045,12 @@ __declspec(naked) void upDoubleJump()
 		mov ecx, 0xFFFFFF06
 		sub ecx, eax
 		jmp label_ret
-		label_up:
+		label_up :
 		mov eax, 0
-		mov [ebp + 0x0C], eax
-		mov ecx, 0xFFFFFC00
-		label_ret:
-		jmp upDoubleJumpRet
+			mov[ebp + 0x0C], eax
+			mov ecx, 0xFFFFFC00
+			label_ret :
+			jmp upDoubleJumpRet
 	}
 }
 
