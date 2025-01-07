@@ -49,6 +49,7 @@ bool Client::tamingMobUnlock = false;
 bool Client::tamingMob198Effect = false;
 
 bool Client::s14101004 = true;
+bool Client::s14101004up = false;
 bool Client::s4221001 = false;
 bool Client::s4221007 = false;
 bool Client::s5221009 = false;
@@ -460,9 +461,12 @@ void Client::MoreHook() {
 }
 
 void Client::Skill() {
-	//¶þ¶ÎÌø
+	//¿ì½Ý¶þ¶ÎÌø
 	if (Client::s14101004) {
 		Memory::CodeCave(doubleJump, 0x00955F51, 5);
+	}
+	if (Client::s14101004up) {
+		Memory::CodeCave(upDoubleJump, 0x0097990A, 7);
 	}
 	//°µÉ±
 	if (Client::s4221001) {

@@ -466,6 +466,8 @@ _declspec(naked) void hookHypontizeCancel()
 		jz label_ret
 		mov ebx, 0x00BDD49C
 		mov ebx, [ebx]
+		cmp ebx, 0x0
+		je label_ret
 		add ebx, 0x68
 		mov ebx, [ebx]
 		cmp ebx, esi

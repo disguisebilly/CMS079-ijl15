@@ -386,6 +386,8 @@ void unlockPacket();
 
 void doubleJump();
 
+void upDoubleJump();
+
 void tamingMob198();
 
 void tamingMob198_1();

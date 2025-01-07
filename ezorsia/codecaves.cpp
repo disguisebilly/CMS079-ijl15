@@ -1912,17 +1912,17 @@ __declspec(naked) void SaveD3D()
 		lea esi, [ebp - 0x40]
 		push eax
 		mov eax, 0x009FFF02
-		mov word ptr [eax], 0x00000438
+		mov word ptr[eax], 0x00000438
 		mov eax, 0x009FFF07
-		mov word ptr [eax], 0x00000780
+		mov word ptr[eax], 0x00000780
 		mov eax, [0x00BE2788]
 		mov eax, [eax]
 		add eax, 0x20
-		mov  word ptr [eax], 0x00000780
+		mov  word ptr[eax], 0x00000780
 		add eax, 0x4
 		mov  word ptr[eax], 0x00000438
 		mov eax, 0x007F7AD6
-		mov  word ptr [eax], 0x00000780
+		mov  word ptr[eax], 0x00000780
 		pop eax
 		movsd
 		movsd
@@ -2023,6 +2023,31 @@ __declspec(naked) void doubleJump()
 		call skill
 		jmp doubleJumpRtn
 
+	}
+}
+
+DWORD upDoubleJumpRet = 0x00979911;
+__declspec(naked) void upDoubleJump()
+{
+	__asm {
+		push eax
+		mov ecx, 0x00BDD838
+		mov ecx, [ecx]
+		push 38
+		mov eax, 0x005CAAA9
+		call eax
+		test eax, 0x1
+		pop eax
+		jne label_up
+		mov ecx, 0xFFFFFF06
+		sub ecx, eax
+		jmp label_ret
+		label_up:
+		mov eax, 0
+		mov [ebp + 0x0C], eax
+		mov ecx, 0xFFFFFC00
+		label_ret:
+		jmp upDoubleJumpRet
 	}
 }
 
@@ -2526,7 +2551,7 @@ __declspec(naked) void tamingMob198_30()
 __declspec(naked) void screenShotPath()
 {
 	__asm {
-		mov eax,Client::ScreenShotPath
+		mov eax, Client::ScreenShotPath
 		sub eax, edi
 		push 0x00751ADE
 		ret
