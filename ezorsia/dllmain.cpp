@@ -48,6 +48,7 @@ DWORD GetCurrentMemoryUsage()
 	return CurrentMem;
 }
 
+boolean isOpen = false;
 void EmptyMemory()
 {
 	while (true)
@@ -74,7 +75,16 @@ void EmptyMemory()
 					CloseHandle(hProcess);
 				}
 				else {
-					std::cerr << "Save Memory OpenProcess error!" << std::endl;
+					std::cout << "Save Memory OpenProcess error!" << std::endl;
+				}
+			}
+			if (Client::forceExit) {
+				HWND hWnd = FindWindow(L"MapleStoryClass", nullptr);
+				if (hWnd) {
+					isOpen = true;
+				}
+				else if (isOpen) {
+					std::abort();
 				}
 			}
 		}
@@ -147,6 +157,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::jumpCap = reader.GetInteger("optional", "jumpCap", Client::jumpCap);
 			Client::debug = reader.GetBoolean("debug", "debug", Client::debug);
 			Client::noPassword = reader.GetBoolean("debug", "noPassword", Client::noPassword);
+			Client::forceExit = reader.GetBoolean("debug", "forceExit", Client::forceExit);
 			Client::ServerIP_AddressFromINI = reader.Get("general", "ServerIP_Address", Client::ServerIP_AddressFromINI);
 			Client::ServerIP_Address_hook = reader.GetBoolean("general", "ServerIP_Address_hook", Client::ServerIP_Address_hook);
 			Client::climbSpeedAuto = reader.GetBoolean("optional", "climbSpeedAuto", Client::climbSpeedAuto);

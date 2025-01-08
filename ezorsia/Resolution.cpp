@@ -88,6 +88,7 @@ __declspec(naked) void reloadMap()
 
 int checkUpdateResolution() {
 	auto setting = reinterpret_cast<DWORD*>(0x00BDD494);
+	DWORD* gameWidth = Memory::getAddress(0x00BE2788, { 32 });
 	if (*setting != NULL) {
 		auto option = (int)*reinterpret_cast<DWORD*>(*setting + 0x7C);
 		if (resolutionOption.find(option) == resolutionOption.end()) {
@@ -98,7 +99,7 @@ int checkUpdateResolution() {
 			}
 		}
 		std::vector<int> resolution = resolutionOption[option];
-		if (Resolution::m_nGameWidth != resolution[0]) {
+		if (Resolution::m_nGameWidth != resolution[0] || (gameWidth != NULL && *gameWidth != resolution[0])) {
 			Resolution::UpdateResolution(resolution[0], resolution[1]);
 			return 1;
 		}
@@ -293,6 +294,19 @@ __declspec(naked) void saveTopMsg()
 		popad
 		push 0x00A2CA54
 		ret
+	}
+}
+
+DWORD CLoginUtilDlgError = 0x0063C021;
+DWORD ConnctErrorRet = 0x009FB953;
+__declspec(naked) void onConnctError()
+{
+	__asm {
+		pushad
+		call Resolution::ResetResolution
+		popad
+		call CLoginUtilDlgError
+		jmp ConnctErrorRet
 	}
 }
 
@@ -1001,6 +1015,7 @@ void Resolution::Init()
 	Memory::CodeCave(saveMaplePoint, 0x00A348A2, 5);
 	Memory::CodeCave(loadingSettingConfig, 0x0049D517, 5);
 	Memory::CodeCave(saveTopMsg, 0x00A2CA4F, 5);
+	Memory::CodeCave(onConnctError, 0x009FB94E, 5);
 	//Memory::WriteByte(0x0049D517 + 1, 5);     //config
 	//Memory::CodeCave(backgroundHook, 0x00427EB3, 5);
 	//_UpdateResolution(Resolution::m_nGameWidth, Resolution::m_nGameHeight);

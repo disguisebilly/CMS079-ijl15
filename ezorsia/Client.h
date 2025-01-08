@@ -33,6 +33,7 @@ public:
 	static bool useTubi;
 	static bool debug;
 	static bool noPassword;
+	static bool forceExit;
 	static bool climbSpeedAuto;
 	static float climbSpeed;
 	static int speedMovementCap;
