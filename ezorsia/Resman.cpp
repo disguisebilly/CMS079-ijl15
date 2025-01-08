@@ -503,7 +503,8 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 
 __declspec(naked) int getattackObjectId() {
 	__asm {
-		mov eax, [0x0019DD94]
+		mov eax, [ebp]
+		mov eax, [eax]
 		add eax, 8
 		mov eax, [eax]
 		ret
