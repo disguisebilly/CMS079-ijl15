@@ -1,3 +1,14 @@
+<p align="center">
+	<a href="./README-en.md">
+	English
+	</a>
+	/
+  <a href="./README.md">
+	简体中文
+	</a>
+</p>
+
+
 适用于CMS-079版本的ijl15
 ====
 
