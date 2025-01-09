@@ -1,20 +1,20 @@
 #pragma once
-const DWORD dwDInput8DLLInject = 0x00796357; 
-const DWORD dwMovementFlushInterval = 0x0068A83F;
-const DWORD dwStatWndOnStatChange = 0x00A20213;
-const DWORD dwUserEmoteCoolTime = 0x00A244AE;
-const DWORD dwUserGivePopularityCoolTime = 0x00A23F28;
-const DWORD dwMessageChatDelay = 0x00490651;
-const DWORD dwMessageChatSpam = 0x00490607;
-const DWORD dwRemoteAddress = 0x00AFE084;
-const DWORD dwIGCipherHash = 0x00A4A845; //related to packet encryption, not used, kept for reference
-const DWORD dwIGCipherVirtual1 = 0x00A4A8DA;
-const DWORD dwIGCipherVirtual2 = 0x00A4A9BF;
-const DWORD dwIGCipherDecrypt = 0x00A4A942;
-const DWORD dwIGCipherDecryptStr = 0x00A4A9F7;
-const DWORD dwUnlimitedSoulRush = 0x0096BF09;
-const DWORD dwUnlimitedFJ = 0x0096BEB5;
-const DWORD dwUnlimitedFJYVector = 0x0096BF86;
+//const DWORD dwDInput8DLLInject = 0x00796357; 
+const DWORD dwMovementFlushInterval = 0x006B8491;
+//const DWORD dwStatWndOnStatChange = 0x00A20213;
+const DWORD dwUserEmoteCoolTime = 0x00A2DC70;
+const DWORD dwUserGivePopularityCoolTime = 0x00A2D6E3;
+const DWORD dwMessageChatDelay = 0x0049012D;
+const DWORD dwMessageChatSpam = 0x004900E3;
+const DWORD dwRemoteAddress = 0x00BA5784;
+const DWORD dwIGCipherHash = 0x00A5908F; //related to packet encryption, not used, kept for reference
+const DWORD dwIGCipherVirtual1 = 0x00A59124;
+const DWORD dwIGCipherVirtual2 = 0x00A59209;
+const DWORD dwIGCipherDecrypt = 0x00A5918C;
+const DWORD dwIGCipherDecryptStr = 0x00A59241;
+const DWORD dwUnlimitedSoulRush = 0x009797E8;
+const DWORD dwUnlimitedFJ = 0x00979794;
+const DWORD dwUnlimitedFJYVector = 0x00979863;
 //0x008DB181 + 1	position of the line breaks in the text displayed in this chat log //ty dream
 //008DFB06 008D4B75 008D4C27 008D4CBF 008D6308 //related to vertical scrolling //ty rynyan
 //005F456A version number edit //ty windy

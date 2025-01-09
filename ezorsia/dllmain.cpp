@@ -96,6 +96,7 @@ bool CreateHook()
 	std::string processName = Client::GetCurrentProcessName();
 	std::cout << "Current process name: " << processName << std::endl;
 	Client::CRCBypass();
+	//Client::EnableNewIGCipher();
 	Resman::Hook_InitializeResMan();
 	Resman::Hook_InitInlinkOutlink();
 	Hook_SetActiveChairRelMove(true);

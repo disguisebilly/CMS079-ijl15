@@ -422,7 +422,7 @@ void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 	Memory::WriteInt(0x004E3250 + 1, nScreenWidth);    // CreateWnd //-> 079 004E3250 || 004D875F 800
 	Memory::WriteInt(0x004E33B5 + 2, nScreenHeight);                          //->079 004E33B5 600
 	Memory::WriteInt(0x004D88AF + 1, nScreenWidth);    // CreateWnd //->079 004D88AF 800        
-	Memory::WriteInt(0x004D88C4 + 1, nScreenHeight);                         //-> 079 004D88C4 
+	Memory::WriteInt(0x004D88C4 + 2, nScreenHeight);                         //-> 079 004D88C4 
 	Memory::WriteInt(0x004E33A0 + 1, nScreenWidth);    // CreateWnd //->079  004E33A0
 	Memory::WriteInt(0x0086D3BC + 2, nScreenWidth);                          //->079 0086D3BC 800
 	Memory::WriteInt(0x0086D3C4 + 1, nScreenWidth - 80);                      // CreateDlg//->079 0086D3C4  (TMS 700 CMS 704)
@@ -1044,7 +1044,7 @@ void Resolution::UpdateResolution(unsigned int nScreenWidth, unsigned int nScree
 		UpdateBarWidth(m_nBarWidth);
 
 	//分辨率无限制
-	//Memory::WriteByte(0x60E082, 0xEB);   //0x7E
+	Memory::WriteByte(0x00A0E082, 0xEB);   //0x7E
 	Memory::WriteInt(*IWzGr2DPtr + 48, nScreenWidth);
 	Memory::WriteInt(*IWzGr2DPtr + 32, nScreenWidth);
 	Memory::WriteInt(*IWzGr2DPtr + 52, nScreenHeight);
