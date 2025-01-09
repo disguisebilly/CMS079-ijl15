@@ -12,6 +12,10 @@ public:
 	static void NoPassword();
 	static void MoreHook();
 	static void Skill();
+	static bool EmptyMemory();
+	static std::string GetCurrentProcessName();
+	static DWORD GetCurrentMemoryUsage();
+	static void TimerTask(std::function<boolean()> task, unsigned int interval);
 	static const int m_nIGCipherHash = 0XC65053F2;
 	static int DefaultResolution;
 	static int MsgAmount;
@@ -21,8 +25,9 @@ public:
 	static bool RemoveSystemMsg;
 	static bool RemoveLoginNxIdDialog;
 	static int ScreenShotPath;
+	static int ResCheckTime;
 	static int ResManFlushCached;
-	static int SetProcessWorkingSetSize;
+	static int SetWorkingSetSize;
 	static int setDamageCap;
 	static int setMAtkCap;
 	static int setAccCap;

@@ -2560,3 +2560,14 @@ __declspec(naked) void screenShotPath()
 		ret
 	}
 }
+
+__declspec(naked) void fExit()
+{
+	__asm {
+		mov fs:[00000000] , ecx
+		pop ebx
+		leave
+		call std::abort
+		retn 0x10
+	}
+}

@@ -8,7 +8,6 @@
 #include "BossHP.h"
 #include <Resman.h>
 #include <CharacterEx.h>
-#include "psapi.h"
 #include "ChairRelMove.h"
 #include <HeapCreateEx.h>
 
@@ -18,80 +17,6 @@ void CreateConsole() {
 	freopen_s(&stream, "CONOUT$", "w", stdout); //CONOUT$
 }
 
-std::string GetCurrentProcessName() {
-	char buffer[MAX_PATH];
-	DWORD size = GetModuleFileNameA(NULL, buffer, MAX_PATH);
-	if (size == 0) {
-		return "";
-	}
-
-	std::string processPath(buffer);
-	size_t pos = processPath.find_last_of('\\');
-	if (pos != std::string::npos) {
-		return processPath.substr(pos + 1);
-	}
-
-	return "";
-}
-
-HANDLE hThread;
-
-DWORD GetCurrentMemoryUsage()
-{
-	MEMORYSTATUSEX MS;
-	MS.dwLength = sizeof(MS);
-	PROCESS_MEMORY_COUNTERS pmc;
-	GlobalMemoryStatusEx(&MS);
-	GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
-	DWORD CurrentMem = pmc.WorkingSetSize / 1048576;
-	DWORD TotalMem = MS.ullTotalPhys / 1048576;
-	return CurrentMem;
-}
-
-boolean isOpen = false;
-void EmptyMemory()
-{
-	while (true)
-	{
-		try {
-			Sleep(1000);
-			int memory = GetCurrentMemoryUsage();
-			if (memory >= Client::ResManFlushCached) {
-				//if (Resman::getIWzResMan())
-				//{
-				//	Resman::getIWzResMan()->raw_FlushCachedObjects(0);
-				//}
-				autoFlushCacheTime(0);
-				callFlushcache();
-				autoFlushCacheTime(10000);
-				std::cout << "Try flushcache:" << memory << std::endl;
-			}
-			if (memory >= Client::SetProcessWorkingSetSize)
-			{
-				HANDLE hProcess = OpenProcess(2035711, 0, GetCurrentProcessId());
-				if (hProcess) {
-					std::cout << "Save Memory:" << memory << " " << GetCurrentProcessId()
-						<< " " << SetProcessWorkingSetSize(hProcess, -1, -1) << std::endl;
-					CloseHandle(hProcess);
-				}
-				else {
-					std::cout << "Save Memory OpenProcess error!" << std::endl;
-				}
-			}
-			if (Client::forceExit) {
-				HWND hWnd = FindWindow(L"MapleStoryClass", nullptr);
-				if (hWnd) {
-					isOpen = true;
-				}
-				else if (isOpen) {
-					std::abort();
-				}
-			}
-		}
-		catch (...) {}
-	}
-};
-
 void Injected() {
 	while (!Client::canInjected) {
 		Sleep(10);
@@ -99,7 +24,7 @@ void Injected() {
 	std::cout << "GetModuleFileName hook created" << std::endl;
 	Hook_StringPool__GetString(true); //hook stringpool modification //ty !! popcorn //ty darter
 	Hook_StringPool__GetStringW(true);
-	std::string processName = GetCurrentProcessName();
+	std::string processName = Client::GetCurrentProcessName();
 	std::cout << "Current process name: " << processName << std::endl;
 	Client::CRCBypass();
 	Resman::Hook_InitializeResMan();
@@ -121,7 +46,7 @@ void Injected() {
 	//Hook_CItemInfo__GetItemName(Client::showItemID);
 	Hook_CItemInfo__GetItemDesc(Client::showItemID);
 	ijl15::CreateHook(); //NMCO::CreateHook();
-	hThread = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)EmptyMemory, NULL, 0, 0);
+	Client::TimerTask(Client::EmptyMemory, Client::ResCheckTime);
 	std::cout << "NMCO hook initialized" << std::endl;
 	Client::injected = true;
 }
@@ -143,8 +68,9 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::ScreenShotPath = reader.GetBoolean("general", "ScreenShotPath", Client::ScreenShotPath);
 			Client::RemoveSystemMsg = reader.GetBoolean("general", "RemoveSystemMsg", Client::RemoveSystemMsg);
 			Memory::UseVirtuProtect = reader.GetBoolean("general", "UseVirtuProtect", Memory::UseVirtuProtect);
+			Client::ResCheckTime = reader.GetInteger("general", "ResCheckTime", Client::ResCheckTime);
 			Client::ResManFlushCached = reader.GetInteger("general", "ResManFlushCached", Client::ResManFlushCached);
-			Client::SetProcessWorkingSetSize = reader.GetInteger("general", "SetProcessWorkingSetSize", Client::SetProcessWorkingSetSize);
+			Client::SetWorkingSetSize = reader.GetInteger("general", "SetWorkingSetSize", Client::SetWorkingSetSize);
 			Client::setDamageCap = reader.GetReal("optional", "setDamageCap", Client::setDamageCap);
 			Client::setMAtkCap = reader.GetReal("optional", "setMAtkCap", Client::setMAtkCap);
 			Client::setAccCap = reader.GetReal("optional", "setAccCap", Client::setAccCap);
@@ -194,8 +120,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 	}
 	default: break;
 	case DLL_PROCESS_DETACH:
-		if (hThread)
-			CloseHandle(hThread);
 		ExitProcess(0);
 	}
 	return TRUE;
