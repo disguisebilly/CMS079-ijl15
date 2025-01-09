@@ -418,7 +418,7 @@ bool Client::EmptyMemory()
 		}
 	}
 	catch (...) {}
-	return true;
+	return false;
 }
 
 std::string Client::GetCurrentProcessName()
@@ -453,7 +453,7 @@ void Client::TimerTask(std::function<boolean()> task, unsigned int interval)
 	std::thread([task, interval]() {
 		while (true) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(interval));
-			if (!task())
+			if (task())
 				break;
 		}
 		}).detach();

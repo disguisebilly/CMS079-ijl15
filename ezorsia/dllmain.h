@@ -1,4 +1,5 @@
 #pragma once
 
+void Init();
 void CreateConsole();
-void CreateHook();
+bool CreateHook();
