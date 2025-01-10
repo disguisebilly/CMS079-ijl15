@@ -45,6 +45,7 @@ For both methods, copy the config.ini from the project’s root directory to the
 - Supports effects in ItemEff.img (activatable via 0xAA packet header or ItemEffect).
 - Supports memory anti-crash.
 - Supports quick double jump (double-tap jump key).
+- Support the wearing of new pet equipment (replacing the wearing verification algorithm)
 - Suppresses chatroom button pop-up, only sends data packet (can be used for unblocking).
 - Character level exceeds Short type, character experience exceeds Long type.
 - Character panel width adapts (follows background image width).

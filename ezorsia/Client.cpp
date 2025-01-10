@@ -4,6 +4,7 @@
 #include "FixBuddy.h"
 #include <Resman.h>
 #include "psapi.h"
+#include <PetEquip.h>
 
 int Client::DefaultResolution = 2;
 int Client::MsgAmount = 10;
@@ -50,6 +51,7 @@ int Client::DamageSkin = 0;
 bool Client::RemoteDamageSkin = false;
 bool Client::tamingMobUnlock = false;
 bool Client::tamingMob198Effect = false;
+bool Client::replacePetEquipCheck = false;
 
 bool Client::s14101004 = true;
 bool Client::s14101004up = false;
@@ -59,7 +61,7 @@ bool Client::s5221009 = false;
 
 void Client::UpdateGameStartup() {
 	Resolution::Init();
-
+	PetEquip::Hook(Client::replacePetEquipCheck);
 	if (Client::forceExit)
 		Memory::CodeCave(fExit, 0x009FC170, 12);
 

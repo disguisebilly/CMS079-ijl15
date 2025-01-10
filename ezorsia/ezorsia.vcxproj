@@ -348,6 +348,7 @@
     <ClInclude Include="detver.h" />
     <ClInclude Include="dllmain.h" />
     <ClInclude Include="codecaves.h" />
+    <ClInclude Include="PetEquip.h" />
     <ClInclude Include="ReplacementFuncs.h" />
     <ClInclude Include="INIReader.h" />
     <ClInclude Include="Memory.h" />
@@ -382,6 +383,7 @@
     <ClCompile Include="MapleClientCollectionTypes\CInpacket.cpp" />
     <ClCompile Include="MapleClientCollectionTypes\COutPacket.cpp" />
     <ClCompile Include="MapleClientCollectionTypes\CUser.cpp" />
+    <ClCompile Include="PetEquip.cpp" />
     <ClCompile Include="ReplacementFuncs.cpp" />
     <ClCompile Include="Resman.cpp" />
     <ClCompile Include="Resolution.cpp" />

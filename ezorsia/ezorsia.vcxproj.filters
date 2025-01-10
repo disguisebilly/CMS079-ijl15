@@ -378,6 +378,9 @@
     <ClInclude Include="ReplacementFuncs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PetEquip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -438,6 +441,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ReplacementFuncs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PetEquip.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

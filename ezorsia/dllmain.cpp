@@ -63,6 +63,7 @@ void Init()
 		Client::DamageSkin = reader.GetInteger("ui", "DamageSkin", Client::DamageSkin);
 		Client::RemoteDamageSkin = reader.GetBoolean("ui", "RemoteDamageSkin", Client::RemoteDamageSkin);
 		Client::tamingMob198Effect = reader.GetBoolean("ui", "tamingMob198", Client::tamingMob198Effect);
+		Client::replacePetEquipCheck = reader.GetBoolean("ui", "replacePetEquipCheck", Client::replacePetEquipCheck);
 		Client::s4221001 = reader.GetBoolean("skill", "s4221001", Client::s4221001);
 		Client::s4221007 = reader.GetBoolean("skill", "s4221007", Client::s4221007);
 		Client::s14101004 = reader.GetBoolean("skill", "s14101004", Client::s14101004);
