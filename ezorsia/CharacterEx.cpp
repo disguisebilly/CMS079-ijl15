@@ -430,6 +430,37 @@ _declspec(naked) void exitCleart()
 	}
 }
 
+void __fastcall _changerMapCleart() {
+	int skin = -1;
+	if (CharacterEx::h_userSkin.find(CharacterEx::m_loginUserId) != CharacterEx::h_userSkin.end())
+		skin = CharacterEx::h_userSkin[CharacterEx::m_loginUserId];
+	int level = -1;
+	if (CharacterDataEx::GetInstance()->h_liLevel.find(CharacterEx::m_loginUserId) != CharacterDataEx::GetInstance()->h_liLevel.end())
+		level = CharacterDataEx::GetInstance()->h_liLevel[CharacterEx::m_loginUserId];
+	_exitcleart();
+	if (skin > 0) {
+		CharacterEx::h_userSkin[CharacterEx::m_loginUserId] = skin;
+	}
+	if (level > 0) {
+		CharacterDataEx::GetInstance()->h_liLevel[CharacterEx::m_loginUserId] = level;
+	}
+}
+
+const DWORD changerMapCleartOrginCall = 0x00666186;
+_declspec(naked) void changerMapCleart()
+{
+	_asm {
+		pushad
+		pushfd
+		call _changerMapCleart
+		popfd
+		popad
+		call changerMapCleartOrginCall
+		push 0x005348FF
+		ret
+	}
+}
+
 int hypontizeId = 0;
 const DWORD hypontizeCInpacket__Decode4 = 0x004066FF;
 const DWORD hypontize_INT128__operator_bool = 0x00884E00;
@@ -518,6 +549,7 @@ void CharacterEx::InitExpOverride(BOOL bEnable)
 	Memory::CodeCave(fixMaxMp, 0x008DF97C, 6);
 	if (!bEnable)
 		return;
+	Memory::CodeCave(changerMapCleart, 0x005348FA, 5);
 	Memory::CodeCave(exitCleart, 0x00628312, 6);
 	//Memory::SetHook(true, reinterpret_cast<void**>(&_lpfn_NextLevel), _lpfn_NextLevel_Hook);
 	/* GW_CharacterStat::DecodeChangeStat -> hijack decode4 call and switch to decode8, then return int value */
@@ -552,6 +584,7 @@ void CharacterEx::InitLevelOverride(BOOL bEnable)
 {
 	if (!bEnable)
 		return;
+	Memory::CodeCave(changerMapCleart, 0x005348FA, 5);
 	Memory::CodeCave(exitCleart, 0x00628312, 6);
 	/* GW_CharacterStat::DecodeChangeStat */
 	Memory::PatchCall(0x004F26F8, LevelSwap__Decode1To2);
@@ -579,13 +612,18 @@ void CharacterEx::InitDamageSkinOverride(BOOL bEnable)
 {
 	if (!bEnable)
 		return;
+	Memory::CodeCave(changerMapCleart, 0x005348FA, 5);
 	Memory::CodeCave(exitCleart, 0x00628312, 6);
 	Memory::PatchCall(0x0097FAD3, CUserPoolOnUserRemotePacket_DecodeID);
 	Memory::PatchCall(0x0097F8CD, OnUserLeave_DecodeID);
 	Memory::CodeCave(GuildNameDecode, 0x0098CE5E, 5);
 	Memory::CodeCave(GuildNameDecode2, 0x009912E7, 5);
 	Memory::CodeCave(CharacterStatSkin, 0x004F28B4, 7);
-
+	Memory::WriteByte(0x00437D44 + 1, 0x60);  // 0x39->0x60  57 -> 96  expand display range
+	Memory::WriteByte(0x0043803A + 1, 0x60);
+	Memory::WriteByte(0x006978DD + 2, 0xCA);  //0xF1
+	Memory::WriteByte(0x006978E8 + 1, 0xCA);
+	Memory::WriteByte(0x00437F04 + 1, 0x27);  //0x00
 }
 
 void CharacterEx::InitHypontizeFix(BOOL bEnable)

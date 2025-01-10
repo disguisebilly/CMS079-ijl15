@@ -219,7 +219,7 @@ VARIANTARG* __fastcall IWzResMan__GetObjectA_Hook(DWORD* This, void* notuse, VAR
 	if (ret == nullptr)
 		ret = IWzResMan__GetObjectA(This, nullptr, pvargDest, sUOL, vParam, vAux);
 
-	//std::wstring findStr = L"Login";
+	//std::wstring findStr = L"effect";
 
 	//if (strT.find(findStr) != std::wstring::npos) {
 	//	std::wcout << "IWzResMan__GetObjectA_Hook :" << This << " " << strT << " " << _ReturnAddress() << std::endl;
@@ -432,7 +432,7 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 		Resolution::UpdateBarWidth(width);
 	}
 
-	//std::wstring findStr = L"key";
+	//std::wstring findStr = L"effect";
 
 	//if (strT.find(findStr) != std::wstring::npos) {
 	//	std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << " " << ret->punkVal << " " << _ReturnAddress() << std::endl;
@@ -531,15 +531,20 @@ VARIANTARG* __fastcall IWzProperty__GetSkinItem_Hook(IWzProperty* This, void* no
 			{
 				name = (*imgPath[This]).name;
 			}
-			//std::wcout << This << " " << attackObject << " " << skinId << std::endl;
+			//std::wcout << This << " " << attackObject << " " << skinId << " "<< name <<" " << _ReturnAddress() << std::endl;
 			if (skinId != 0) {
+				std::wstring item = strT;
+				bool isEffect = (item == L"effect" && name == L"NoCri1");
+				if (isEffect) {
+					item = L"effect3";
+				}
 				if (name == L"NoRed0" || name == L"NoRed1" || name == L"NoCri0" || name == L"NoCri1") {
 					std::wostringstream oss;
 					oss << skinId;
 					oss << "/";
 					oss << name;
 					oss << "/";
-					oss << strT;
+					oss << item;
 					std::wstring path = oss.str();
 					auto ret = IWzProperty__GetItem(damageSkinImg, nullptr, pvargDest, (int*)&path);
 					if (ret && ret->vt == VT_UNKNOWN)
@@ -944,6 +949,7 @@ VOID Resman::Hook_InitInlinkOutlink() {
 		Memory::PatchCall(0x00437B62, IWzProperty__GetSkinItem_Hook);
 		Memory::PatchCall(0x00437F8E, IWzProperty__GetSkinItem_Hook);
 		Memory::PatchCall(0x00437DFE, IWzProperty__GetSkinItem_Hook);
+		Memory::PatchCall(0x00437E7E, IWzProperty__GetSkinItem_Hook);
 	}
 }
 
