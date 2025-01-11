@@ -30,7 +30,7 @@ typedef void(__fastcall* CWvsApp__InitializeResMan_t)(void*);
 typedef IUnknown* (__fastcall* _Ztl_variant_t__GetUnknown)(VARIANTARG* This, void* notuse, bool a2, bool a3);
 typedef VARIANTARG* (__fastcall* _IWzResMan__GetObjectA)(DWORD* This, void* notuse, VARIANTARG* pvargDest, int* sUOL, int vParam, int vAux);
 typedef VARIANTARG* (__fastcall* _IWzProperty__GetItem)(IUnknown* This, void* notuse, VARIANTARG* pvargDest, int* sPath);
-//typedef VARIANTARG* (__fastcall* _IWzNameSpace__GetItem)(IWzNameSpace * pThis, PVOID edx, tagVARIANT * result, _bstr_t sPath);
+typedef VARIANTARG* (__fastcall* _IWzNameSpace__GetItem)(IWzNameSpace* pThis, PVOID edx, tagVARIANT* result, _bstr_t sPath);
 typedef IUnknown* (__fastcall* _IWzUOL_QueryInterface)(DWORD* This, void* notuse, IUnknown* a2);
 typedef int(__fastcall* _IWzUOL__GetfilePath)(DWORD* This, void* notuse, int a2);
 typedef int(__fastcall* _IWzCanvas_operator_equal)(DWORD* This, void* notuse, DWORD* a2);
@@ -234,6 +234,31 @@ VARIANTARG* __fastcall IWzResMan__GetObjectA_Hook(DWORD* This, void* notuse, VAR
 	//		p = imgPath[(IUnknown*)This]->rootPath;
 	//	std::wcout << "IWzResMan__GetObjectA_Hook :" << This << " " << strT << " " << p << " " << _ReturnAddress();
 	//}
+
+	if ((int)_ReturnAddress() == 0x009AA95E && strT.find(L"DamageSkin") != std::wstring::npos && ret && pvargDest->vt == VT_UNKNOWN) {
+		IWzCanvas* canvas = NULL;
+		Ztl_variant_t t = *reinterpret_cast<Ztl_variant_t*>(ret);
+		IUnknown* iunknown = t.GetUnknown(FALSE, FALSE);
+		HRESULT hr = iunknown->QueryInterface<IWzCanvas>(&canvas);
+		if (SUCCEEDED(hr)) {
+			return ret;
+		}
+		else {
+			IWzProperty* pro = NULL;
+			hr = iunknown->QueryInterface<IWzProperty>(&pro);
+			if (SUCCEEDED(hr)) {
+				auto pro = _com_ptr_t<_com_IIID<IWzProperty, &IID_IUnknown>>(iunknown);
+				ret = pro->get_item(L"0", pvargDest);
+				if (ret && ret->vt == VT_UNKNOWN) {
+					Ztl_variant_t t = *reinterpret_cast<Ztl_variant_t*>(ret);
+					HRESULT hr = t.GetUnknown(FALSE, FALSE)->QueryInterface<IWzCanvas>(&canvas);
+					if (SUCCEEDED(hr)) {
+						return ret;
+					}
+				}
+			}
+		}
+	}
 
 	if ((int)_ReturnAddress() == 0x00941E73 || ((int)_ReturnAddress() == 0x009482BC) && ret->vt == VT_EMPTY) {
 		std::wregex pattern(L".*?0501.img/(\\d*)/(.*)?");
