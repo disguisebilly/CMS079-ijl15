@@ -549,7 +549,28 @@ VARIANTARG* __fastcall IWzProperty__GetSkinItem_Hook(IWzProperty* This, void* no
 					auto ret = IWzProperty__GetItem(damageSkinImg, nullptr, pvargDest, (int*)&path);
 					if (ret && ret->vt == VT_UNKNOWN)
 					{
-						return ret;
+						IWzCanvas* canvas = NULL;
+						Ztl_variant_t t = *reinterpret_cast<Ztl_variant_t*>(ret);
+						IUnknown* iunknown = t.GetUnknown(FALSE, FALSE);
+						HRESULT hr = iunknown->QueryInterface<IWzCanvas>(&canvas);
+						if (SUCCEEDED(hr)) {
+							return ret;
+						}
+						else {
+							IWzProperty* pro = NULL;
+							hr = iunknown->QueryInterface<IWzProperty>(&pro);
+							if (SUCCEEDED(hr)) {
+								auto pro = _com_ptr_t<_com_IIID<IWzProperty, &IID_IUnknown>>(iunknown);
+								ret = pro->get_item(L"0", pvargDest);
+								if (ret && ret->vt == VT_UNKNOWN) {
+									Ztl_variant_t t = *reinterpret_cast<Ztl_variant_t*>(ret);
+									HRESULT hr = t.GetUnknown(FALSE, FALSE)->QueryInterface<IWzCanvas>(&canvas);
+									if (SUCCEEDED(hr)) {
+										return ret;
+									}
+								}
+							}
+						}
 					}
 				}
 			}

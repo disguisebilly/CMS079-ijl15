@@ -2,8 +2,8 @@
 #undef  INTERFACE
 #define INTERFACE   IWzSerialize
 
-DECLARE_INTERFACE_(IWzSerialize, IUnknown) {
-    BEGIN_INTERFACE
+DECLARE_INTERFACE_IID_(IWzSerialize, IUnknown, "01110bc6-d843-4ff1-918c-9cf64632fb15") {
+    BEGIN_INTERFACE;
 
     // *** IUnknown methods ***
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void** ppv) PURE;
@@ -20,3 +20,4 @@ DECLARE_INTERFACE_(IWzSerialize, IUnknown) {
 
     END_INTERFACE
 };
+_COM_SMARTPTR_TYPEDEF(IWzSerialize, __uuidof(IWzSerialize));
