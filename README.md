@@ -38,7 +38,8 @@
 
 - 支持WZ与IMG模式
 - 支持动态分辨率(可在系统设置中切换)
-- 支持伤害皮肤(支持加载外置文件[Effect/DamageSkin.img](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/DamageSkin.img)或[Custom.wz](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/Custom.wz)
+- 支持伤害皮肤(支持加载外置文件[Effect/DamageSkin.img](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/DamageSkin.img)或[Custom.wz](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/Custom.wz))
+- 支持动态伤害皮肤加载(仅支持显示)
 - 支持长键盘(支持加载外置文件[UI/QuickSlot.img](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/QuickSlot.img)或[Custom.wz](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/Custom.wz)，支持多种键位配置)
 - 支持198开头的的TamingMob
 - 支持新版发型脸型
