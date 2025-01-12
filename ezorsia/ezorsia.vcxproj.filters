@@ -378,7 +378,7 @@
     <ClInclude Include="ReplacementFuncs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PetEquip.h">
+    <ClInclude Include="PetEx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -443,7 +443,7 @@
     <ClCompile Include="ReplacementFuncs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PetEquip.cpp">
+    <ClCompile Include="PetEx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

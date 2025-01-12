@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "PetEquip.h"
+#include "PetEx.h"
 #include "Resman.h"
 #include <iomanip>
 
@@ -32,7 +32,7 @@ __declspec(naked) void checkCanEquip()
 	}
 }
 
-void PetEquip::Hook(bool enable)
+void PetEx::HookPetCheckCanEquip(bool enable)
 {
 	if (!enable)
 		return;

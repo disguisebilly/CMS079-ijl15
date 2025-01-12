@@ -54,7 +54,7 @@ auto bstr_constructor = (void(__fastcall*)(void*, void*, const char*))0x004063D7
 auto IWzFileSystem__Init = (void* (__fastcall*)(void*, void*, void*))0x00A00D93;
 auto IWzPackage__Init = reinterpret_cast<_IWzPackage__Init>(0x00A00DE7);
 auto IWZNameSpace__Mount = (void* (__fastcall*)(void*, void*, void*, void*, void*))0x00A00D39;
-//auto IWzNameSpace__GetItem = (void* (__fastcall*)(void*, void*, void*, void*))0x0060DE5A;
+auto IWzNameSpace__GetItem = (void* (__fastcall*)(void*, void*, void*, void*))0x0060DE5A;
 
 _Ztl_variant_t__GetUnknown Ztl_variant_t__GetUnknown = (_Ztl_variant_t__GetUnknown)0x004032B2;
 _IWzResMan__GetObjectA IWzResMan__GetObjectA = (_IWzResMan__GetObjectA)0x00404A75;
@@ -172,13 +172,22 @@ IWzCanvas* getIWzCanvas(IWzProperty* property, const wchar_t* wsPath) {
 	return NULL;
 }
 
+VARIANTARG* getGetObjectAForPath(DWORD* This, std::wstring path, VARIANTARG* ret) {
+	try {
+		VARIANTARG pvarg1 = errorVar;
+		VARIANTARG pvarg2 = errorVar;
+		IWzResMan__GetObjectA(This, nullptr, ret, (int*)&path, (int)&pvarg1, (int)&pvarg2);
+		return ret;
+	}
+	catch (...) {
+	}
+	return nullptr;
+}
+
 VARIANTARG* getGetObjectAForPath(DWORD* This, std::wstring path) {
 	try {
 		VARIANTARG ret = {};
-		VARIANTARG pvarg1 = errorVar;
-		VARIANTARG pvarg2 = errorVar;
-		IWzResMan__GetObjectA(This, nullptr, &ret, (int*)&path, (int)&pvarg1, (int)&pvarg2);
-		return &ret;
+		return getGetObjectAForPath(This, path, &ret);
 	}
 	catch (...) {
 	}
@@ -235,29 +244,32 @@ VARIANTARG* __fastcall IWzResMan__GetObjectA_Hook(DWORD* This, void* notuse, VAR
 	//	std::wcout << "IWzResMan__GetObjectA_Hook :" << This << " " << strT << " " << p << " " << _ReturnAddress();
 	//}
 
-	if ((int)_ReturnAddress() == 0x009AA95E && strT.find(L"DamageSkin") != std::wstring::npos && ret && pvargDest->vt == VT_UNKNOWN) {
-		IWzCanvas* canvas = NULL;
-		Ztl_variant_t t = *reinterpret_cast<Ztl_variant_t*>(ret);
-		IUnknown* iunknown = t.GetUnknown(FALSE, FALSE);
-		HRESULT hr = iunknown->QueryInterface<IWzCanvas>(&canvas);
-		if (SUCCEEDED(hr)) {
-			return ret;
-		}
-		else {
-			IWzProperty* pro = NULL;
-			hr = iunknown->QueryInterface<IWzProperty>(&pro);
+	if ((int)_ReturnAddress() == 0x009AA95E && strT.find(L"DamageSkin") != std::wstring::npos) {
+		if (ret && pvargDest->vt == VT_UNKNOWN) {
+			IWzCanvas* canvas = NULL;
+			Ztl_variant_t t = *reinterpret_cast<Ztl_variant_t*>(ret);
+			IUnknown* iunknown = t.GetUnknown(FALSE, FALSE);
+			HRESULT hr = iunknown->QueryInterface<IWzCanvas>(&canvas);
 			if (SUCCEEDED(hr)) {
-				auto pro = _com_ptr_t<_com_IIID<IWzProperty, &IID_IUnknown>>(iunknown);
-				ret = pro->get_item(L"0", pvargDest);
-				if (ret && ret->vt == VT_UNKNOWN) {
-					Ztl_variant_t t = *reinterpret_cast<Ztl_variant_t*>(ret);
-					HRESULT hr = t.GetUnknown(FALSE, FALSE)->QueryInterface<IWzCanvas>(&canvas);
-					if (SUCCEEDED(hr)) {
-						return ret;
+				return ret;
+			}
+			else {
+				IWzProperty* pro = NULL;
+				hr = iunknown->QueryInterface<IWzProperty>(&pro);
+				if (SUCCEEDED(hr)) {
+					auto pro = _com_ptr_t<_com_IIID<IWzProperty, &IID_IUnknown>>(iunknown);
+					ret = pro->get_item(L"0", pvargDest);
+					if (ret && ret->vt == VT_UNKNOWN) {
+						Ztl_variant_t t = *reinterpret_cast<Ztl_variant_t*>(ret);
+						HRESULT hr = t.GetUnknown(FALSE, FALSE)->QueryInterface<IWzCanvas>(&canvas);
+						if (SUCCEEDED(hr)) {
+							return ret;
+						}
 					}
 				}
 			}
 		}
+		return getGetObjectAForPath(This, L"Effect/BasicEff.img/NoRed0/0", pvargDest);  //return default
 	}
 
 	if ((int)_ReturnAddress() == 0x00941E73 || ((int)_ReturnAddress() == 0x009482BC) && ret->vt == VT_EMPTY) {
@@ -270,9 +282,7 @@ VARIANTARG* __fastcall IWzResMan__GetObjectA_Hook(DWORD* This, void* notuse, VAR
 			oss << "/";
 			oss << result[2].str().c_str();
 			std::wstring path = oss.str();
-			VARIANTARG pvarg1 = errorVar;
-			VARIANTARG pvarg2 = errorVar;
-			ret = IWzResMan__GetObjectA(This, nullptr, ret, (int*)&path, (int)&pvarg1, (int)&pvarg2);
+			ret = getGetObjectAForPath(This, path, pvargDest);
 			//std::wcout << "IWzResMan__GetObjectA_Hook :" << path << " " << ret->vt << " " << _ReturnAddress() << std::endl;
 		}
 	}
@@ -473,9 +483,7 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 				oss << GetImgFullPath(imgPath[This]->rootPath.c_str());
 				oss << "stand1";
 				std::wstring path = oss.str();
-				VARIANTARG pvarg1 = errorVar;
-				VARIANTARG pvarg2 = errorVar;
-				ret = IWzResMan__GetObjectA(GetResManInstance(), nullptr, pvargDest, (int*)&path, (int)&pvarg1, (int)&pvarg2);
+				ret = getGetObjectAForPath(GetResManInstance(), path, pvargDest);
 				//std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << "->" << path << " " << pvargDest->vt << imgPath[This]->name << std::endl;
 			}
 			catch (...) {
@@ -492,10 +500,7 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 					oss << GetImgFullPath(imgPath[This]->rootPath.c_str());
 					oss << "sit";
 					std::wstring path = oss.str();
-					//ret = IWzProperty__GetItem(This, nullptr, pvargDest, (int*)&path);  读取不到sit节点
-					VARIANTARG pvarg1 = errorVar;
-					VARIANTARG pvarg2 = errorVar;
-					ret = IWzResMan__GetObjectA(GetResManInstance(), nullptr, pvargDest, (int*)&path, (int)&pvarg1, (int)&pvarg2);
+					ret = getGetObjectAForPath(GetResManInstance(), path, pvargDest);
 					//std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << "->" << path << " " << pvargDest->vt << imgPath[This]->name << std::endl;
 				}
 				catch (...) {

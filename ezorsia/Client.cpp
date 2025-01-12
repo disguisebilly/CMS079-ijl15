@@ -4,7 +4,7 @@
 #include "FixBuddy.h"
 #include <Resman.h>
 #include "psapi.h"
-#include <PetEquip.h>
+#include <PetEx.h>
 
 int Client::DefaultResolution = 2;
 int Client::MsgAmount = 10;
@@ -61,7 +61,7 @@ bool Client::s5221009 = false;
 
 void Client::UpdateGameStartup() {
 	Resolution::Init();
-	PetEquip::Hook(Client::replacePetEquipCheck);
+	PetEx::HookPetCheckCanEquip(Client::replacePetEquipCheck);
 	if (Client::forceExit)
 		Memory::CodeCave(fExit, 0x009FC170, 12);
 
