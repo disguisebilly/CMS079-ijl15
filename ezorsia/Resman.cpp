@@ -276,14 +276,19 @@ VARIANTARG* __fastcall IWzResMan__GetObjectA_Hook(DWORD* This, void* notuse, VAR
 		std::wregex pattern(L".*?0501.img/(\\d*)/(.*)?");
 		std::wsmatch result;
 		if (std::regex_search(strT, result, pattern)) {
-			std::wostringstream oss;
-			oss << L"Effect/ItemEff.img/";
-			oss << static_cast<int>(std::wcstol(result[1].str().c_str(), nullptr, 10));
-			oss << "/";
-			oss << result[2].str().c_str();
-			std::wstring path = oss.str();
-			ret = getGetObjectAForPath(This, path, pvargDest);
-			//std::wcout << "IWzResMan__GetObjectA_Hook :" << path << " " << ret->vt << " " << _ReturnAddress() << std::endl;
+			auto pro = getIWzPropertyForPath(This, L"Item/Cash/0501.img/" + result[1].str());
+			if (!pro) {
+				int itemId = static_cast<int>(std::wcstol(result[1].str().c_str(), nullptr, 10));
+				std::wostringstream oss;
+				oss << L"Effect/ItemEff.img/";
+				oss << itemId;
+				oss << "/";
+				oss << result[2].str().c_str();
+				std::wstring path = oss.str();
+				ret = getGetObjectAForPath(This, path, pvargDest);
+				//std::wcout << "IWzResMan__GetObjectA_Hook :" << path << " " << ret->vt << " " << _ReturnAddress() << std::endl;
+
+			}
 		}
 	}
 
