@@ -147,18 +147,18 @@ __declspec(naked) void enterShop()
 }
 
 void checkMoveWindow() {
-	int width = GetSystemMetrics(SM_CXSCREEN);
-	int height = GetSystemMetrics(SM_CYSCREEN);
+	int width = GetSystemMetrics(SM_CXFULLSCREEN);
+	int height = GetSystemMetrics(SM_CYFULLSCREEN);
 	HWND hWnd = FindWindow(L"MapleStoryClass", nullptr);
 	if (hWnd) {
 		RECT rect;
 		GetWindowRect(hWnd, &rect);
 		int left = rect.left;
 		int top = rect.top;
-		if (left + Resolution::m_nGameWidth > width)
-			left = (width - Resolution::m_nGameWidth) / 2;
-		if (top + Resolution::m_nGameHeight > height)
+		if (left + Resolution::m_nGameWidth > width || top + Resolution::m_nGameHeight > height) {
+			left = (width - Resolution::m_nGameWidth) / 2;   //center
 			top = (height - Resolution::m_nGameHeight) / 2;
+		}
 		if (left < 0)
 			left = 0;
 		if (top < 0)
