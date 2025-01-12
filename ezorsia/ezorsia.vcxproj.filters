@@ -78,9 +78,6 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files\innerH</Filter>
     </ClInclude>
-    <ClInclude Include="INIReader.h">
-      <Filter>Header Files\innerH</Filter>
-    </ClInclude>
     <ClInclude Include="MapleClientCollectionTypes\ZAllocAnonSelector.h">
       <Filter>Header Files\MapleTypes\ZAllocEx</Filter>
     </ClInclude>
@@ -381,6 +378,12 @@
     <ClInclude Include="PetEx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="INIReader.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="ini.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -445,6 +448,12 @@
     </ClCompile>
     <ClCompile Include="PetEx.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="INIReader.cpp">
+      <Filter>Header Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="ini.c">
+      <Filter>Header Files\Util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

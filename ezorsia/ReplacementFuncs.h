@@ -24,7 +24,7 @@ bool HookGetModuleFileName(bool bEnable);
 /// Creates a detour for the User32.dll CreateWindowExA function applying the following changes:
 /// 1. Enable the window minimize box
 /// </summary>
-inline void HookCreateWindowExA(bool bEnable);
+void HookCreateWindowExA(bool bEnable);
 
 DWORD GetFuncAddress(LPCSTR lpModule, LPCSTR lpFunc);
 

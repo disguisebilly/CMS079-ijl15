@@ -294,6 +294,7 @@
     <ClInclude Include="include\wil\wistd_memory.h" />
     <ClInclude Include="include\wil\wistd_type_traits.h" />
     <ClInclude Include="include\wil\wrl.h" />
+    <ClInclude Include="ini.h" />
     <ClInclude Include="MapleClientCollectionTypes\asserts.h" />
     <ClInclude Include="MapleClientCollectionTypes\CanvasType.h" />
     <ClInclude Include="MapleClientCollectionTypes\CAvatar.h" />
@@ -378,6 +379,16 @@
     </ClInclude>
     <ClCompile Include="HeapCreateEx.cpp" />
     <ClCompile Include="ijl15.cpp" />
+    <ClCompile Include="ini.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-mt|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-md|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="INIReader.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-mt|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-md|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="MapleClientCollectionTypes\CAvatar.cpp" />
     <ClCompile Include="MapleClientCollectionTypes\CClientSocket.cpp" />
     <ClCompile Include="MapleClientCollectionTypes\CInpacket.cpp" />

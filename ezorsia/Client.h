@@ -43,6 +43,7 @@ public:
 	static float climbSpeed;
 	static int speedMovementCap;
 	static DWORD jumpCap;
+	static std::string ServerName;
 	static std::string ServerIP_AddressFromINI;
 	static bool ServerIP_Address_hook;
 	static bool canInjected;

@@ -87,10 +87,9 @@ __declspec(naked) void reloadMap()
 }
 
 int checkUpdateResolution() {
-	auto setting = reinterpret_cast<DWORD*>(0x00BDD494);
-	DWORD* gameWidth = Memory::getAddress(0x00BE2788, { 32 });
-	if (*setting != NULL) {
-		auto option = (int)*reinterpret_cast<DWORD*>(*setting + 0x7C);
+	auto setting = Memory::getAddress(0x00BDD494, { 0x7C });
+	if (setting) {
+		auto option = (int)*setting;
 		if (resolutionOption.find(option) == resolutionOption.end()) {
 			option = Client::DefaultResolution;
 			if (option < 0 || option >= resolutionOption.size() || resolutionOption.find(option) == resolutionOption.end()) {
@@ -99,6 +98,7 @@ int checkUpdateResolution() {
 			}
 		}
 		std::vector<int> resolution = resolutionOption[option];
+		auto gameWidth = Memory::getAddress(0x00BE2788, { 32 });
 		if (Resolution::m_nGameWidth != resolution[0] || (gameWidth != NULL && *gameWidth != resolution[0])) {
 			Resolution::UpdateResolution(resolution[0], resolution[1]);
 			return 1;
@@ -156,17 +156,19 @@ void checkMoveWindow() {
 		int left = rect.left;
 		int top = rect.top;
 		if (left + Resolution::m_nGameWidth > width)
-			left = width - Resolution::m_nGameWidth;
+			left = (width - Resolution::m_nGameWidth) / 2;
 		if (top + Resolution::m_nGameHeight > height)
-			top = height - Resolution::m_nGameHeight;
+			top = (height - Resolution::m_nGameHeight) / 2;
 		if (left < 0)
 			left = 0;
 		if (top < 0)
 			top = 0;
-		if (left != rect.left || top != rect.top) {
-			SetWindowPos(hWnd, HWND(-2), left, top
-				, Resolution::m_nGameWidth, Resolution::m_nGameHeight, SWP_NOSIZE);
+		auto flag = SWP_NOSIZE;
+		if (left == rect.left && top == rect.top) {
+			flag |= SWP_NOMOVE;
 		}
+		SetWindowPos(hWnd, HWND_TOPMOST, left, top
+			, Resolution::m_nGameWidth, Resolution::m_nGameHeight, flag);
 		CloseHandle(hWnd);
 	}
 }

@@ -43,10 +43,11 @@ void Init()
 		Client::debug = reader.GetBoolean("debug", "debug", Client::debug);
 		Client::noPassword = reader.GetBoolean("debug", "noPassword", Client::noPassword);
 		Client::forceExit = reader.GetBoolean("debug", "forceExit", Client::forceExit);
-		Client::ServerIP_AddressFromINI = reader.Get("general", "ServerIP_Address", Client::ServerIP_AddressFromINI);
+		Client::ServerName = reader.GetString("general", "ServerName", Client::ServerName);
+		Client::ServerIP_AddressFromINI = reader.GetString("general", "ServerIP_Address", Client::ServerIP_AddressFromINI);
 		Client::ServerIP_Address_hook = reader.GetBoolean("general", "ServerIP_Address_hook", Client::ServerIP_Address_hook);
 		Client::climbSpeedAuto = reader.GetBoolean("optional", "climbSpeedAuto", Client::climbSpeedAuto);
-		Client::climbSpeed = reader.GetFloat("optional", "climbSpeed", Client::climbSpeed);
+		Client::climbSpeed = reader.GetReal("optional", "climbSpeed", Client::climbSpeed);
 		Client::serverIP_Port = reader.GetInteger("general", "serverIP_Port", Client::serverIP_Port);
 		Client::talkRepeat = reader.GetBoolean("optional", "talkRepeat", Client::talkRepeat);
 		Client::talkTime = reader.GetInteger("optional", "talkTime", Client::talkTime);
@@ -73,6 +74,7 @@ void Init()
 	if (Client::debug)
 		CreateConsole();	//console for devs, use this to log stuff if you want
 	Hook_CreateMutexA(true); //multiclient //ty darter, angel, and alias!
+	HookCreateWindowExA(true);
 	HeapCreateEx::HOOK_HeapCreate();
 	Hook_gethostbyname(true);
 	Client::TimerTask(CreateHook, 10);

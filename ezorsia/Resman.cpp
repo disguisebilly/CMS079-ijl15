@@ -347,7 +347,7 @@ VARIANTARG* __fastcall IWzResMan__GetObjectA_Hook(DWORD* This, void* notuse, VAR
 							case 3:
 								break;
 							}
-							std::wcout << "empty" << pos.vt << " " << pos.intVal << std::endl;
+							//std::wcout << "empty" << pos.vt << " " << pos.intVal << std::endl;
 						}
 						//effect->raw_Remove(const_cast<wchar_t*>(L"pos"));
 					}
