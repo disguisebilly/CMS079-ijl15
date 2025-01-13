@@ -378,10 +378,10 @@
     <ClInclude Include="PetEx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="INIReader.h">
+    <ClInclude Include="Util\ini.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
-    <ClInclude Include="ini.h">
+    <ClInclude Include="Util\INIReader.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
   </ItemGroup>
@@ -449,10 +449,10 @@
     <ClCompile Include="PetEx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="INIReader.cpp">
+    <ClCompile Include="Util\ini.c">
       <Filter>Header Files\Util</Filter>
     </ClCompile>
-    <ClCompile Include="ini.c">
+    <ClCompile Include="Util\INIReader.cpp">
       <Filter>Header Files\Util</Filter>
     </ClCompile>
   </ItemGroup>

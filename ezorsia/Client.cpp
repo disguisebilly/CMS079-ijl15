@@ -66,6 +66,8 @@ void Client::UpdateGameStartup() {
 	if (Client::forceExit)
 		Memory::CodeCave(fExit, 0x009FC170, 12);
 
+	FixBuddy::Hook();  //unkown
+
 	if (useTubi) { Memory::FillBytes(0x00485173, 0x90, 2); }
 
 	Memory::WriteInt(0x007868CF + 1, 2147483646); // 物攻PAD 相关具体不明，默认值1999，int 4字节
