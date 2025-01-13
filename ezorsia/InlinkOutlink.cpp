@@ -43,10 +43,16 @@ HRESULT __stdcall CWzCanvas__raw_Serialize_hook(IWzCanvas* pThis, IWzArchive* pA
 }
 
 
-void HandleLinkProperty(IWzCanvasPtr pCanvas) {
+void InlinkOutlink::HandleLinkProperty(IWzCanvasPtr pCanvas) {
 	// Check for link property
 	IWzPropertyPtr pProperty;
 	CHECK_HRESULT(pCanvas->Getproperty(&pProperty));
+	unsigned int w = 0, h = 0;
+	pCanvas->Getwidth(&w);
+	pCanvas->Getheight(&h);
+	if (w > 1 || h > 1) {
+		return;
+	}
 	const wchar_t* asLinkProperty[] = {
 		L"_inlink",
 		L"_outlink",
@@ -57,11 +63,15 @@ void HandleLinkProperty(IWzCanvasPtr pCanvas) {
 		Ztl_variant_t link;
 		CHECK_HRESULT(pProperty->getItem(const_cast<wchar_t*>(asLinkProperty[i]), (_variant_t*)(&link)));
 		if (link.vt == VT_BSTR) {
+			//std::wcout << "HandleLinkProperty" << asLinkProperty[i] << " " << link.bstrVal << std::endl;
 			Ztl_variant_t vEmpty;
 			Ztl_variant_t vSource;
 			Resman::getIWzResMan()->raw_GetObject(link.bstrVal, vEmpty, vEmpty, &vSource);
 			//std::wcout << "HandleLinkProperty" << asLinkProperty[i] << " " << vSource.vt << " " << link.bstrVal << std::endl;
-			if (vSource.vt == VT_EMPTY) break;
+			if (vSource.vt == VT_EMPTY) {
+				pProperty->raw_Remove(const_cast<wchar_t*>(asLinkProperty[i]));
+				break;
+			}
 			// Get source canvas
 			IWzCanvasPtr pSourceCanvas = IWzCanvasPtr(vSource.GetUnknown(false, false));
 			int nWidth, nHeight, nFormat, nMagLevel;
@@ -83,10 +93,24 @@ void HandleLinkProperty(IWzCanvasPtr pCanvas) {
 			// Set target origin
 			CHECK_HRESULT(pCanvas->Putcx(nOriginX));
 			CHECK_HRESULT(pCanvas->Putcy(nOriginY));
+			pProperty->raw_Remove(const_cast<wchar_t*>(asLinkProperty[i]));
 			//std::wcout << "HandleLinkProperty" << asLinkProperty[i] << " " << vSource.vt << " " << link.bstrVal << std::endl;
 			break;
 		}
 	}
+}
+
+typedef IUnknownPtr* (__cdecl* get_unknown_t)(IUnknownPtr*, Ztl_variant_t*);
+static auto get_unknown = reinterpret_cast<get_unknown_t>(0x0041511B);
+
+IUnknownPtr* __cdecl get_unknown_hook(IUnknownPtr* result, Ztl_variant_t* v) {
+	get_unknown(result, v);
+	IWzCanvasPtr pCanvas;
+	IUnknownPtr pUnknown(*result);
+	if (SUCCEEDED(pUnknown.QueryInterface(__uuidof(IWzCanvas), &pCanvas))) {
+		InlinkOutlink::HandleLinkProperty(pCanvas);
+	}
+	return result;
 }
 
 typedef IUnknown* (__thiscall* Ztl_variant_t__GetUnknown_t)(Ztl_variant_t*, bool, bool);
@@ -96,7 +120,7 @@ IUnknown* __fastcall Ztl_variant_t__GetUnknown_hook(Ztl_variant_t* pThis, void* 
 	IUnknownPtr pUnknown = _Ztl_variant_t__GetUnknown(pThis, fAddRef, fTryChangeType);
 	IWzCanvasPtr pCanvas;
 	if (SUCCEEDED(pUnknown.QueryInterface(__uuidof(IWzCanvas), &pCanvas))) {
-		HandleLinkProperty(pCanvas);
+		InlinkOutlink::HandleLinkProperty(pCanvas);
 	}
 	return pUnknown;
 }
@@ -104,9 +128,10 @@ IUnknown* __fastcall Ztl_variant_t__GetUnknown_hook(Ztl_variant_t* pThis, void* 
 void InlinkOutlink::AttachClientInlink(bool enable) {
 	if (enable)
 	{
-		std::cout<<"Enble New Inlink Outlink" << std::endl;
+		std::cout << "Enble New Inlink Outlink" << std::endl;
 		LoadLibrary(L"CANVAS.DLL");
 		Memory::SetHook(true, reinterpret_cast<void**>(&_CWzCanvas__raw_Serialize), CWzCanvas__raw_Serialize_hook);
+		//Memory::SetHook(true, reinterpret_cast<void**>(&get_unknown), get_unknown_hook);
 		Memory::SetHook(true, reinterpret_cast<void**>(&_Ztl_variant_t__GetUnknown), Ztl_variant_t__GetUnknown_hook);
 	}
 
