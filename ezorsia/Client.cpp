@@ -28,6 +28,7 @@ bool Client::useTubi = false;
 int Client::speedMovementCap = 140;
 bool Client::noPassword = false;
 bool Client::forceExit = true;
+bool Client::linkNodeNew = true;
 bool Client::debug = false;
 bool Client::climbSpeedAuto = false;
 bool Client::canInjected = false;

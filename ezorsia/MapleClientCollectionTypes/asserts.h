@@ -21,3 +21,13 @@
 #ifndef padding
 #define padding(x) struct { unsigned char __padding##x[(x)]; };
 #endif
+
+#ifndef CHECK_HRESULT
+#define CHECK_HRESULT(HR) \
+    do { \
+        HRESULT _hr = (HR); \
+        if (FAILED(_hr)) { \
+            _com_issue_error(_hr); \
+        } \
+    } while (0)
+#endif

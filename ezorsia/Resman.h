@@ -3,7 +3,7 @@ class Resman
 {
 public:
 	static BOOL Hook_InitializeResMan();
-	static VOID Hook_InitInlinkOutlink();
+	static VOID Hook_InitGetHook();
 	static IWzResMan* getIWzResMan();
 };
 

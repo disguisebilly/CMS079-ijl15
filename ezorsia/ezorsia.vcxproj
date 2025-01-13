@@ -294,6 +294,7 @@
     <ClInclude Include="include\wil\wistd_memory.h" />
     <ClInclude Include="include\wil\wistd_type_traits.h" />
     <ClInclude Include="include\wil\wrl.h" />
+    <ClInclude Include="InlinkOutlink.h" />
     <ClInclude Include="MapleClientCollectionTypes\asserts.h" />
     <ClInclude Include="MapleClientCollectionTypes\CanvasType.h" />
     <ClInclude Include="MapleClientCollectionTypes\CAvatar.h" />
@@ -379,6 +380,7 @@
     </ClInclude>
     <ClCompile Include="HeapCreateEx.cpp" />
     <ClCompile Include="ijl15.cpp" />
+    <ClCompile Include="InlinkOutlink.cpp" />
     <ClCompile Include="MapleClientCollectionTypes\CAvatar.cpp" />
     <ClCompile Include="MapleClientCollectionTypes\CClientSocket.cpp" />
     <ClCompile Include="MapleClientCollectionTypes\CInpacket.cpp" />

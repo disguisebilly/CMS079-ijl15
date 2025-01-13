@@ -16,7 +16,7 @@ DECLARE_INTERFACE_IID_(IWzProperty, IUnknown, "986515D9-0A0B-4929-8B4F-718682177
 	STDMETHOD(raw_Serialize)(THIS_ uintptr_t*) PURE;
 
 	/*** IWzProperty methods ***/
-	STDMETHOD(get_item)(THIS_ const wchar_t* wsPath, _variant_t * result);
+	STDMETHOD(getItem)(THIS_ const wchar_t* wsPath, _variant_t * result);
 	STDMETHOD(put_item)(THIS_ const wchar_t* wsPath, _variant_t pItem);
 	STDMETHOD(get__NewEnum)(THIS_ IUnknown**);
 	STDMETHOD(get_count)(THIS_ unsigned int*);
@@ -40,16 +40,17 @@ DECLARE_INTERFACE_IID_(IWzProperty, IUnknown, "986515D9-0A0B-4929-8B4F-718682177
 	VARIANTARG* get_item(const wchar_t* wsPath)
 	{
 		_variant_t pItem(0);
-		this->get_item(wsPath, &pItem);
+		this->getItem(wsPath, &pItem);
 
 		return pItem.pvarVal;
 	}
 
 	VARIANTARG* get_item(const wchar_t* wsPath, VARIANTARG * dest)
 	{
-		this->get_item(wsPath, (_variant_t *)dest);
+		this->getItem(wsPath, (_variant_t *)dest);
 		return dest;
 	}
 
 	END_INTERFACE;
 };
+_COM_SMARTPTR_TYPEDEF(IWzProperty, __uuidof(IWzProperty));

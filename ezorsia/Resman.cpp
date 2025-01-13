@@ -228,7 +228,7 @@ VARIANTARG* __fastcall IWzResMan__GetObjectA_Hook(DWORD* This, void* notuse, VAR
 	if (ret == nullptr)
 		ret = IWzResMan__GetObjectA(This, nullptr, pvargDest, sUOL, vParam, vAux);
 
-	//std::wstring findStr = L"effect";
+	//std::wstring findStr = L"2049116";
 
 	//if (strT.find(findStr) != std::wstring::npos) {
 	//	std::wcout << "IWzResMan__GetObjectA_Hook :" << This << " " << strT << " " << _ReturnAddress() << std::endl;
@@ -472,7 +472,7 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 		Resolution::UpdateBarWidth(width);
 	}
 
-	//std::wstring findStr = L"effect";
+	//std::wstring findStr = L"2049116";
 
 	//if (strT.find(findStr) != std::wstring::npos) {
 	//	std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << " " << ret->punkVal << " " << _ReturnAddress() << std::endl;
@@ -993,11 +993,11 @@ BOOL Resman::Hook_InitializeResMan() {
 	return Memory::SetHook(true, reinterpret_cast<void**>(&CWvsApp__InitializeResMan), Hook);
 }
 
-VOID Resman::Hook_InitInlinkOutlink() {
+VOID Resman::Hook_InitGetHook() {
 	Memory::SetHook(true, reinterpret_cast<void**>(&getEffPosition), getEffPosition_Hook);
 	Memory::SetHook(true, reinterpret_cast<void**>(&IWzProperty__GetItem), IWzProperty__GetItem_Hook);
 	Memory::SetHook(true, reinterpret_cast<void**>(&IWzResMan__GetObjectA), IWzResMan__GetObjectA_Hook);
-	Memory::SetHook(true, reinterpret_cast<void**>(&IWzCanvas_operator_equal), IWzCanvas_operator_equal_Hook);
+	Memory::SetHook(!Client::linkNodeNew, reinterpret_cast<void**>(&IWzCanvas_operator_equal), IWzCanvas_operator_equal_Hook);
 	//skin
 	if (Client::DamageSkin > 0 || Client::RemoteDamageSkin) {
 		Memory::PatchCall(0x0043873E, IWzProperty__GetSkinItem_Hook);

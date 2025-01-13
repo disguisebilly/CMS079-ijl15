@@ -4,33 +4,24 @@
 #undef  INTERFACE
 #define INTERFACE   IWzRawCanvas
 
-DECLARE_INTERFACE_(IWzRawCanvas, IUnknown) {
-	BEGIN_INTERFACE
+DECLARE_INTERFACE_IID_(IWzRawCanvas, IUnknown, "312126f0-c399-4111-8eab-0f96a30b6b7c") {
+    BEGIN_INTERFACE;
 
-		// *** IUnknown methods ***
-		STDMETHOD(QueryInterface)(THIS_ REFIID riid, void** ppv) PURE;
+    /*** IUnknown methods ***/
+    STDMETHOD(QueryInterface)(THIS_ REFIID riid, void** ppv) PURE;
+    STDMETHOD_(ULONG, AddRef)(THIS) PURE;
+    STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-	STDMETHOD_(ULONG, AddRef)(THIS) PURE;
+    /*** IWzRawCanvas methods ***/
+    STDMETHOD(get_pixelFormat)(THIS_ CANVAS_PIXFORMAT*) PURE;
+    STDMETHOD(get_magLevel)(THIS_ int*) PURE;
+    STDMETHOD(get_width)(THIS_ unsigned int* puWidth) PURE;
+    STDMETHOD(get_height)(THIS_ unsigned int* puHeight) PURE;
+    STDMETHOD(raw__LockAddress)(THIS_ int* pnPitch, tagVARIANT*) PURE;
+    STDMETHOD(raw__UnlockAddress)(THIS_ tagRECT*) PURE;
+    STDMETHOD(raw_SetTexture)(THIS_ unsigned int*) PURE;
+    STDMETHOD(raw_GetTextureSize)(THIS_ tagRECT*) PURE;
 
-	STDMETHOD_(ULONG, Release)(THIS) PURE;
-
-	// ** IWzRawCanvas methods ***
-
-	STDMETHOD(GetpixelFormat)(THIS_ CANVAS_PIXFORMAT*) PURE;
-
-	STDMETHOD(GetmagLevel)(THIS_ int*) PURE;
-
-	STDMETHOD(Getwidth)(THIS_ unsigned int*) PURE;
-
-	STDMETHOD(Getheight)(THIS_ unsigned int*) PURE;
-
-	STDMETHOD(LockAddress)(THIS_ int*, tagVARIANT*) PURE;
-
-	STDMETHOD(UnlockAddress)(THIS_ tagRECT*) PURE;
-
-	STDMETHOD(SetTexture)(THIS_ unsigned int*) PURE;
-
-	STDMETHOD(GetTextureSize)(THIS_ tagRECT*) PURE;
-
-	END_INTERFACE
+    END_INTERFACE;
 };
+_COM_SMARTPTR_TYPEDEF(IWzRawCanvas, __uuidof(IWzRawCanvas));

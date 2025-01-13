@@ -384,6 +384,9 @@
     <ClInclude Include="Util\INIReader.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
+    <ClInclude Include="InlinkOutlink.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -454,6 +457,9 @@
     </ClCompile>
     <ClCompile Include="Util\INIReader.cpp">
       <Filter>Header Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="InlinkOutlink.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -43,6 +43,7 @@
 - 支持长键盘(支持加载外置文件[UI/QuickSlot.img](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/QuickSlot.img)或[Custom.wz](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/Custom.wz)，支持多种键位配置)
 - 支持198开头的的TamingMob
 - 支持新版发型脸型
+- 支持部分inlink和outlink节点(默认使用新方法，如遇启动问题设置linkNodeNew=false)
 - 支持ItemEff.img里头的特效(可用0xAA包头或ItemEffect激活)
 - 支持内存防爆
 - 支持快捷二段跳（双击跳跃键）

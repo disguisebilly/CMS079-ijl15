@@ -43,6 +43,7 @@ For both methods, copy the config.ini from the project’s root directory to the
 - Supports Longslot (loads external files from [UI/QuickSlot.img](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/QuickSlot.img) or [Custom.wz](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/Custom.wz)， supports multiple key configurations)
 - Supports TamingMob starting with 198.
 - Supports new hairstyles and faces.
+- Support partial inlink and outlink nodes (Default using the new method, set linkNodeNew=false in case of startup issues)
 - Supports effects in ItemEff.img (activatable via 0xAA packet header or ItemEffect).
 - Supports memory anti-crash.
 - Supports quick double jump (double-tap jump key).

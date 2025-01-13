@@ -11,6 +11,7 @@
 #include "ChairRelMove.h"
 #include <HeapCreateEx.h>
 #include "dllmain.h"
+#include <InlinkOutlink.h>
 
 bool isCreate = false;
 
@@ -43,6 +44,7 @@ void Init()
 		Client::debug = reader.GetBoolean("debug", "debug", Client::debug);
 		Client::noPassword = reader.GetBoolean("debug", "noPassword", Client::noPassword);
 		Client::forceExit = reader.GetBoolean("debug", "forceExit", Client::forceExit);
+		Client::linkNodeNew = reader.GetBoolean("debug", "linkNodeNew", Client::linkNodeNew);
 		Client::ServerName = reader.GetString("general", "ServerName", Client::ServerName);
 		Client::ServerIP_AddressFromINI = reader.GetString("general", "ServerIP_Address", Client::ServerIP_AddressFromINI);
 		Client::ServerIP_Address_hook = reader.GetBoolean("general", "ServerIP_Address_hook", Client::ServerIP_Address_hook);
@@ -101,7 +103,8 @@ bool CreateHook()
 	Client::CRCBypass();
 	//Client::EnableNewIGCipher();
 	Resman::Hook_InitializeResMan();
-	Resman::Hook_InitInlinkOutlink();
+	Resman::Hook_InitGetHook();
+	InlinkOutlink::AttachClientInlink(Client::linkNodeNew);
 	Hook_SetActiveChairRelMove(true);
 	CharacterEx::InitExpOverride(Client::longEXP);
 	CharacterEx::InitLevelOverride(Client::shortLevel);

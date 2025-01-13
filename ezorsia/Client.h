@@ -39,6 +39,7 @@ public:
 	static bool debug;
 	static bool noPassword;
 	static bool forceExit;
+	static bool linkNodeNew;
 	static bool climbSpeedAuto;
 	static float climbSpeed;
 	static int speedMovementCap;
