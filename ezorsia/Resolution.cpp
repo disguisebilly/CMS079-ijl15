@@ -890,6 +890,7 @@ void Resolution::UpdateSlotPosition(int width) {
 		Memory::WriteInt(dwQuickSlotHPos + 1, 580); //push 647 //hd800
 		Memory::WriteInt(dwQuickSlotCWndVPos + 2, -427);
 		Memory::WriteInt(dwQuickSlotCWndHPos + 2, -580);
+		Memory::WriteInt(0x008E3384 + 3, 427);  //open click y range
 		Memory::WriteInt(0x008E4443 + 1, 440);  //装备按鈕高度
 		Memory::WriteInt(0x008E4448 + 1, 587);  //装备按钮宽度
 		Memory::WriteInt(0x008E53F6 + 1, 440);  //装备闪烁高度
@@ -919,6 +920,7 @@ void Resolution::UpdateSlotPosition(int width) {
 		Memory::WriteInt(dwQuickSlotHPos + 1, m_slotXPos); //push 647 //hd800
 		Memory::WriteInt(dwQuickSlotCWndVPos + 2, -500); //lea edi,[eax-427]6
 		Memory::WriteInt(dwQuickSlotCWndHPos + 2, -m_slotXPos); //lea ebx,[eax-647]
+		Memory::WriteInt(0x008E3384 + 3, 507);  //open click y range
 		//4个快捷按钮位置
 		Memory::WriteInt(0x008E4443 + 1, 506);  //装备按鈕高度
 		Memory::WriteInt(0x008E4448 + 1, m_slotXPos + 7);  //装备按鈕寬度
