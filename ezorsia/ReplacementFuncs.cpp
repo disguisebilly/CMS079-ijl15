@@ -126,12 +126,14 @@ bool Hook_StringPool__GetString(bool bEnable)	//hook stringpool modification //t
 			/*if (strstr(str, "冒险岛ON") != nullptr) {
 				std::cout << "StringPool__GetString id = " << nIdx << " " << str << " " << _ReturnAddress() << std::endl;
 			}*/
-			if (nIdx == 2219)
-			{
-				*ret = "soResolution";
-			}
 			switch (nIdx)
 			{
+			case 2219:
+				*ret = "soResolution";
+				break;
+			case 737:
+				*ret = Client::WelcomeMessage.c_str();
+				break;
 				//case 233:
 					//if(Client::longEXP)
 					//	*ret = ("得到经验值 (+%ld)"); break;

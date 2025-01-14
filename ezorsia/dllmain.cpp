@@ -46,6 +46,7 @@ void Init()
 		Client::forceExit = reader.GetBoolean("debug", "forceExit", Client::forceExit);
 		Client::linkNodeNew = reader.GetBoolean("debug", "linkNodeNew", Client::linkNodeNew);
 		Client::ServerName = reader.GetString("general", "ServerName", Client::ServerName);
+		Client::WelcomeMessage = reader.GetString("general", "WelcomeMessage", Client::WelcomeMessage);
 		Client::ServerIP_AddressFromINI = reader.GetString("general", "ServerIP_Address", Client::ServerIP_AddressFromINI);
 		Client::ServerIP_Address_hook = reader.GetBoolean("general", "ServerIP_Address_hook", Client::ServerIP_Address_hook);
 		Client::climbSpeedAuto = reader.GetBoolean("optional", "climbSpeedAuto", Client::climbSpeedAuto);

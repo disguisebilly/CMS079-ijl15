@@ -36,6 +36,7 @@ bool Client::injected = false;
 bool Client::ServerIP_Address_hook = true;
 float Client::climbSpeed = 1.0;
 std::string Client::ServerName = "MapleStory";
+std::string Client::WelcomeMessage = "";
 std::string Client::ServerIP_AddressFromINI = "127.0.0.1";
 int Client::serverIP_Port = 8484;
 bool Client::talkRepeat = false;
@@ -369,8 +370,11 @@ void Client::MoreHook() {
 
 	Memory::WriteByte(0x00942A01, 0xEB);
 
-	if (Client::RemoveSystemMsg) {
+	if (Client::WelcomeMessage.empty()) {
 		Memory::FillBytes(0x00A0CD7D, 0x90, 5);
+	}
+
+	if (Client::RemoveSystemMsg) {
 		Memory::FillBytes(0x00A0C8CA, 0x90, 5);
 	}
 }
