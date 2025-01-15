@@ -67,6 +67,7 @@ public:
 	static bool tamingMobUnlock;
 	static bool tamingMob198Effect;
 	static bool replacePetEquipCheck;
+	static int downJumpLimitHeight;
 	static bool s4221001;
 	static bool s4221007;
 	static bool s14101004;

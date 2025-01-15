@@ -55,7 +55,7 @@ bool Client::RemoteDamageSkin = false;
 bool Client::tamingMobUnlock = false;
 bool Client::tamingMob198Effect = false;
 bool Client::replacePetEquipCheck = false;
-
+int Client::downJumpLimitHeight = 300;
 bool Client::s14101004 = true;
 bool Client::s14101004up = false;
 bool Client::s4221001 = false;
@@ -377,6 +377,8 @@ void Client::MoreHook() {
 	if (Client::RemoveSystemMsg) {
 		Memory::FillBytes(0x00A0C8CA, 0x90, 5);
 	}
+
+	Memory::WriteInt(0x00953224 + 2, Client::downJumpLimitHeight);
 }
 
 void Client::Skill() {
