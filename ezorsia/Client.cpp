@@ -15,6 +15,7 @@ bool Client::RemoveSystemMsg = true;
 bool Client::RemoveLoginNxIdDialog = true;
 int Client::ScreenShotPath = 0;
 int Client::ResCheckTime = 1000;
+int Client::ResFlushTimeInterval = 5;
 int Client::ResManFlushCached = 640;
 int Client::SetWorkingSetSize = 768;
 int Client::setDamageCap = 199999;
@@ -30,6 +31,7 @@ bool Client::noPassword = false;
 bool Client::forceExit = true;
 bool Client::linkNodeNew = true;
 bool Client::debug = false;
+bool Client::crashAutoDump = false;
 bool Client::climbSpeedAuto = false;
 bool Client::canInjected = false;
 bool Client::injected = false;
@@ -56,6 +58,8 @@ bool Client::tamingMobUnlock = false;
 bool Client::tamingMob198Effect = false;
 bool Client::replacePetEquipCheck = false;
 int Client::downJumpLimitHeight = 300;
+bool Client::unlockPanelLimit = false;
+bool Client::unlockPaneMaplLimit = false;
 bool Client::s14101004 = true;
 bool Client::s14101004up = false;
 bool Client::s4221001 = false;
@@ -379,6 +383,16 @@ void Client::MoreHook() {
 	}
 
 	Memory::WriteInt(0x00953224 + 2, Client::downJumpLimitHeight);
+
+	if (Client::unlockPanelLimit) {
+		Memory::WriteByte(0x00A1AACD, 0xEB);  //unlock attack during 
+	}
+
+	if (Client::unlockPaneMaplLimit) {
+		Memory::WriteByte(0x00A1AB9B, 0xEB);  //auction
+		Memory::WriteByte(0x00A0E14F, 0xEB);  //shop
+	}
+
 }
 
 void Client::Skill() {
@@ -402,19 +416,24 @@ void Client::Skill() {
 	}
 }
 
+std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
+
 bool Client::EmptyMemory()
 {
 	try {
 		int memory = Client::GetCurrentMemoryUsage();
-		if (memory >= Client::ResManFlushCached) {
-			//if (Resman::getIWzResMan())
-			//{
-			//	Resman::getIWzResMan()->raw_FlushCachedObjects(0);
-			//}
+		std::chrono::system_clock::time_point end = std::chrono::system_clock::now();
+		std::chrono::duration<double> diff = end - start;
+		if (memory >= Client::ResManFlushCached && diff.count() >= Client::ResFlushTimeInterval) {
+			if (Resman::getIWzResMan())
+			{
+				Resman::getIWzResMan()->raw_FlushCachedObjects(0);
+			}
 			autoFlushCacheTime(0);
 			callFlushcache();
 			autoFlushCacheTime(10000);
 			std::cout << "Try flushcache:" << memory << std::endl;
+			start = std::chrono::system_clock::now();;
 		}
 		if (memory >= Client::SetWorkingSetSize)
 		{

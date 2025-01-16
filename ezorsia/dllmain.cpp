@@ -12,8 +12,18 @@
 #include <HeapCreateEx.h>
 #include "dllmain.h"
 #include <InlinkOutlink.h>
+#include "CreateDump.h"
+#include "AutoDump.h"
 
 bool isCreate = false;
+
+CAutoDump* autoDump = nullptr;
+
+LONG WINAPI DumpCallback(_EXCEPTION_POINTERS* excp) {
+	std::cout << "DumpCallback" << std::endl;
+	CreateDump(excp);
+	return EXCEPTION_EXECUTE_HANDLER;
+}
 
 void Init()
 {
@@ -29,6 +39,7 @@ void Init()
 		Client::RemoveSystemMsg = reader.GetBoolean("general", "RemoveSystemMsg", Client::RemoveSystemMsg);
 		Memory::UseVirtuProtect = reader.GetBoolean("general", "UseVirtuProtect", Memory::UseVirtuProtect);
 		Client::ResCheckTime = reader.GetInteger("general", "ResCheckTime", Client::ResCheckTime);
+		Client::ResFlushTimeInterval = reader.GetInteger("general", "ResFlushTimeInterval", Client::ResFlushTimeInterval);
 		Client::ResManFlushCached = reader.GetInteger("general", "ResManFlushCached", Client::ResManFlushCached);
 		Client::SetWorkingSetSize = reader.GetInteger("general", "SetWorkingSetSize", Client::SetWorkingSetSize);
 		Client::setDamageCap = reader.GetReal("optional", "setDamageCap", Client::setDamageCap);
@@ -42,6 +53,7 @@ void Init()
 		Client::speedMovementCap = reader.GetInteger("optional", "speedMovementCap", Client::speedMovementCap);
 		Client::jumpCap = reader.GetInteger("optional", "jumpCap", Client::jumpCap);
 		Client::debug = reader.GetBoolean("debug", "debug", Client::debug);
+		Client::crashAutoDump = reader.GetBoolean("debug", "crashAutoDump", Client::crashAutoDump);
 		Client::noPassword = reader.GetBoolean("debug", "noPassword", Client::noPassword);
 		Client::forceExit = reader.GetBoolean("debug", "forceExit", Client::forceExit);
 		Client::linkNodeNew = reader.GetBoolean("debug", "linkNodeNew", Client::linkNodeNew);
@@ -60,6 +72,8 @@ void Init()
 		Client::tamingMobUnlock = reader.GetBoolean("optional", "tamingMobUnlock", Client::tamingMobUnlock);
 		Client::replacePetEquipCheck = reader.GetBoolean("optional", "replacePetEquipCheck", Client::replacePetEquipCheck);
 		Client::downJumpLimitHeight = reader.GetInteger("optional", "downJumpLimitHeight", Client::downJumpLimitHeight);
+		Client::unlockPanelLimit = reader.GetBoolean("optional", "unlockPanelLimit", Client::unlockPanelLimit);
+		Client::unlockPaneMaplLimit = reader.GetBoolean("optional", "unlockPaneMaplLimit", Client::unlockPaneMaplLimit);
 		Client::longSlots = reader.GetBoolean("ui", "LongSlots", Client::longSlots);
 		Client::longSlotsKey = reader.GetInteger("ui", "longSlotsKey", Client::longSlotsKey);
 		Client::showItemID = reader.GetBoolean("ui", "showItemID", Client::showItemID);
@@ -77,6 +91,10 @@ void Init()
 	}
 	if (Client::debug)
 		CreateConsole();	//console for devs, use this to log stuff if you want
+	if (Client::crashAutoDump) {
+		autoDump = new CAutoDump();
+		SetUnhandledExceptionFilter(DumpCallback);
+	}
 	Hook_CreateMutexA(true); //multiclient //ty darter, angel, and alias!
 	HookCreateWindowExA(true);
 	HeapCreateEx::HOOK_HeapCreate();
@@ -141,6 +159,10 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 	}
 	default: break;
 	case DLL_PROCESS_DETACH:
+		if (autoDump) {
+			delete autoDump;
+			autoDump = nullptr;
+		}
 		ExitProcess(0);
 	}
 	return TRUE;

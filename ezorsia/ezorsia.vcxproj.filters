@@ -387,6 +387,12 @@
     <ClInclude Include="InlinkOutlink.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Util\AutoDump.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\CreateDump.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -460,6 +466,12 @@
     </ClCompile>
     <ClCompile Include="InlinkOutlink.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\AutoDump.cpp">
+      <Filter>Header Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\CreateDump.cpp">
+      <Filter>Header Files\Util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

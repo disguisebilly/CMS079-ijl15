@@ -26,6 +26,7 @@ public:
 	static bool RemoveLoginNxIdDialog;
 	static int ScreenShotPath;
 	static int ResCheckTime;
+	static int ResFlushTimeInterval;
 	static int ResManFlushCached;
 	static int SetWorkingSetSize;
 	static int setDamageCap;
@@ -37,6 +38,7 @@ public:
 	static bool shortLevel;
 	static bool useTubi;
 	static bool debug;
+	static bool crashAutoDump;
 	static bool noPassword;
 	static bool forceExit;
 	static bool linkNodeNew;
@@ -68,6 +70,8 @@ public:
 	static bool tamingMob198Effect;
 	static bool replacePetEquipCheck;
 	static int downJumpLimitHeight;
+	static bool unlockPanelLimit;
+	static bool unlockPaneMaplLimit;
 	static bool s4221001;
 	static bool s4221007;
 	static bool s14101004;
