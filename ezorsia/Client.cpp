@@ -119,6 +119,9 @@ void Client::UpdateGameStartup() {
 	if (Client::ScreenShotPath < 0 || Client::ScreenShotPath > 2)
 		Client::ScreenShotPath = 0;
 	Memory::CodeCave(screenShotPath, 0x00751AD9, 5);
+
+	//修复部分装备没有Canvas闪退
+	Memory::CodeCave(fixSomeEuipmentNotCanvasCrash, 0x00401D52, 6);
 }
 
 void Client::EnableNewIGCipher() {//??not called //no idea what cipher is

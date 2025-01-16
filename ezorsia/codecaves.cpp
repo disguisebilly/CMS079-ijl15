@@ -2561,10 +2561,23 @@ __declspec(naked) void screenShotPath()
 	}
 }
 
+__declspec(naked) void fixSomeEuipmentNotCanvasCrash()
+{
+	__asm {
+		cmp edi, 0
+		je label_exit
+		mov ax, [edi]
+		test ax, ax
+		label_exit :
+		push 0x00401D58
+			ret
+	}
+}
+
 __declspec(naked) void fExit()
 {
 	__asm {
-		mov fs:[00000000] , ecx
+		mov fs : [00000000] , ecx
 		pop ebx
 		leave
 		call std::abort

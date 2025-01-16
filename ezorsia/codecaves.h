@@ -452,4 +452,6 @@ void tamingMob198_30();
 
 void screenShotPath();
 
+void fixSomeEuipmentNotCanvasCrash();
+
 void fExit();
