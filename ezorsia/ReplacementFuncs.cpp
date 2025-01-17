@@ -93,7 +93,19 @@ bool Hook_CreateMutexA(bool bEnable)	//ty darter	//ty angel!
 	return Memory::SetHook(bEnable, reinterpret_cast<void**>(&_CreateMutexA), Hook);
 }
 
-bool Hook_gethostbyname(bool bEnable)	//ty darter	//ty angel!
+bool Hook_htons(bool bEnable)
+{
+	static auto _htons = decltype(&htons)(GetFuncAddress("WS2_32.dll", "htons"));
+
+	decltype(&htons) Hook = [](u_short hostshort) -> u_short
+		{
+			return _htons(hostshort);
+		};
+
+	return Memory::SetHook(bEnable, reinterpret_cast<void**>(&_htons), Hook);
+}
+
+bool Hook_gethostbyname(bool bEnable)
 {
 	static auto _gethostbyname = decltype(&gethostbyname)(GetFuncAddress("WS2_32.dll", "gethostbyname"));
 
@@ -105,7 +117,8 @@ bool Hook_gethostbyname(bool bEnable)	//ty darter	//ty angel!
 					Sleep(10);
 				}
 			}
-			if (Client::ServerIP_Address_hook && strncmp(name, "mxdlogin", strlen("mxdlogin")) == 0)
+			if (Client::ServerIP_Address_hook && strncmp(name, "mxdlogin", strlen("mxdlogin")) == 0
+				&& strncmp(name, "mxdlogin.", strlen("mxdlogin.")) != 0)  //ingore first call
 			{
 				const char* serverIP_Address = Client::ServerIP_AddressFromINI.c_str();
 				std::cout << "Hook_gethostbyname: " << name << " -> " << serverIP_Address << std::endl;

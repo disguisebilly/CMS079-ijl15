@@ -455,3 +455,5 @@ void screenShotPath();
 void fixSomeEuipmentNotCanvasCrash();
 
 void fExit();
+
+void changerPort();

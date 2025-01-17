@@ -30,6 +30,8 @@ DWORD GetFuncAddress(LPCSTR lpModule, LPCSTR lpFunc);
 
 bool Hook_CreateMutexA(bool bEnable);
 
+bool Hook_htons(bool bEnable);
+
 bool Hook_gethostbyname(bool bEnable);
 
 struct KeyValuePair {

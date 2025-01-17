@@ -13,7 +13,7 @@ typedef BOOL(WINAPI* PGetModuleHandleEx)(DWORD dwFlags, LPCTSTR lpModuleName, HM
 
 VOID CreateDump(struct _EXCEPTION_POINTERS* pExceptionPointers)
 {
-	std::cout << "CreateDump" << std::endl;
+	std::cout << "CreateDump start" << std::endl;
 	//收集信息
 	CStringW strBuild;
 	strBuild.Format(L"Build: %s %s", __DATE__, __TIME__);
@@ -34,17 +34,18 @@ VOID CreateDump(struct _EXCEPTION_POINTERS* pExceptionPointers)
 	BOOL bMiniDumpSuccessful;
 	WCHAR szPath[MAX_PATH];
 	WCHAR szFileName[MAX_PATH];
-	const WCHAR* szAppName = L"DumpFile";
+	const WCHAR* szAppName = L"ErrorDumpFile";
 	const WCHAR* szVersion = L"v1.0";
 	DWORD dwBufferSize = MAX_PATH;
 	HANDLE hDumpFile;
 	SYSTEMTIME stLocalTime;
 	MINIDUMP_EXCEPTION_INFORMATION ExpParam;
 	GetLocalTime(&stLocalTime);
-	GetTempPath(dwBufferSize, szPath);
-	StringCchPrintf(szFileName, MAX_PATH, L"%s%s", szPath, szAppName);
+	GetCurrentDirectory(MAX_PATH, szPath);
+	//GetTempPath(dwBufferSize, szPath);
+	StringCchPrintf(szFileName, MAX_PATH, L"%s//%s", szPath, szAppName);
 	CreateDirectory(szFileName, NULL);
-	StringCchPrintf(szFileName, MAX_PATH, L"%s%s//%s-%04d%02d%02d-%02d%02d%02d-%ld-%ld.dmp",
+	StringCchPrintf(szFileName, MAX_PATH, L"%s//%s//%s-%04d%02d%02d-%02d%02d%02d-%ld-%ld.dmp",
 		szPath, szAppName, szVersion,
 		stLocalTime.wYear, stLocalTime.wMonth, stLocalTime.wDay,
 		stLocalTime.wHour, stLocalTime.wMinute, stLocalTime.wSecond,
@@ -77,6 +78,8 @@ VOID CreateDump(struct _EXCEPTION_POINTERS* pExceptionPointers)
 
 	bMiniDumpSuccessful = MiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(),
 		hDumpFile, MiniDumpWithDataSegs, &ExpParam, NULL, NULL);
+
+	std::wcout << L"CreateDump " << bMiniDumpSuccessful << std::endl;
 
 	return;
 }

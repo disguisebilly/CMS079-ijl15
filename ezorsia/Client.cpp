@@ -97,7 +97,9 @@ void Client::UpdateGameStartup() {
 	Memory::WriteInt(0x008C9B1A + 1, speedMovementCap); //set speed cap //ty ronan
 	Memory::WriteInt(0x00954534 + 1, speedMovementCap); //set speed cap //ty ronan
 
-	Memory::WriteInt(0x0075F142 + 1, serverIP_Port);
+	if (Client::ServerIP_Address_hook)
+		Memory::CodeCave(changerPort, 0x0075F186, 5);
+	//Memory::WriteInt(0x0075F142 + 1, serverIP_Port);
 	if (WindowedMode) {
 		unsigned char forced_window[] = { 0xB8, 0x00, 0x00, 0x00, 0x00 }; //force window mode	//thanks stelmo for showing me how to do this
 		Memory::WriteByteArray(0x00A00EF2, forced_window, sizeof(forced_window));//force window mode

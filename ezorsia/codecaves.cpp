@@ -1942,7 +1942,7 @@ __declspec(naked) void skipWorldSelect() {
 		mov ecx, [ecx]
 		mov eax, [ecx]
 		mov edx, 0x005BCDF4
-		push 0x000007D0
+		push 0x000007D3  //0x000007D0ÏßÂ·1
 		call edx
 		mov edx, 0x005BB9C6
 		jmp edx
@@ -2582,5 +2582,17 @@ __declspec(naked) void fExit()
 		leave
 		call std::abort
 		retn 0x10
+	}
+}
+
+DWORD sub_49470D = 0x0049470D;
+__declspec(naked) void changerPort()
+{
+	__asm {
+		mov ebp, Client::serverIP_Port
+		mov [esp + 0x4], ebp
+		call sub_49470D
+		push 0x0075F18B;
+		ret
 	}
 }
