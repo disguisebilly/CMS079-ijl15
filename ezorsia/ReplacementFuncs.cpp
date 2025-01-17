@@ -111,11 +111,15 @@ bool Hook_gethostbyname(bool bEnable)
 
 	decltype(&gethostbyname) Hook = [](const char* name) -> hostent*
 		{
-			if (!Client::injected) {
+			if (!Client::canInjected) {
+				std::unique_lock<std::mutex> lock(Client::injected);
 				Client::canInjected = true;
-				while (!Client::injected) {
-					Sleep(10);
-				}
+				Client::injectedCondition.notify_all();
+				Client::injectedCondition.wait(lock);
+				lock.unlock();
+				std::cout << "Injected hook initialized" << std::endl;
+				if (strncmp(name, "mxdlogin.", strlen("mxdlogin.")) == 0)
+					std::cout << "Hook_gethostbyname: " << name << " ignore" << std::endl;
 			}
 			if (Client::ServerIP_Address_hook && strncmp(name, "mxdlogin", strlen("mxdlogin")) == 0
 				&& strncmp(name, "mxdlogin.", strlen("mxdlogin.")) != 0)  //ingore first call

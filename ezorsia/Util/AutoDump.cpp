@@ -1,18 +1,21 @@
+#include "stdafx.h"
 #include "AutoDump.h"
 #include <windows.h>
 #include "detours.h"
 #include "CreateDump.h"
 #include <iostream>
+#include <Client.h>
 
 //LPVOID g_lp = NULL;
 LONG WINAPI NewUnhandledExceptionFilter(struct _EXCEPTION_POINTERS* ExceptionInfo) {
-	OutputDebugString(L"NewUnhandledExceptionFilter\n");
-	std::cout << "NewUnhandledExceptionFilter" << std::endl;
+	PEXCEPTION_RECORD ExceptionRecord = ExceptionInfo->ExceptionRecord;
+	PCONTEXT ContextRecord = ExceptionInfo->ContextRecord;
+	std::cout << "Exception code: " << ExceptionRecord->ExceptionCode << std::endl;
+	std::cout << "Exception address: " << ExceptionRecord->ExceptionAddress << std::endl;
+	if ((int)ExceptionRecord->ExceptionAddress != 0x00402EFF && !Client::exit) {  //ignore exit crash
+		CreateDump(ExceptionInfo);
+	}
 	//MessageBox( NULL, L"",L"", MB_OK);
-	// 
-	// 	typedef LONG (WINAPI * PNewUnhandledExceptionFilter)( struct _EXCEPTION_POINTERS *ExceptionInfo );
-	// 	((PNewUnhandledExceptionFilter)(g_lp))(ExceptionInfo);
-	CreateDump(ExceptionInfo);
 	return EXCEPTION_EXECUTE_HANDLER;
 }
 

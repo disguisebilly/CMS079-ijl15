@@ -456,4 +456,6 @@ void fixSomeEuipmentNotCanvasCrash();
 
 void fExit();
 
+void onExit();
+
 void changerPort();

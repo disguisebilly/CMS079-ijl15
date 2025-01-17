@@ -51,7 +51,9 @@ public:
 	static std::string ServerIP_AddressFromINI;
 	static bool ServerIP_Address_hook;
 	static bool canInjected;
-	static bool injected;
+	static std::mutex injected;
+	static std::condition_variable injectedCondition;
+	static bool exit;
 	static int serverIP_Port;
 	static bool talkRepeat;
 	static int talkTime;

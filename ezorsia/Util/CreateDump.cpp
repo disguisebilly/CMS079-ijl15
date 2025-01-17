@@ -34,7 +34,7 @@ VOID CreateDump(struct _EXCEPTION_POINTERS* pExceptionPointers)
 	BOOL bMiniDumpSuccessful;
 	WCHAR szPath[MAX_PATH];
 	WCHAR szFileName[MAX_PATH];
-	const WCHAR* szAppName = L"ErrorDumpFile";
+	const WCHAR* szAppName = L"ErrorDump";
 	const WCHAR* szVersion = L"v1.0";
 	DWORD dwBufferSize = MAX_PATH;
 	HANDLE hDumpFile;

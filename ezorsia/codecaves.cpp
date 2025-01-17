@@ -2585,12 +2585,23 @@ __declspec(naked) void fExit()
 	}
 }
 
+DWORD sub_A73600 = 0x00A73600;
+__declspec(naked) void onExit()
+{
+	__asm {
+		mov Client::exit, 0x1
+		call sub_A73600
+		push 0x00A73561
+		ret
+	}
+}
+
 DWORD sub_49470D = 0x0049470D;
 __declspec(naked) void changerPort()
 {
 	__asm {
 		mov ebp, Client::serverIP_Port
-		mov [esp + 0x4], ebp
+		mov[esp + 0x4], ebp
 		call sub_49470D
 		push 0x0075F18B;
 		ret

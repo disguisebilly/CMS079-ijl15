@@ -34,7 +34,9 @@ bool Client::debug = false;
 bool Client::crashAutoDump = false;
 bool Client::climbSpeedAuto = false;
 bool Client::canInjected = false;
-bool Client::injected = false;
+std::mutex Client::injected;
+std::condition_variable Client::injectedCondition;
+bool Client::exit = false;
 bool Client::ServerIP_Address_hook = true;
 float Client::climbSpeed = 1.0;
 std::string Client::ServerName = "MapleStory";
@@ -71,6 +73,7 @@ void Client::UpdateGameStartup() {
 	PetEx::HookPetCheckCanEquip(Client::replacePetEquipCheck);
 	if (Client::forceExit)
 		Memory::CodeCave(fExit, 0x009FC170, 12);
+	Memory::CodeCave(onExit, 0x00A7355C, 5);
 
 	FixBuddy::Hook();  //unkown
 

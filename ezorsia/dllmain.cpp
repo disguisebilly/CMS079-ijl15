@@ -110,11 +110,10 @@ void CreateConsole() {
 
 bool CreateHook()
 {
-	if (!Client::canInjected)
+	if (Client::canInjected)
 		return false;
-	if (isCreate)
-		return true;
-	isCreate = true;
+	std::unique_lock<std::mutex> lock(Client::injected);
+	Client::injectedCondition.wait(lock, [] {return Client::canInjected; });
 	std::cout << "GetModuleFileName hook created" << std::endl;
 	Hook_StringPool__GetString(true); //hook stringpool modification //ty !! popcorn //ty darter
 	Hook_StringPool__GetStringW(true);
@@ -143,8 +142,8 @@ bool CreateHook()
 	Hook_CItemInfo__GetItemDesc(Client::showItemID);
 	ijl15::CreateHook(); //NMCO::CreateHook();
 	Client::TimerTask(Client::EmptyMemory, Client::ResCheckTime);
-	std::cout << "NMCO hook initialized" << std::endl;
-	Client::injected = true;
+	Client::injectedCondition.notify_all();
+	lock.unlock();
 	return true;
 }
 
