@@ -16,6 +16,7 @@ public:
 	static std::string GetCurrentProcessName();
 	static DWORD GetCurrentMemoryUsage();
 	static void TimerTask(std::function<boolean()> task, unsigned int interval);
+	static int MessageBoxPos(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType, int x, int y);
 	static const int m_nIGCipherHash = 0xC65053F2;
 	static int DefaultResolution;
 	static int MsgAmount;

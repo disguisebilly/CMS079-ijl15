@@ -372,6 +372,8 @@ void skipWorldSelect();
 
 void SaveD3D();
 
+void skipWorldSConnectError();
+
 void updateBarBackgrndWidth();
 
 void updateBarBackgrndaAnimationTime();

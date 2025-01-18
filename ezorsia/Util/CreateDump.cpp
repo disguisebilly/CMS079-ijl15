@@ -35,7 +35,7 @@ VOID CreateDump(struct _EXCEPTION_POINTERS* pExceptionPointers)
 	WCHAR szPath[MAX_PATH];
 	WCHAR szFileName[MAX_PATH];
 	const WCHAR* szAppName = L"ErrorDump";
-	const WCHAR* szVersion = L"v1.0";
+	//const WCHAR* szVersion = L"v1.0";
 	DWORD dwBufferSize = MAX_PATH;
 	HANDLE hDumpFile;
 	SYSTEMTIME stLocalTime;
@@ -45,8 +45,8 @@ VOID CreateDump(struct _EXCEPTION_POINTERS* pExceptionPointers)
 	//GetTempPath(dwBufferSize, szPath);
 	StringCchPrintf(szFileName, MAX_PATH, L"%s//%s", szPath, szAppName);
 	CreateDirectory(szFileName, NULL);
-	StringCchPrintf(szFileName, MAX_PATH, L"%s//%s//%s-%04d%02d%02d-%02d%02d%02d-%ld-%ld.dmp",
-		szPath, szAppName, szVersion,
+	StringCchPrintf(szFileName, MAX_PATH, L"%s//%s//%04d%02d%02d-%02d%02d%02d-%ld-%ld.dmp",
+		szPath, szAppName,
 		stLocalTime.wYear, stLocalTime.wMonth, stLocalTime.wDay,
 		stLocalTime.wHour, stLocalTime.wMinute, stLocalTime.wSecond,
 		GetCurrentProcessId(), GetCurrentThreadId());

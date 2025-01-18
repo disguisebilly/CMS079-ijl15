@@ -112,6 +112,7 @@ void Client::UpdateGameStartup() {
 	}
 	if (SkipWorldSelect) {
 		Memory::CodeCave(skipWorldSelect, 0x005BB9C1, 5);
+		Memory::CodeCave(skipWorldSConnectError, 0x004948BC, 5);
 	}
 	if (RemoveLoginNxIdDialog) {
 		Memory::FillBytes(0x0062C650, 0x90, 5);	//ÆÁ±ÎµÇÂ¼À¶É«µ¯´°
@@ -496,4 +497,31 @@ void Client::TimerTask(std::function<boolean()> task, unsigned int interval)
 				break;
 		}
 		}).detach();
+}
+
+int MsgBox_X;
+int MsgBox_Y;
+
+static LRESULT CALLBACK CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
+{
+	if (nCode == HCBT_CREATEWND)
+	{
+		CBT_CREATEWND* s = (CBT_CREATEWND*)lParam;
+		if (((LPCBT_CREATEWND)lParam)->lpcs->hwndParent == NULL)
+		{
+			((LPCBT_CREATEWND)lParam)->lpcs->x = MsgBox_X;
+			((LPCBT_CREATEWND)lParam)->lpcs->y = MsgBox_Y;
+		}
+	}
+	return CallNextHookEx(NULL, nCode, wParam, lParam);
+}
+
+int Client::MessageBoxPos(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType, int x, int y)
+{
+	HHOOK hHook = SetWindowsHookEx(WH_CBT, &CBTProc, NULL, GetCurrentThreadId());
+	MsgBox_X = x;
+	MsgBox_Y = y;
+	int result = MessageBox(hWnd, lpText, lpCaption, uType);
+	if (hHook) UnhookWindowsHookEx(hHook);
+	return result;
 }

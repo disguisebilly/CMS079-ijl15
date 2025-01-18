@@ -113,8 +113,9 @@ bool CreateHook()
 	if (Client::canInjected)
 		return false;
 	std::unique_lock<std::mutex> lock(Client::injected);
+	std::cout << "CreateHook invoke wait can inject" << std::endl;
 	Client::injectedCondition.wait(lock, [] {return Client::canInjected; });
-	std::cout << "GetModuleFileName hook created" << std::endl;
+	std::cout << "CreateHook invoke inject start" << std::endl;
 	Hook_StringPool__GetString(true); //hook stringpool modification //ty !! popcorn //ty darter
 	Hook_StringPool__GetStringW(true);
 	std::string processName = Client::GetCurrentProcessName();
@@ -144,6 +145,7 @@ bool CreateHook()
 	Client::TimerTask(Client::EmptyMemory, Client::ResCheckTime);
 	Client::injectedCondition.notify_all();
 	lock.unlock();
+	std::cout << "CreateHook invoke inject successed" << std::endl;
 	return true;
 }
 

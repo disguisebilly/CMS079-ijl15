@@ -128,13 +128,13 @@ IUnknown* __fastcall Ztl_variant_t__GetUnknown_hook(Ztl_variant_t* pThis, void* 
 void InlinkOutlink::AttachClientInlink(bool enable) {
 	if (enable)
 	{
-		std::cout << "Enable new inlink outlink" << std::endl;
+		std::cout << "Enable new inlink outlink function" << std::endl;
 		LoadLibrary(L"CANVAS.DLL");
 		Memory::SetHook(true, reinterpret_cast<void**>(&_CWzCanvas__raw_Serialize), CWzCanvas__raw_Serialize_hook);
 		//Memory::SetHook(true, reinterpret_cast<void**>(&get_unknown), get_unknown_hook);
 		Memory::SetHook(true, reinterpret_cast<void**>(&_Ztl_variant_t__GetUnknown), Ztl_variant_t__GetUnknown_hook);
 	}
 	else {
-		std::cout << "Enable old inlink outlink" << std::endl;
+		std::cout << "Enable old inlink outlink function" << std::endl;
 	}
 }

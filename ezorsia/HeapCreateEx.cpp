@@ -67,7 +67,7 @@ bool Hook_HeapCreate(bool bEnable)
 	decltype(&HeapCreate) Hook = [](DWORD flOptions, SIZE_T dwInitialSize, SIZE_T dwMaximumSize) -> HANDLE
 		{
 			Hook_HeapCreate(false);
-			std::cout << "Hook_HeapCreate:" << _ReturnAddress() << std::endl;
+			std::cout << "Hook_HeapCreate Hook ReturnAddress:" << _ReturnAddress() << std::endl;
 			HANDLE origin;
 			if ((int)_ReturnAddress() == 0x00A75F02) {
 				origin = heap2;
@@ -86,7 +86,7 @@ bool Hook_HeapCreate(bool bEnable)
 void HeapCreateEx::HOOK_HeapCreate()
 {
 	if (heap1 != NULL && heap2 != NULL)
-		std::cout << "Hook_HeapCreate :" << (Hook_HeapCreate(true) == 1) << " heap1:" << heap1 << " heap2:" << heap2 << std::endl;
+		std::cout << "Hook_HeapCreate Init state:" << (Hook_HeapCreate(true) == 1 ? "Success" : "Fail") << " heap1:" << heap1 << " heap2:" << heap2 << std::endl;
 }
 
 void HeapCreateEx::MemoryOptimization()

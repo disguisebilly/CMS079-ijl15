@@ -1949,6 +1949,33 @@ __declspec(naked) void skipWorldSelect() {
 	}
 }
 
+void _skipWorldSConnectError() {
+	int x = 0;
+	int y = 0;
+	HWND hWnd = FindWindow(L"MapleStoryClass", nullptr);
+	if (hWnd) {
+		RECT rect;
+		GetWindowRect(hWnd, &rect);
+		x = rect.left + Resolution::m_nGameWidth / 2;
+		y = rect.top + Resolution::m_nGameHeight / 2;
+	}
+	Client::MessageBoxPos(NULL, L"连接服务器失败", L"启动失败", MB_ICONERROR | MB_TOPMOST, x, y);
+	std::abort();
+}
+
+DWORD sub_495C4A = 0x00495C4A;
+__declspec(naked) void skipWorldSConnectError() {
+	__asm {
+		call sub_495C4A
+		cmp eax, 0x0
+		jne label_ret
+		call _skipWorldSConnectError
+		label_ret :
+		push 0x004948C1
+			ret
+	}
+}
+
 __declspec(naked) void updateBarBackgrndWidth()
 {
 	__asm {
