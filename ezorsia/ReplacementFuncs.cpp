@@ -45,7 +45,7 @@ void HookCreateWindowExA(bool bEnable) {
 		dwStyle |= WS_MINIMIZEBOX; // enable minimize button
 		//x = (GetSystemMetrics(SM_CXSCREEN) - nWidth) / 2;
 		//y = (GetSystemMetrics(SM_CYSCREEN) - nHeight) / 4;
-		return create_window_ex_a(dwExStyle, lpClassName, Client::ServerName.c_str(), dwStyle, x, y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam);
+		return create_window_ex_a(dwExStyle, lpClassName, (Client::ServerName + " " + Client::ServerNameTips).c_str(), dwStyle, x, y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam);
 		};
 	Memory::SetHook(bEnable, reinterpret_cast<void**>(&create_window_ex_a), hook);
 }

@@ -1952,14 +1952,15 @@ __declspec(naked) void skipWorldSelect() {
 void _skipWorldSConnectError() {
 	int x = 0;
 	int y = 0;
-	HWND hWnd = FindWindow(L"MapleStoryClass", nullptr);
+	HWND hWnd = getMapleStoryHWND();
 	if (hWnd) {
 		RECT rect;
 		GetWindowRect(hWnd, &rect);
 		x = rect.left + Resolution::m_nGameWidth / 2;
 		y = rect.top + Resolution::m_nGameHeight / 2;
+		CloseHandle(hWnd);
 	}
-	Client::MessageBoxPos(NULL, L"连接服务器失败", L"启动失败", MB_ICONERROR | MB_TOPMOST, x, y);
+	MessageBoxPos(NULL, L"连接服务器失败", StringToWString(Client::ServerName).c_str(), MB_ICONERROR | MB_TOPMOST, x, y);
 	std::abort();
 }
 

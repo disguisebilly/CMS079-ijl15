@@ -149,7 +149,7 @@ __declspec(naked) void enterShop()
 void checkMoveWindow() {
 	int width = GetSystemMetrics(SM_CXFULLSCREEN);
 	int height = GetSystemMetrics(SM_CYFULLSCREEN);
-	HWND hWnd = FindWindow(L"MapleStoryClass", nullptr);
+	HWND hWnd = getMapleStoryHWND();
 	if (hWnd) {
 		RECT rect;
 		GetWindowRect(hWnd, &rect);

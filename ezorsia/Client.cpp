@@ -3,7 +3,6 @@
 #include <cstringt.h>
 #include "FixBuddy.h"
 #include <Resman.h>
-#include "psapi.h"
 #include <PetEx.h>
 
 int Client::DefaultResolution = 2;
@@ -40,6 +39,7 @@ bool Client::exit = false;
 bool Client::ServerIP_Address_hook = true;
 float Client::climbSpeed = 1.0;
 std::string Client::ServerName = "MapleStory";
+std::string Client::ServerNameTips = "";
 std::string Client::WelcomeMessage = "";
 std::string Client::ServerIP_AddressFromINI = "127.0.0.1";
 int Client::serverIP_Port = 8484;
@@ -430,7 +430,7 @@ std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
 bool Client::EmptyMemory()
 {
 	try {
-		int memory = Client::GetCurrentMemoryUsage();
+		int memory = GetCurrentMemoryUsage();
 		std::chrono::system_clock::time_point end = std::chrono::system_clock::now();
 		std::chrono::duration<double> diff = end - start;
 		if (memory >= Client::ResManFlushCached && diff.count() >= Client::ResFlushTimeInterval) {
@@ -459,69 +459,4 @@ bool Client::EmptyMemory()
 	}
 	catch (...) {}
 	return false;
-}
-
-std::string Client::GetCurrentProcessName()
-{
-	char buffer[MAX_PATH];
-	DWORD size = GetModuleFileNameA(NULL, buffer, MAX_PATH);
-	if (size == 0) {
-		return "";
-	}
-	std::string processPath(buffer);
-	size_t pos = processPath.find_last_of('\\');
-	if (pos != std::string::npos) {
-		return processPath.substr(pos + 1);
-	}
-	return "";
-}
-
-DWORD Client::GetCurrentMemoryUsage()
-{
-	MEMORYSTATUSEX MS;
-	MS.dwLength = sizeof(MS);
-	PROCESS_MEMORY_COUNTERS pmc;
-	GlobalMemoryStatusEx(&MS);
-	GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
-	DWORD CurrentMem = pmc.WorkingSetSize / 1048576;
-	DWORD TotalMem = MS.ullTotalPhys / 1048576;
-	return CurrentMem;
-}
-
-void Client::TimerTask(std::function<boolean()> task, unsigned int interval)
-{
-	std::thread([task, interval]() {
-		while (true) {
-			std::this_thread::sleep_for(std::chrono::milliseconds(interval));
-			if (task())
-				break;
-		}
-		}).detach();
-}
-
-int MsgBox_X;
-int MsgBox_Y;
-
-static LRESULT CALLBACK CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
-{
-	if (nCode == HCBT_CREATEWND)
-	{
-		CBT_CREATEWND* s = (CBT_CREATEWND*)lParam;
-		if (((LPCBT_CREATEWND)lParam)->lpcs->hwndParent == NULL)
-		{
-			((LPCBT_CREATEWND)lParam)->lpcs->x = MsgBox_X;
-			((LPCBT_CREATEWND)lParam)->lpcs->y = MsgBox_Y;
-		}
-	}
-	return CallNextHookEx(NULL, nCode, wParam, lParam);
-}
-
-int Client::MessageBoxPos(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType, int x, int y)
-{
-	HHOOK hHook = SetWindowsHookEx(WH_CBT, &CBTProc, NULL, GetCurrentThreadId());
-	MsgBox_X = x;
-	MsgBox_Y = y;
-	int result = MessageBox(hWnd, lpText, lpCaption, uType);
-	if (hHook) UnhookWindowsHookEx(hHook);
-	return result;
 }

@@ -58,6 +58,7 @@ void Init()
 		Client::forceExit = reader.GetBoolean("debug", "forceExit", Client::forceExit);
 		Client::linkNodeNew = reader.GetBoolean("debug", "linkNodeNew", Client::linkNodeNew);
 		Client::ServerName = reader.GetString("general", "ServerName", Client::ServerName);
+		Client::ServerNameTips = reader.GetString("general", "ServerNameTips", Client::ServerNameTips);
 		Client::WelcomeMessage = reader.GetString("general", "WelcomeMessage", Client::WelcomeMessage);
 		Client::ServerIP_AddressFromINI = reader.GetString("general", "ServerIP_Address", Client::ServerIP_AddressFromINI);
 		Client::ServerIP_Address_hook = reader.GetBoolean("general", "ServerIP_Address_hook", Client::ServerIP_Address_hook);
@@ -88,6 +89,7 @@ void Init()
 		Client::s14101004 = reader.GetBoolean("skill", "s14101004", Client::s14101004);
 		Client::s14101004up = reader.GetBoolean("skill", "s14101004up", Client::s14101004up);
 		Client::s5221009 = reader.GetBoolean("skill", "s5221009", Client::s5221009);
+
 	}
 	if (Client::debug)
 		CreateConsole();	//console for devs, use this to log stuff if you want
@@ -99,7 +101,7 @@ void Init()
 	HookCreateWindowExA(true);
 	HeapCreateEx::HOOK_HeapCreate();
 	Hook_gethostbyname(true);
-	Client::TimerTask(CreateHook, 10);
+	TimerTask(CreateHook, 10);
 }
 
 void CreateConsole() {
@@ -118,7 +120,7 @@ bool CreateHook()
 	std::cout << "CreateHook invoke inject start" << std::endl;
 	Hook_StringPool__GetString(true); //hook stringpool modification //ty !! popcorn //ty darter
 	Hook_StringPool__GetStringW(true);
-	std::string processName = Client::GetCurrentProcessName();
+	std::string processName = GetCurrentProcessName();
 	std::cout << "Current process name: " << processName << std::endl;
 	Client::CRCBypass();
 	//Client::EnableNewIGCipher();
@@ -142,10 +144,10 @@ bool CreateHook()
 	//Hook_CItemInfo__GetItemName(Client::showItemID);
 	Hook_CItemInfo__GetItemDesc(Client::showItemID);
 	ijl15::CreateHook(); //NMCO::CreateHook();
-	Client::TimerTask(Client::EmptyMemory, Client::ResCheckTime);
-	Client::injectedCondition.notify_all();
+	TimerTask(Client::EmptyMemory, Client::ResCheckTime);
 	lock.unlock();
 	std::cout << "CreateHook invoke inject successed" << std::endl;
+	Client::injectedCondition.notify_all();
 	return true;
 }
 

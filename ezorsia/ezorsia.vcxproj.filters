@@ -393,6 +393,9 @@
     <ClInclude Include="Util\CreateDump.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -471,6 +474,9 @@
       <Filter>Header Files\Util</Filter>
     </ClCompile>
     <ClCompile Include="Util\CreateDump.cpp">
+      <Filter>Header Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
       <Filter>Header Files\Util</Filter>
     </ClCompile>
   </ItemGroup>

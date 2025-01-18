@@ -78,6 +78,7 @@
 #include "TSecType.h"
 #include "TSingleton.h"
 
+#include "Utils.h"
 #include "codecaves.h"
 #include "ReplacementFuncs.h"
 #include "AddyLocations.h"
