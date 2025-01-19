@@ -359,7 +359,6 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="syelog.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="Utils.h" />
     <ClInclude Include="Util\AutoDump.h" />
     <ClInclude Include="Util\CreateDump.h" />
     <ClInclude Include="Util\ini.h" />
@@ -368,6 +367,7 @@
     <ClInclude Include="Util\robin_hash.h" />
     <ClInclude Include="Util\robin_map.h" />
     <ClInclude Include="Util\robin_set.h" />
+    <ClInclude Include="Util\Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BossHP.cpp" />
@@ -396,7 +396,6 @@
     <ClInclude Include="Resolution.h">
       <FileType>CppHeader</FileType>
     </ClInclude>
-    <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Util\AutoDump.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-mt|Win32'">Use</PrecompiledHeader>
@@ -417,6 +416,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-mt|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-md|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Util\Utils.cpp" />
     <ClCompile Include="ZAllocEx.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Memory.cpp" />

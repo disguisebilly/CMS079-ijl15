@@ -354,9 +354,6 @@
     <ClInclude Include="MapleClientCollectionTypes\ZtlBstT.h">
       <Filter>Header Files\MapleTypes</Filter>
     </ClInclude>
-    <ClInclude Include="Resolution.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MapleClientCollectionTypes\IWzGr2D.h">
       <Filter>Header Files\MapleTypes</Filter>
     </ClInclude>
@@ -393,8 +390,11 @@
     <ClInclude Include="Util\CreateDump.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
-    <ClInclude Include="Utils.h">
+    <ClInclude Include="Util\Utils.h">
       <Filter>Header Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Resolution.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -476,7 +476,7 @@
     <ClCompile Include="Util\CreateDump.cpp">
       <Filter>Header Files\Util</Filter>
     </ClCompile>
-    <ClCompile Include="Utils.cpp">
+    <ClCompile Include="Util\Utils.cpp">
       <Filter>Header Files\Util</Filter>
     </ClCompile>
   </ItemGroup>

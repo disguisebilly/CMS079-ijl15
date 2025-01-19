@@ -64,6 +64,7 @@ bool Client::unlockPanelLimit = false;
 bool Client::unlockPaneMaplLimit = false;
 bool Client::s14101004 = true;
 bool Client::s14101004up = false;
+bool Client::s2221006 = false;
 bool Client::s4221001 = false;
 bool Client::s4221007 = false;
 bool Client::s5221009 = false;
@@ -422,6 +423,10 @@ void Client::Skill() {
 	if (Client::s4221007) {
 		byte s4221001[] = { 0xB8,0xFF,0xFF ,0xFF ,0xFF };
 		Memory::WriteByteArray(0x0097A28F, s4221001, sizeof(s4221001));
+	}
+	//¡¥ª∑…¡µÁ…À∫¶≤ªµ›ºı
+	if (Client::s2221006) {
+		Memory::CodeCave(skill2221006, 0x007693F7, 11);
 	}
 }
 

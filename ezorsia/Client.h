@@ -72,6 +72,7 @@ public:
 	static int downJumpLimitHeight;
 	static bool unlockPanelLimit;
 	static bool unlockPaneMaplLimit;
+	static bool s2221006;
 	static bool s4221001;
 	static bool s4221007;
 	static bool s14101004;

@@ -2082,6 +2082,26 @@ __declspec(naked) void upDoubleJump()
 	}
 }
 
+DWORD sub_A70F94 = 0x00A70F94;
+__declspec(naked) void skill2221006()
+{
+	__asm {
+	lablel_loop:
+		fild dword ptr[esi]
+			fmul st(0), st(1)
+			call sub_A70F94
+			cmp[ecx], 0x21E3CE
+			je label_je
+			mov[esi], eax
+			label_je:
+			add esi, 0x4
+			dec edi
+			jne lablel_loop
+			push 0x00769408
+			ret
+	}
+}
+
 //DWORD skill4221001Rtn = 0x00975478;
 //__declspec(naked) void skill4221001()   //0x00975369
 //{
