@@ -4,6 +4,7 @@
 #include "FixBuddy.h"
 #include <Resman.h>
 #include <PetEx.h>
+#include <CharacterEx.h>
 
 int Client::DefaultResolution = 2;
 int Client::MsgAmount = 10;
@@ -23,6 +24,7 @@ int Client::setAccCap = 999;
 int Client::setAvdCap = 999;
 double Client::setAtkOutCap = 199999;
 bool Client::longEXP = false;
+std::string Client::longEXPOverride = "";
 bool Client::shortLevel = false;
 bool Client::useTubi = false;
 int Client::speedMovementCap = 140;
@@ -129,6 +131,23 @@ void Client::UpdateGameStartup() {
 
 	//修复部分装备没有Canvas闪退
 	Memory::CodeCave(fixSomeEuipmentNotCanvasCrash, 0x00401D52, 6);
+
+	//修改升级EXP
+	if (!Client::longEXPOverride.empty() && Client::longEXP) {
+		try {
+			StringList res = splitstr(Client::longEXPOverride, ",");
+			std::vector<LONGLONG> longEXPOverride;
+			for (std::string& s : res) {
+				long long num = std::stoll(s);
+				longEXPOverride.push_back(num);
+			}
+			CharacterEx::SetOverrideExp(longEXPOverride);
+			std::cout << "Enable longEXPOverride success, EXP size:" << longEXPOverride.size() << std::endl;
+		}
+		catch (const std::exception& e) {
+			std::cout << "Enable longEXPOverride failed: " << e.what() << ". restory to default" << std::endl;
+		}
+	}
 }
 
 void Client::EnableNewIGCipher() {//??not called //no idea what cipher is

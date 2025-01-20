@@ -32,6 +32,7 @@ public:
 	static int setAvdCap;
 	static double setAtkOutCap;
 	static bool longEXP;
+	static std::string longEXPOverride;
 	static bool shortLevel;
 	static bool useTubi;
 	static bool debug;

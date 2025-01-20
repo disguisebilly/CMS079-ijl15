@@ -10,5 +10,7 @@ public:
 	static void InitLevelOverride(BOOL bEnable);
 	static void InitDamageSkinOverride(BOOL bEnable);
 	static void InitHypontizeFix(BOOL bEnable);
+
+	static void SetOverrideExp(std::vector<LONGLONG> exp);
 };
 

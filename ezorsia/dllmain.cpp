@@ -48,6 +48,7 @@ void Init()
 		Client::setAvdCap = reader.GetReal("optional", "setAvdCap", Client::setAvdCap);
 		Client::setAtkOutCap = reader.GetReal("optional", "setAtkOutCap", Client::setAtkOutCap);
 		Client::longEXP = reader.GetBoolean("optional", "longEXP", Client::longEXP);
+		Client::longEXPOverride = reader.GetString("optional", "longEXPOverride", Client::longEXPOverride);
 		Client::shortLevel = reader.GetBoolean("optional", "shortLevel", Client::shortLevel);
 		Client::useTubi = reader.GetBoolean("optional", "useTubi", Client::useTubi);
 		Client::speedMovementCap = reader.GetInteger("optional", "speedMovementCap", Client::speedMovementCap);
@@ -90,7 +91,6 @@ void Init()
 		Client::s14101004 = reader.GetBoolean("skill", "s14101004", Client::s14101004);
 		Client::s14101004up = reader.GetBoolean("skill", "s14101004up", Client::s14101004up);
 		Client::s5221009 = reader.GetBoolean("skill", "s5221009", Client::s5221009);
-
 	}
 	if (Client::debug)
 		CreateConsole();	//console for devs, use this to log stuff if you want

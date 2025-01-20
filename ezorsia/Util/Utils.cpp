@@ -86,3 +86,43 @@ void TimerTask(std::function<boolean()> task, unsigned int interval)
 		}
 		}).detach();
 }
+
+StringList splitstr(const std::string& str, const std::string& pattern)
+{
+	StringList  li;
+	std::string subStr;
+	std::string tPattern;
+	size_t      patternLen = pattern.length();
+	size_t      strLen = str.length();
+
+	for (size_t i = 0; i < str.length(); i++)
+	{
+		if (pattern[0] == str[i] && ((strLen - i) >= patternLen))
+		{
+			if (memcmp(&pattern[0], &str[i], patternLen) == 0)
+			{
+				i += patternLen - 1;
+				if (!subStr.empty())
+				{
+					li.push_back(subStr);
+					subStr.clear();
+				}
+			}
+			else
+			{
+				subStr.push_back(str[i]);
+			}
+		}
+		else
+		{
+			subStr.push_back(str[i]);
+		}
+	}
+
+	if (!subStr.empty())
+	{
+		li.push_back(subStr);
+	}
+
+	return li;
+}
