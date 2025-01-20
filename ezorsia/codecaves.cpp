@@ -2082,6 +2082,8 @@ __declspec(naked) void upDoubleJump()
 	}
 }
 
+int currentSkillId = 0;
+
 DWORD sub_A70F94 = 0x00A70F94;
 __declspec(naked) void skill2221006()
 {
@@ -2090,7 +2092,7 @@ __declspec(naked) void skill2221006()
 		fild dword ptr[esi]
 			fmul st(0), st(1)
 			call sub_A70F94
-			cmp[ecx], 0x21E3CE
+			cmp currentSkillId,0x21E3CE
 			je label_je
 			mov[esi], eax
 			label_je:
@@ -2099,6 +2101,16 @@ __declspec(naked) void skill2221006()
 			jne lablel_loop
 			push 0x00769408
 			ret
+	}
+}
+
+__declspec(naked) void skill2221006_2()  //save skill id
+{
+	__asm {
+		mov currentSkillId, eax
+		cmp eax, 0x0021E3CE
+		push 0x0076937B
+		ret
 	}
 }
 

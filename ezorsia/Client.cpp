@@ -426,7 +426,8 @@ void Client::Skill() {
 	}
 	//¡¥ª∑…¡µÁ…À∫¶≤ªµ›ºı
 	if (Client::s2221006) {
-		Memory::CodeCave(skill2221006, 0x007693F7, 11);
+		Memory::CodeCave(skill2221006, 0x007693F7, 17);
+		Memory::CodeCave(skill2221006_2, 0x00769376, 5);
 	}
 }
 

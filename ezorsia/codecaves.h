@@ -392,6 +392,8 @@ void upDoubleJump();
 
 void skill2221006();
 
+void skill2221006_2();
+
 void tamingMob198();
 
 void tamingMob198_1();
