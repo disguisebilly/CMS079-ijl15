@@ -113,9 +113,11 @@ bool Hook_gethostbyname(bool bEnable)
 		{
 			if (!Client::canInjected) {
 				std::unique_lock<std::mutex> lock(Client::injected);
-				Client::canInjected = true;
-				Client::injectedCondition.notify_all();
-				Client::injectedCondition.wait(lock);
+				if (!Client::canInjected) {
+					Client::canInjected = true;
+					Client::injectedCondition.notify_all();
+					Client::injectedCondition.wait(lock, [] {return Client::isInjected; });
+				}
 				lock.unlock();
 				std::cout << "Injected hook initialized" << std::endl;
 				if (strncmp(name, "mxdlogin.", strlen("mxdlogin.")) == 0)

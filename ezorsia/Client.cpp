@@ -35,6 +35,7 @@ bool Client::debug = false;
 bool Client::crashAutoDump = false;
 bool Client::climbSpeedAuto = false;
 bool Client::canInjected = false;
+bool Client::isInjected = false;
 std::mutex Client::injected;
 std::condition_variable Client::injectedCondition;
 bool Client::exit = false;

@@ -113,11 +113,16 @@ void CreateConsole() {
 
 bool CreateHook()
 {
-	if (Client::canInjected)
-		return false;
+	if (Client::isInjected)
+	{
+		Client::injectedCondition.notify_all();
+		return true;
+	}
 	std::unique_lock<std::mutex> lock(Client::injected);
-	std::cout << "CreateHook invoke wait can inject" << std::endl;
-	Client::injectedCondition.wait(lock, [] {return Client::canInjected; });
+	if (!Client::canInjected) {
+		std::cout << "CreateHook invoke wait can inject" << std::endl;
+		Client::injectedCondition.wait(lock, [] {return Client::canInjected; });
+	}
 	std::cout << "CreateHook invoke inject start" << std::endl;
 	Hook_StringPool__GetString(true); //hook stringpool modification //ty !! popcorn //ty darter
 	Hook_StringPool__GetStringW(true);
@@ -146,9 +151,10 @@ bool CreateHook()
 	Hook_CItemInfo__GetItemDesc(Client::showItemID);
 	ijl15::CreateHook(); //NMCO::CreateHook();
 	TimerTask(Client::EmptyMemory, Client::ResCheckTime);
-	lock.unlock();
 	std::cout << "CreateHook invoke inject successed" << std::endl;
+	Client::isInjected = true;
 	Client::injectedCondition.notify_all();
+	lock.unlock();
 	return true;
 }
 
