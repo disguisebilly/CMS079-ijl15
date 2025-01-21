@@ -17,9 +17,9 @@
 
 使用VS打开的时候注意，要使用 Release x86 MT/MD 模式生成解决方案
 
-- MT 无需C++运行库，不支持转发方式加载
-- MD 需要C++运行库，支持转发方式加载
-
+- MT 无需C++运行库，不支持转发方式加载 ([点击下载MT最新版](https://github.com/Willh92/CMS079-ijl15/releases/latest/download/Release-mt.zip))
+- MD 需要C++运行库，支持转发方式加载 ([点击下载MD最新版](https://github.com/Willh92/CMS079-ijl15/releases/latest/download/Release-md.zip))
+  
 生成后可在 out相应的Release-mt/md 目录下找到 ijl15.dll
 
 支持两种方式加载
