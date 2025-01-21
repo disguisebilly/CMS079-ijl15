@@ -48,7 +48,7 @@ void Init()
 		Client::setAvdCap = reader.GetReal("optional", "setAvdCap", Client::setAvdCap);
 		Client::setAtkOutCap = reader.GetReal("optional", "setAtkOutCap", Client::setAtkOutCap);
 		Client::longEXP = reader.GetBoolean("optional", "longEXP", Client::longEXP);
-		Client::longEXPOverride = reader.GetString("optional", "longEXPOverride", Client::longEXPOverride);
+		Client::levelExpOverride = reader.GetString("optional", "levelExpOverride", Client::levelExpOverride);
 		Client::shortLevel = reader.GetBoolean("optional", "shortLevel", Client::shortLevel);
 		Client::useTubi = reader.GetBoolean("optional", "useTubi", Client::useTubi);
 		Client::speedMovementCap = reader.GetInteger("optional", "speedMovementCap", Client::speedMovementCap);
@@ -129,7 +129,7 @@ bool CreateHook()
 	Resman::Hook_InitGetHook();
 	InlinkOutlink::AttachClientInlink(Client::linkNodeNew);
 	Hook_SetActiveChairRelMove(true);
-	CharacterEx::InitExpOverride(Client::longEXP);
+	CharacterEx::InitExpOverride();
 	CharacterEx::InitLevelOverride(Client::shortLevel);
 	CharacterEx::InitDamageSkinOverride(Client::DamageSkin > 0 || Client::RemoteDamageSkin);
 	CharacterEx::InitHypontizeFix(Client::s5221009);
