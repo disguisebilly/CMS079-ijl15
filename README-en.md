@@ -18,7 +18,7 @@ Tested development tools: VS 2022, SDK 10, Toolset VS2022 (v144).
 When opening with VS, ensure to build the solution in Release x86 MT/MD mode:
 
 - MT: No need for C++ runtime library, does not support forwarding load.  ([Click to download the latest version of MT](https://github.com/Willh92/CMS079-ijl15/releases/latest/download/Release-mt.zip))
-- MD: Requires C++ runtime library, supports forwarding load.  ([Click to download the latest version of MD](https://github.com/Willh92/CMS079-ijl15/releases/latest/download/Release-mt.zip))
+- MD: Requires C++ runtime library, supports forwarding load.  ([Click to download the latest version of MD](https://github.com/Willh92/CMS079-ijl15/releases/latest/download/Release-md.zip))
 
 After building, you can find ijl15.dll in the corresponding out/Release-mt or out/Release-md directory.
 
