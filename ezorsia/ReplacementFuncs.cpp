@@ -119,16 +119,18 @@ bool Hook_gethostbyname(bool bEnable)
 					Client::injectedCondition.wait(lock, [] {return Client::isInjected; });
 				}
 				lock.unlock();
-				std::cout << "Injected hook initialized" << std::endl;
-				if (strncmp(name, "mxdlogin.", strlen("mxdlogin.")) == 0)
-					std::cout << "Hook_gethostbyname: " << name << " ignore" << std::endl;
+				std::cout << "Injected initialized" << std::endl;
 			}
-			if (Client::ServerIP_Address_hook && strncmp(name, "mxdlogin", strlen("mxdlogin")) == 0
-				&& strncmp(name, "mxdlogin.", strlen("mxdlogin.")) != 0)  //ingore first call
+			if (Client::ServerIP_Address_hook && strncmp(name, "mxdlogin", strlen("mxdlogin")) == 0)
 			{
-				const char* serverIP_Address = Client::ServerIP_AddressFromINI.c_str();
-				std::cout << "Hook_gethostbyname: " << name << " -> " << serverIP_Address << std::endl;
-				return _gethostbyname(serverIP_Address);
+				if (strncmp(name, "mxdlogin.", strlen("mxdlogin.")) == 0) {
+					std::cout << "Hook_gethostbyname: " << name << " ignore" << std::endl;   //ingore first call
+				}
+				else {
+					const char* serverIP_Address = Client::ServerIP_AddressFromINI.c_str();
+					std::cout << "Hook_gethostbyname: " << name << " -> " << serverIP_Address << std::endl;
+					return _gethostbyname(serverIP_Address);
+				}
 			}
 			return _gethostbyname(name);
 		};

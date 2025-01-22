@@ -134,10 +134,7 @@ bool CreateHook()
 	Resman::Hook_InitGetHook();
 	InlinkOutlink::AttachClientInlink(Client::linkNodeNew);
 	Hook_SetActiveChairRelMove(true);
-	CharacterEx::InitExpOverride();
-	CharacterEx::InitLevelOverride(Client::shortLevel);
-	CharacterEx::InitDamageSkinOverride(Client::DamageSkin > 0 || Client::RemoteDamageSkin);
-	CharacterEx::InitHypontizeFix(Client::s5221009);
+	CharacterEx::Init();
 	HeapCreateEx::MemoryOptimization();
 	Client::UpdateGameStartup();
 	//Client::LongQuickSlot();

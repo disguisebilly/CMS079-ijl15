@@ -213,7 +213,14 @@ int __fastcall ExpSwap__Decode4To8(CInPacket* pThis, void* edx)
 
 char __fastcall LevelSwap__Decode1To2(CInPacket* pThis, void* edx)
 {
-	short level = pThis->Decode2();
+	short level = 0;
+
+	if (Client::shortLevel) {
+		level = pThis->Decode2();
+	}
+	else {
+		level = pThis->Decode1();
+	}
 
 	CharacterDataEx::GetInstance()->m_liLevel = level;
 
@@ -222,7 +229,16 @@ char __fastcall LevelSwap__Decode1To2(CInPacket* pThis, void* edx)
 
 char __fastcall LevelSwapOnCharacterInfo__Decode1To2(CInPacket* pThis, void* edx)
 {
-	short level = pThis->Decode2();
+	short level = 0;
+
+	if (Client::shortLevel)
+	{
+		level = pThis->Decode2();
+	}
+	else
+	{
+		level = pThis->Decode1();
+	}
 
 	CharacterDataEx::GetInstance()->m_liLevelCharInfo = level;
 
@@ -510,6 +526,19 @@ __declspec(naked) void fixMaxMp() {
 	}
 }
 
+void CharacterEx::Init()
+{
+	Memory::SetHook(true, reinterpret_cast<void**>(&CUIStatusBar__SetNumberValue_t), CUIStatusBar__SetNumberValue_Hook);
+	Memory::CodeCave(fixMaxHP, 0x008DF651, 6);
+	Memory::CodeCave(fixMaxMp, 0x008DF97C, 6);
+	Memory::CodeCave(changerMapCleart, 0x005348FA, 5);
+	Memory::CodeCave(exitCleart, 0x00628312, 6);
+	CharacterEx::InitExpOverride();
+	CharacterEx::InitLevelOverride();
+	CharacterEx::InitDamageSkinOverride(Client::DamageSkin > 0 || Client::RemoteDamageSkin);
+	CharacterEx::InitHypontizeFix(Client::s5221009);
+}
+
 void CharacterEx::InitExpOverride()
 {
 	//ÐÞ¸ÄÉý¼¶EXP
@@ -529,13 +558,9 @@ void CharacterEx::InitExpOverride()
 			std::cout << "Enable longEXPOverride failed: " << e.what() << ". restory to default" << std::endl;
 		}
 	}
-	Memory::SetHook(true, reinterpret_cast<void**>(&CUIStatusBar__SetNumberValue_t), CUIStatusBar__SetNumberValue_Hook);
-	Memory::CodeCave(fixMaxHP, 0x008DF651, 6);
-	Memory::CodeCave(fixMaxMp, 0x008DF97C, 6);
+
 	//if (!Client::longEXP && Client::levelExpOverride.empty())
 	//	return;
-	Memory::CodeCave(changerMapCleart, 0x005348FA, 5);
-	Memory::CodeCave(exitCleart, 0x00628312, 6);
 	//Memory::SetHook(true, reinterpret_cast<void**>(&_lpfn_NextLevel), _lpfn_NextLevel_Hook);
 	/* GW_CharacterStat::DecodeChangeStat -> hijack decode4 call and switch to decode8, then return int value */
 	Memory::PatchCall(0x004F283C, ExpSwap__Decode4To8);
@@ -565,12 +590,8 @@ void CharacterEx::InitExpOverride()
 	Memory::PatchCall(0x008DEF10, itoa_ExpSwap);
 }
 
-void CharacterEx::InitLevelOverride(BOOL bEnable)
+void CharacterEx::InitLevelOverride()
 {
-	if (!bEnable)
-		return;
-	Memory::CodeCave(changerMapCleart, 0x005348FA, 5);
-	Memory::CodeCave(exitCleart, 0x00628312, 6);
 	/* GW_CharacterStat::DecodeChangeStat */
 	Memory::PatchCall(0x004F26F8, LevelSwap__Decode1To2);
 
@@ -597,8 +618,6 @@ void CharacterEx::InitDamageSkinOverride(BOOL bEnable)
 {
 	if (!bEnable)
 		return;
-	Memory::CodeCave(changerMapCleart, 0x005348FA, 5);
-	Memory::CodeCave(exitCleart, 0x00628312, 6);
 	Memory::PatchCall(0x0097FAD3, CUserPoolOnUserRemotePacket_DecodeID);
 	Memory::PatchCall(0x0097F8CD, OnUserLeave_DecodeID);
 	Memory::CodeCave(GuildNameDecode, 0x0098CE5E, 5);
