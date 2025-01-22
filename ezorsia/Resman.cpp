@@ -501,7 +501,20 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 		}
 	}
 
-	//std::wstring findStr = L"58822";
+	if ((int)_ReturnAddress() == 0x00669EC8
+		&& (strT.find(L"ani/17") != std::wstring::npos || strT.find(L"ani/18") != std::wstring::npos || strT.find(L"ani/19") != std::wstring::npos)
+		&& ret && pvargDest->vt == VT_UNKNOWN) {
+		IWzProperty* prop = NULL;
+		if (SUCCEEDED(((IUnknown*)pvargDest->ppunkVal)->QueryInterface(&prop))) {
+			unsigned int count = 0;
+			prop->get_count(&count);
+			for (int i = (int)count - 1; i >= 0; i--) {
+				prop->raw_Remove(const_cast<wchar_t*>(std::to_wstring(i).c_str()));
+			}
+		}
+	}
+
+	//std::wstring findStr = L"dragonRoad";
 
 	//if (strT.find(findStr) != std::wstring::npos) {
 	//	std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << " " << ret->punkVal << " " << _ReturnAddress() << std::endl;
