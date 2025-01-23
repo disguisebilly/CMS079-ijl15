@@ -596,7 +596,7 @@ VARIANTARG* __fastcall IWzProperty__GetSkinItem_Hook(IWzProperty* This, void* no
 	if ((Client::DamageSkin > 0 || Client::RemoteDamageSkin) && damageSkinImg) {
 		try {
 			int attackObject = getattackObjectId();
-			int skinId = (Client::DamageSkin > 0 && attackObject == CharacterEx::m_loginUserId) ? Client::DamageSkin : 0;
+			int skinId = (Client::DamageSkin > 0 && attackObject == CharacterEx::getLoginUserId()) ? Client::DamageSkin : 0;
 			if (Client::RemoteDamageSkin) {
 				auto it = CharacterEx::h_userSkin.find(attackObject);
 				if (it != CharacterEx::h_userSkin.end()) {

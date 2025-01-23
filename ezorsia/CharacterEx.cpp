@@ -16,18 +16,15 @@ private:
 public:
 	LONGLONG m_liExp;
 	LONGLONG m_liExpMsg;
-	short m_liLevel;
-	short m_liLevelCharInfo;
 	tsl::robin_map<int, short> h_liLevel;
 
 	CharacterDataEx()
 	{
-		/* setting default value as proof of concept. can be removed. */
 		m_liExp = 0;
 		m_liExpMsg = 0;
 	}
 
-	BYTE GetCharLevel();
+	short GetCharLevel();
 
 	static CharacterDataEx* GetInstance()
 	{
@@ -42,7 +39,6 @@ public:
 
 
 CharacterDataEx* CharacterDataEx::m_pInstance;
-int CharacterEx::m_loginUserId = 0;
 int CharacterEx::m_maxHp = 0;
 int CharacterEx::m_maxMp = 0;
 tsl::robin_map<int, int> CharacterEx::h_userSkin;
@@ -55,8 +51,7 @@ auto _get_next_level_exp = (int(__cdecl*)(int level))0x00793711;
 
 LONGLONG get_next_level_exp()
 {
-	//BYTE level = CharacterDataEx::GetInstance()->GetCharLevel();
-	short level = CharacterDataEx::GetInstance()->m_liLevel;
+	short level = CharacterDataEx::GetInstance()->GetCharLevel();
 	if (myArrayForCustomEXP.empty()) {
 		return _get_next_level_exp(level);
 	}
@@ -67,14 +62,17 @@ LONGLONG get_next_level_exp()
 	}
 }
 
-BYTE CharacterDataEx::GetCharLevel()
-{
-
+BYTE _GetCharLevel() {
 	auto CUserLocal__GetCharacterLevel = (BYTE(__fastcall*)(PVOID pThis, PVOID edx))0x00950DE3;
 
 	PVOID CUserLocal__ms_pInstance = *reinterpret_cast<void**>(0x00BD9028);
 
 	return CUserLocal__GetCharacterLevel(CUserLocal__ms_pInstance, NULL);
+}
+
+short CharacterDataEx::GetCharLevel()
+{
+	return CharacterDataEx::GetInstance()->h_liLevel[CharacterEx::getLoginUserId()];
 }
 
 char* __cdecl itoa_ExpSwap(int value, PCHAR buffer, int radix)
@@ -87,34 +85,27 @@ char* __cdecl itoa_ExpSwap(int value, PCHAR buffer, int radix)
 LPWSTR __cdecl _itoa_LevelSwap(int value, LPWSTR lpWideCharStr, int radix)
 {
 	CHAR MultiByteStr[64];
-	_itoa_s(CharacterDataEx::GetInstance()->m_liLevel, MultiByteStr, strlen(MultiByteStr), radix);
+	_itoa_s(value, MultiByteStr, strlen(MultiByteStr), radix);
 	MultiByteToWideChar(0, 1u, MultiByteStr, -1, lpWideCharStr, 20);
 	return lpWideCharStr;
 }
 
-int level = 1;
-void getlevel() {
-	level = CharacterDataEx::GetInstance()->m_liLevel;
+short __stdcall getUserlevel(int userId) {
+	return CharacterDataEx::GetInstance()->h_liLevel[userId];
 }
 
-void getlevel2(void* esi) {
-	int userId = reinterpret_cast<int>(esi);
-	CharacterEx::m_loginUserId = userId;
-	CharacterDataEx::GetInstance()->m_liLevel = CharacterDataEx::GetInstance()->h_liLevel[userId];
-}
-
-const DWORD itoa_LevelSwapRetn = 0x0063458C;
 __declspec(naked) void itoa_LevelSwap() {
 	__asm {
-		pushad
-		pushfd
+		pop eax
+		push ecx
 		push[esi]
-		call getlevel2
-		pop esi
-		popfd
-		popad
+		call getUserlevel
+		pop ecx
+		movzx eax, ax
+		push eax
 		call _itoa_LevelSwap
-		jmp dword ptr[itoa_LevelSwapRetn]
+		push 0x0063458C
+		ret
 	}
 }
 
@@ -211,7 +202,7 @@ int __fastcall ExpSwap__Decode4To8(CInPacket* pThis, void* edx)
 	return liExp < INT_MAX ? (INT)liExp : INT_MAX;
 }
 
-char __fastcall LevelSwap__Decode1To2(CInPacket* pThis, void* edx)
+char __fastcall LevelSwap__Decode1To2(CInPacket* pThis, void* edx, int userID)
 {
 	short level = 0;
 
@@ -222,34 +213,29 @@ char __fastcall LevelSwap__Decode1To2(CInPacket* pThis, void* edx)
 		level = pThis->Decode1();
 	}
 
-	CharacterDataEx::GetInstance()->m_liLevel = level;
+	if (_GetCharLevel)
+
+		CharacterDataEx::GetInstance()->h_liLevel[userID] = level;
 
 	return level < UCHAR_MAX ? (char)level : UCHAR_MAX;
 }
 
-char __fastcall LevelSwapOnCharacterInfo__Decode1To2(CInPacket* pThis, void* edx)
+const char* __fastcall LevelOnCharacterInfoStr(ZXString<char>* pThis, PVOID edx, int userID)
 {
-	short level = 0;
-
-	if (Client::shortLevel)
-	{
-		level = pThis->Decode2();
-	}
-	else
-	{
-		level = pThis->Decode1();
-	}
-
-	CharacterDataEx::GetInstance()->m_liLevelCharInfo = level;
-
-	return level < UCHAR_MAX ? (char)level : UCHAR_MAX;
-}
-
-const char* __fastcall LevelOnCharacterInfoStr(ZXString<char>* pThis, PVOID edx)
-{
-	std::string s = std::to_string(CharacterDataEx::GetInstance()->m_liLevelCharInfo);
+	std::string s = std::to_string(getUserlevel(userID));
 
 	pThis->Assign(s.c_str(), s.length());
+
+	return static_cast<const char*>(*pThis);
+}
+
+__declspec(naked) void onCharacterInfoStrSwap() {
+	__asm {
+		push[esi + 0x62C]
+		call LevelOnCharacterInfoStr
+		push 0x0090892E
+		ret
+	}
 }
 
 const char* __fastcall ZXString__GetConstCharString(ZXString<char>* pThis, PVOID edx)
@@ -273,41 +259,68 @@ const char* __fastcall ZXString__GetConstCharString(ZXString<char>* pThis, PVOID
 
 const char* __fastcall ZXString_LevelString(ZXString<char>* pThis, PVOID edx)
 {
-	std::string s = std::to_string(CharacterDataEx::GetInstance()->m_liLevel);
+	std::string s = std::to_string(CharacterDataEx::GetInstance()->GetCharLevel());
 
 	pThis->Assign(s.c_str(), s.length());
 
 	return static_cast<const char*>(*pThis);
 }
 
-void putLevel(void* esi) {
-	int addr = reinterpret_cast<int>(esi);
-	CharacterDataEx::GetInstance()->h_liLevel[addr] = CharacterDataEx::GetInstance()->m_liLevel;
-}
-
 const DWORD sub_429411 = 0x00429411;
-const DWORD drawLevelStringRetn = 0x008DCE4B;
 __declspec(naked) void drawLevelString() {
 	__asm {
 		call sub_429411
-		call getlevel
-		push level
-		jmp dword ptr[drawLevelStringRetn]
+		call  CharacterDataEx::GetCharLevel
+		movzx eax, ax
+		push eax
+		push 0x008DCE4B
+		ret
 	}
 }
 
-const DWORD characterLevelStatDecodeRetn = 0x004F2269;
+__declspec(naked) void decodeChangeStatStatDecode() {
+	__asm {
+		push[esi]
+		call LevelSwap__Decode1To2
+		push 0x004F26FD
+		ret
+	}
+}
+
 __declspec(naked) void characterLevelStatDecode() {
 	__asm {
-		call LevelSwap__Decode1To2
-		pushad
-		pushfd
 		push[esi]
-		call putLevel
-		pop esi
-		popfd
-		popad
-		jmp dword ptr[characterLevelStatDecodeRetn]
+		call LevelSwap__Decode1To2
+		push 0x004F2269
+		ret
+	}
+}
+
+__declspec(naked) void onCharacterInfoLevelStatDecode() {
+	__asm {
+		push[ebp - 0x30]
+		call LevelSwap__Decode1To2
+		push 0x00A2CE3F
+		ret
+	}
+}
+
+__declspec(naked) void remoteInitLevelStatDecode() {
+	__asm {
+		push[esi]
+		call LevelSwap__Decode1To2
+		push 0x0098CE22
+		ret
+	}
+}
+
+__declspec(naked) void onPartyCreateResultLevel() {
+	__asm {
+		call CharacterDataEx::GetCharLevel
+		movzx eax, ax
+		mov[ebx + 0x2E86], eax
+		push 0x00A485DC
+		ret
 	}
 }
 
@@ -359,6 +372,7 @@ int __fastcall OnUserLeave_DecodeID(CInPacket* pThis, void* edx)
 	int userId = pThis->Decode4();
 
 	CharacterEx::h_userSkin.erase(userId);
+	CharacterDataEx::GetInstance()->h_liLevel.erase(userId);
 
 	return userId;
 }
@@ -416,17 +430,17 @@ _declspec(naked) void exitCleart()
 
 void __fastcall _changerMapCleart() {
 	int skin = -1;
-	if (CharacterEx::h_userSkin.find(CharacterEx::m_loginUserId) != CharacterEx::h_userSkin.end())
-		skin = CharacterEx::h_userSkin[CharacterEx::m_loginUserId];
+	if (CharacterEx::h_userSkin.find(CharacterEx::getLoginUserId()) != CharacterEx::h_userSkin.end())
+		skin = CharacterEx::h_userSkin[CharacterEx::getLoginUserId()];
 	int level = -1;
-	if (CharacterDataEx::GetInstance()->h_liLevel.find(CharacterEx::m_loginUserId) != CharacterDataEx::GetInstance()->h_liLevel.end())
-		level = CharacterDataEx::GetInstance()->h_liLevel[CharacterEx::m_loginUserId];
+	if (CharacterDataEx::GetInstance()->h_liLevel.find(CharacterEx::getLoginUserId()) != CharacterDataEx::GetInstance()->h_liLevel.end())
+		level = CharacterDataEx::GetInstance()->h_liLevel[CharacterEx::getLoginUserId()];
 	_exitcleart();
 	if (skin > 0) {
-		CharacterEx::h_userSkin[CharacterEx::m_loginUserId] = skin;
+		CharacterEx::h_userSkin[CharacterEx::getLoginUserId()] = skin;
 	}
 	if (level > 0) {
-		CharacterDataEx::GetInstance()->h_liLevel[CharacterEx::m_loginUserId] = level;
+		CharacterDataEx::GetInstance()->h_liLevel[CharacterEx::getLoginUserId()] = level;
 	}
 }
 
@@ -537,6 +551,12 @@ void CharacterEx::Init()
 	CharacterEx::InitLevelOverride();
 	CharacterEx::InitDamageSkinOverride(Client::DamageSkin > 0 || Client::RemoteDamageSkin);
 	CharacterEx::InitHypontizeFix(Client::s5221009);
+	Memory::PatchCall(0x0097F8CD, OnUserLeave_DecodeID);
+}
+
+int CharacterEx::getLoginUserId()
+{
+	return *reinterpret_cast<int*>(0x00BE4F14);
 }
 
 void CharacterEx::InitExpOverride()
@@ -593,7 +613,7 @@ void CharacterEx::InitExpOverride()
 void CharacterEx::InitLevelOverride()
 {
 	/* GW_CharacterStat::DecodeChangeStat */
-	Memory::PatchCall(0x004F26F8, LevelSwap__Decode1To2);
+	Memory::CodeCave(decodeChangeStatStatDecode, 0x004F26F8, 5);
 
 	/* GW_CharacterStat::Decode */
 	Memory::CodeCave(characterLevelStatDecode, 0x004F2264, 5);
@@ -609,9 +629,14 @@ void CharacterEx::InitLevelOverride()
 	Memory::CodeCave(drawLevelString, 0x008DCE43, 5);
 
 	//CWvsContext::OnCharacterInfo
-	Memory::PatchCall(0x00A2CE3A, LevelSwapOnCharacterInfo__Decode1To2);   //0x0090740B pic init
-	Memory::PatchCall(0x00908929, LevelOnCharacterInfoStr);
+	Memory::CodeCave(onCharacterInfoLevelStatDecode, 0x00A2CE3A, 5);   //0x0090740B pic init
+	Memory::CodeCave(onCharacterInfoStrSwap, 0x00908929, 5);
 
+	//CUserRemote::Init
+	Memory::CodeCave(remoteInitLevelStatDecode, 0x0098CE1D, 5);
+
+	//CWvsContext::OnPartyResult  create party
+	Memory::CodeCave(onPartyCreateResultLevel, 0x00A485D6, 5);
 }
 
 void CharacterEx::InitDamageSkinOverride(BOOL bEnable)
@@ -619,7 +644,6 @@ void CharacterEx::InitDamageSkinOverride(BOOL bEnable)
 	if (!bEnable)
 		return;
 	Memory::PatchCall(0x0097FAD3, CUserPoolOnUserRemotePacket_DecodeID);
-	Memory::PatchCall(0x0097F8CD, OnUserLeave_DecodeID);
 	Memory::CodeCave(GuildNameDecode, 0x0098CE5E, 5);
 	Memory::CodeCave(GuildNameDecode2, 0x009912E7, 5);
 	Memory::CodeCave(CharacterStatSkin, 0x004F28B4, 7);

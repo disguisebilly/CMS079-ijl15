@@ -5,6 +5,28 @@
 #include "CreateDump.h"
 #include <iostream>
 #include <Client.h>
+#include <signal.h>
+
+inline void terminator()
+{
+	int* z = 0; *z = 13;
+}
+
+inline void signal_handler(int)
+{
+	terminator();
+}
+
+inline void __cdecl invalid_parameter_handler(const wchar_t*, const wchar_t*, const wchar_t*, unsigned int, uintptr_t)
+{
+	terminator();
+}
+
+LONG WINAPI DumpCallback(_EXCEPTION_POINTERS* excp) {
+	std::cout << "DumpCallback" << std::endl;
+	CreateDump(excp);
+	return EXCEPTION_EXECUTE_HANDLER;
+}
 
 //LPVOID g_lp = NULL;
 LONG WINAPI NewUnhandledExceptionFilter(struct _EXCEPTION_POINTERS* ExceptionInfo) {
@@ -21,6 +43,15 @@ LONG WINAPI NewUnhandledExceptionFilter(struct _EXCEPTION_POINTERS* ExceptionInf
 
 CAutoDump::CAutoDump(void)
 {
+	SetUnhandledExceptionFilter(DumpCallback);
+	//Enhance error catching start
+	signal(SIGABRT, signal_handler);
+	_set_abort_behavior(0, _WRITE_ABORT_MSG | _CALL_REPORTFAULT);
+	set_terminate(&terminator);
+	set_unexpected(&terminator);
+	_set_purecall_handler(&terminator);
+	_set_invalid_parameter_handler(&invalid_parameter_handler);
+	//Enhance error catching end
 	m_lpUnhandledExceptionFilter = NULL;
 	do {
 		SetErrorMode(SEM_NOGPFAULTERRORBOX | SEM_NOOPENFILEERRORBOX);

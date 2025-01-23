@@ -15,15 +15,7 @@
 #include "CreateDump.h"
 #include "AutoDump.h"
 
-bool isCreate = false;
-
 CAutoDump* autoDump = nullptr;
-
-LONG WINAPI DumpCallback(_EXCEPTION_POINTERS* excp) {
-	std::cout << "DumpCallback" << std::endl;
-	CreateDump(excp);
-	return EXCEPTION_EXECUTE_HANDLER;
-}
 
 void Init()
 {
@@ -96,7 +88,6 @@ void Init()
 		CreateConsole();	//console for devs, use this to log stuff if you want
 	if (Client::crashAutoDump) {
 		autoDump = new CAutoDump();
-		SetUnhandledExceptionFilter(DumpCallback);
 	}
 	Hook_CreateMutexA(true); //multiclient //ty darter, angel, and alias!
 	HookCreateWindowExA(true);
