@@ -324,9 +324,8 @@ __declspec(naked) void onPartyCreateResultLevel() {
 	}
 }
 
-unsigned char* __fastcall _userName_Decode(CInPacket* pThis, void* edx, void* esi, ZXString<char>* p)
+unsigned char* __fastcall _guildName_Decode(CInPacket* pThis, void* edx, int userId, ZXString<char>* p)
 {
-	int userId = reinterpret_cast<int>(esi);
 	unsigned char* result = pThis->DecodeStr(p);
 
 	const char* name = static_cast<const char*>(*p);
@@ -351,20 +350,20 @@ unsigned char* __fastcall _userName_Decode(CInPacket* pThis, void* edx, void* es
 const DWORD GuildNameDecodeRet = 0x0098CE63;
 __declspec(naked) void GuildNameDecode() {
 	__asm {
-		push[eax + 1Ch]
-		call _userName_Decode
+		push[eax + 0x1C]
+		call _guildName_Decode
 		jmp dword ptr[GuildNameDecodeRet]
 	}
 }
 
-int __UserRemoteID = 0;
-int __fastcall CUserPoolOnUserRemotePacket_DecodeID(CInPacket* pThis, void* edx)
-{
-
-	__UserRemoteID = pThis->Decode4();
-
-	return __UserRemoteID;
-}
+//int __UserRemoteID = 0;
+//int __fastcall CUserPoolOnUserRemotePacket_DecodeID(CInPacket* pThis, void* edx)
+//{
+//
+//	__UserRemoteID = pThis->Decode4();
+//
+//	return __UserRemoteID;
+//}
 
 int __fastcall OnUserLeave_DecodeID(CInPacket* pThis, void* edx)
 {
@@ -380,8 +379,8 @@ int __fastcall OnUserLeave_DecodeID(CInPacket* pThis, void* edx)
 const DWORD GuildNameDecodeRet2 = 0x009912EC;
 __declspec(naked) void GuildNameDecode2() {
 	__asm {
-		push[__UserRemoteID]
-		call _userName_Decode
+		push[esi + 0xF2C]
+		call _guildName_Decode
 		jmp dword ptr[GuildNameDecodeRet2]
 	}
 }
@@ -643,7 +642,7 @@ void CharacterEx::InitDamageSkinOverride(BOOL bEnable)
 {
 	if (!bEnable)
 		return;
-	Memory::PatchCall(0x0097FAD3, CUserPoolOnUserRemotePacket_DecodeID);
+	//Memory::PatchCall(0x0097FAD3, CUserPoolOnUserRemotePacket_DecodeID);
 	Memory::CodeCave(GuildNameDecode, 0x0098CE5E, 5);
 	Memory::CodeCave(GuildNameDecode2, 0x009912E7, 5);
 	Memory::CodeCave(CharacterStatSkin, 0x004F28B4, 7);
