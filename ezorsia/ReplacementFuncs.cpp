@@ -144,16 +144,19 @@ bool Hook_StringPool__GetString(bool bEnable)	//hook stringpool modification //t
 		{
 			auto ret = _StringPool__GetString(pThis, edx, result, nIdx, formal);
 			auto str = static_cast<const char*>(*ret);
-			/*if (strstr(str, "Ã°ÏÕµºON") != nullptr) {
-				std::cout << "StringPool__GetString id = " << nIdx << " " << str << " " << _ReturnAddress() << std::endl;
-			}*/
+			//if (strstr(str, "uiOpt") != nullptr) {
+			//	std::cout << "StringPool__GetString id = " << nIdx << " " << str << " " << _ReturnAddress() << std::endl;
+			//}
 			switch (nIdx)
 			{
+			case 737:
+				*ret = Client::WelcomeMessage.c_str();
+				break;
 			case 2219:
 				*ret = "soResolution";
 				break;
-			case 737:
-				*ret = Client::WelcomeMessage.c_str();
+			case 2224:
+				*ret = "wuiOpt%d";
 				break;
 				//case 233:
 					//if(Client::longEXP)
@@ -206,8 +209,8 @@ bool Hook_StringPool__GetStringW(bool bEnable)	//hook stringpool modification //
 	_StringPool__GetStringW_t _StringPool__GetStringW_Hook = [](void* pThis, void* edx, ZXString<wchar_t>* result, unsigned int nIdx, char formal) ->  ZXString<wchar_t>*
 		{
 			auto ret = _StringPool__GetStringW(pThis, edx, result, nIdx, formal);
-			const wchar_t* str = static_cast<const wchar_t*>(*ret);
-			//if (wcsstr(str, L"×ÀÃæ") != nullptr) {
+			//const wchar_t* str = static_cast<const wchar_t*>(*ret);
+			//if (wcsstr(str, L"uiOpt") != nullptr) {
 			//	std::wcout << "StringPool__GetStringW id = " << nIdx << " " << str << " " << _ReturnAddress() << std::endl;
 			//}
 			//if (nIdx == 1163)
