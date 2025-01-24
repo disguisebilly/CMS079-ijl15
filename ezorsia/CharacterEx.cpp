@@ -82,29 +82,23 @@ char* __cdecl itoa_ExpSwap(int value, PCHAR buffer, int radix)
 	return buffer;
 }
 
-LPWSTR __cdecl _itoa_LevelSwap(int value, LPWSTR lpWideCharStr, int radix)
-{
-	CHAR MultiByteStr[64];
-	_itoa_s(value, MultiByteStr, strlen(MultiByteStr), radix);
-	MultiByteToWideChar(0, 1u, MultiByteStr, -1, lpWideCharStr, 20);
-	return lpWideCharStr;
-}
-
 short __stdcall getUserlevel(int userId) {
 	return CharacterDataEx::GetInstance()->h_liLevel[userId];
 }
 
+LPWSTR __stdcall _itoa_LevelSwap(int userID, int value, LPWSTR lpWideCharStr, int radix)
+{
+	CHAR MultiByteStr[64] = {};
+	_itoa_s(getUserlevel(userID), MultiByteStr, _countof(MultiByteStr), radix);;
+	MultiByteToWideChar(0, 1u, MultiByteStr, -1, lpWideCharStr, 64);
+	return lpWideCharStr;
+}
+
 __declspec(naked) void itoa_LevelSwap() {
 	__asm {
-		pop eax
-		push ecx
 		push[esi]
-		call getUserlevel
-		pop ecx
-		movzx eax, ax
-		push eax
 		call _itoa_LevelSwap
-		push 0x0063458C
+		push 0x0063458F
 		ret
 	}
 }
@@ -178,7 +172,7 @@ int __fastcall ExpSwap__Decode4To8msg(CInPacket* pThis, void* edx)
 		pThis->DecodeBuffer(&liExpMsg, sizeof(liExpMsg));
 	}
 	else {
-		liExpMsg = pThis->Decode4();
+		liExpMsg = (int)pThis->Decode4();
 	}
 
 	CharacterDataEx::GetInstance()->m_liExpMsg = liExpMsg;
@@ -194,7 +188,7 @@ int __fastcall ExpSwap__Decode4To8(CInPacket* pThis, void* edx)
 		pThis->DecodeBuffer(&liExp, sizeof(liExp));
 	}
 	else {
-		liExp = pThis->Decode4();
+		liExp = (int)pThis->Decode4();
 	}
 
 	CharacterDataEx::GetInstance()->m_liExp = liExp;
@@ -210,10 +204,12 @@ char __fastcall LevelSwap__Decode1To2(CInPacket* pThis, void* edx, int userID)
 		level = pThis->Decode2();
 	}
 	else {
-		level = pThis->Decode1();
+		level = (unsigned char)pThis->Decode1();
 	}
 
 	CharacterDataEx::GetInstance()->h_liLevel[userID] = level;
+
+	//std::cout << "UserID: " << userID << " Level: " << level << std::endl;
 
 	return level < UCHAR_MAX ? (char)level : UCHAR_MAX;
 }
@@ -406,7 +402,7 @@ __declspec(naked) void CharacterStatSkin() {
 	}
 }
 
-void __fastcall _exitcleart() {
+void __stdcall _exitcleart() {
 	CharacterEx::h_userSkin.clear();
 	CharacterDataEx::GetInstance()->h_liLevel.clear();
 }
@@ -425,19 +421,27 @@ _declspec(naked) void exitCleart()
 	}
 }
 
-void __fastcall _changerMapCleart() {
-	int skin = -1;
-	if (CharacterEx::h_userSkin.find(CharacterEx::getLoginUserId()) != CharacterEx::h_userSkin.end())
-		skin = CharacterEx::h_userSkin[CharacterEx::getLoginUserId()];
-	int level = -1;
-	if (CharacterDataEx::GetInstance()->h_liLevel.find(CharacterEx::getLoginUserId()) != CharacterDataEx::GetInstance()->h_liLevel.end())
-		level = CharacterDataEx::GetInstance()->h_liLevel[CharacterEx::getLoginUserId()];
-	_exitcleart();
-	if (skin > 0) {
-		CharacterEx::h_userSkin[CharacterEx::getLoginUserId()] = skin;
+void __stdcall _changerMapCleart() {
+	int userId = CharacterEx::getLoginUserId();
+	if (userId > 0) {
+		int skin = -1;
+		if (CharacterEx::h_userSkin.find(userId) != CharacterEx::h_userSkin.end())
+			skin = CharacterEx::h_userSkin[userId];
+		int level = -1;
+		if (CharacterDataEx::GetInstance()->h_liLevel.find(userId) != CharacterDataEx::GetInstance()->h_liLevel.end())
+			level = CharacterDataEx::GetInstance()->h_liLevel[userId];
+		CharacterEx::h_userSkin.clear();
+		CharacterDataEx::GetInstance()->h_liLevel.clear();
+		if (skin > 0) {
+			CharacterEx::h_userSkin[userId] = skin;
+		}
+		if (level > 0) {
+			CharacterDataEx::GetInstance()->h_liLevel[userId] = level;
+		}
 	}
-	if (level > 0) {
-		CharacterDataEx::GetInstance()->h_liLevel[CharacterEx::getLoginUserId()] = level;
+	else {
+		CharacterEx::h_userSkin.clear();
+		CharacterDataEx::GetInstance()->h_liLevel.clear();
 	}
 }
 
@@ -621,7 +625,7 @@ void CharacterEx::InitLevelOverride()
 
 	Memory::WriteByte(0x00634565 + 1, 64);
 	//Memory::PatchCall(0x00634587, _itoa_LevelSwap);
-	Memory::CodeCave(itoa_LevelSwap, 0x00634587, 5);
+	Memory::CodeCave(itoa_LevelSwap, 0x00634587, 8);
 
 	Memory::CodeCave(drawLevelString, 0x008DCE43, 5);
 
