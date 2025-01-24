@@ -213,9 +213,7 @@ char __fastcall LevelSwap__Decode1To2(CInPacket* pThis, void* edx, int userID)
 		level = pThis->Decode1();
 	}
 
-	if (_GetCharLevel)
-
-		CharacterDataEx::GetInstance()->h_liLevel[userID] = level;
+	CharacterDataEx::GetInstance()->h_liLevel[userID] = level;
 
 	return level < UCHAR_MAX ? (char)level : UCHAR_MAX;
 }
