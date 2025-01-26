@@ -359,6 +359,10 @@ void darkMap2cc();
 
 void darkMap3cc();
 
+extern int nSkillGuildX;
+extern int nSkillGuildY;
+void skillGuild();
+
 extern int nBarBackgrndWidth;
 extern int nBarBackgrndOpenWidth;
 extern int isInit;
@@ -393,6 +397,8 @@ void upDoubleJump();
 void skill2221006();
 
 void skill2221006_2();
+
+void skill2100NoMove();
 
 void tamingMob198();
 

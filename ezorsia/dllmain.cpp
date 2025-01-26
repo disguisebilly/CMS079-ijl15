@@ -83,6 +83,7 @@ void Init()
 		Client::s14101004 = reader.GetBoolean("skill", "s14101004", Client::s14101004);
 		Client::s14101004up = reader.GetBoolean("skill", "s14101004up", Client::s14101004up);
 		Client::s5221009 = reader.GetBoolean("skill", "s5221009", Client::s5221009);
+		Client::s2100NoMove = reader.GetBoolean("skill", "s2100NoMove", Client::s2100NoMove);
 	}
 	if (Client::debug)
 		CreateConsole();	//console for devs, use this to log stuff if you want

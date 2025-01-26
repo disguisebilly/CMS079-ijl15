@@ -71,6 +71,7 @@ bool Client::s2221006 = false;
 bool Client::s4221001 = false;
 bool Client::s4221007 = false;
 bool Client::s5221009 = false;
+bool Client::s2100NoMove = false;
 
 void Client::UpdateGameStartup() {
 	Resolution::Init();
@@ -431,6 +432,10 @@ void Client::Skill() {
 	if (Client::s2221006) {
 		Memory::CodeCave(skill2221006, 0x007693F7, 17);
 		Memory::CodeCave(skill2221006_2, 0x00769376, 5);
+	}
+	//战神攻击不前进
+	if (Client::s2100NoMove) {
+		Memory::CodeCave(skill2100NoMove, 0x009553F0, 6);
 	}
 }
 

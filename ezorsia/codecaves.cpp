@@ -1867,6 +1867,19 @@ __declspec(naked) void darkMap3cc() {
 	}
 }
 
+int nSkillGuildX = 0;
+int nSkillGuildY = 0;
+__declspec(naked) void skillGuild() {
+	__asm {
+		push 600
+		push 800
+		push nSkillGuildY
+		push nSkillGuildX
+		push 0x008BB42D
+		ret
+	}
+}
+
 int nBarBackgrndWidth = 1008;
 int nBarBackgrndOpenWidth = 1008;
 int isInit = 1;
@@ -2092,11 +2105,11 @@ __declspec(naked) void skill2221006()
 		fild dword ptr[esi]
 			fmul st(0), st(1)
 			call sub_A70F94
-			cmp currentSkillId,0x21E3CE
+			cmp currentSkillId, 0x21E3CE
 			je label_je
 			mov[esi], eax
-			label_je:
-			add esi, 0x4
+			label_je :
+		add esi, 0x4
 			dec edi
 			jne lablel_loop
 			push 0x00769408
@@ -2111,6 +2124,28 @@ __declspec(naked) void skill2221006_2()  //save skill id
 		cmp eax, 0x0021E3CE
 		push 0x0076937B
 		ret
+	}
+}
+
+__declspec(naked) void skill2100NoMove()
+{
+	__asm {
+		push ebx
+		mov ebx, [edi + 0x2908]
+		cmp ebx, 0x1406F40    //21000000
+		jl label_ret
+		cmp ebx, 0x141F5E2    //21100002 ignore
+		je label_ret
+		cmp ebx, 0x14247F0    //21121008
+		jg label_ret
+		pop ebx
+		push 0x00955592
+		ret
+		label_ret :
+		pop ebx
+			cmp[edi + 0x290C], ebx
+			push 0x009553F6
+			ret
 	}
 }
 

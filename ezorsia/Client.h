@@ -80,4 +80,5 @@ public:
 	static bool s14101004;
 	static bool s14101004up;
 	static bool s5221009;
+	static bool s2100NoMove;
 };
