@@ -379,26 +379,41 @@ __declspec(naked) void GuildNameDecode2() {
 	}
 }
 
-void __fastcall _CharacterStatSkin(CInPacket* pThis, void* edx, int userId)
+void __fastcall CharacterStatSkin(CInPacket* pThis, void* edx, int userId)
 {
 	CharacterEx::h_userSkin[userId] = pThis->Decode4();
 }
 
-const DWORD CharacterStatSkinRet = 0x004F28BB;
-__declspec(naked) void CharacterStatSkin() {
+void __fastcall CharacterStatDamageLimit(CInPacket* pThis, void* edx, int userId)
+{
+	int damgeLimit = pThis->Decode4();
+	Memory::WriteDouble(0x00B064B8, damgeLimit);	// 输出显示上限
+	Memory::WriteInt(0x008C8BAE + 1, damgeLimit); // 物攻面板
+	Memory::WriteInt(0x00786A8F + 1, damgeLimit); // 魔法防御力面板
+	Memory::WriteInt(0x0078876B + 1, damgeLimit); // 魔攻面板
+}
+
+const DWORD CharacterStatRet = 0x004F28BB;
+__declspec(naked) void CharacterStat() {
 	__asm {
 		test byte ptr[ebp + 0x0A], 0x40
-		je label_ret
+		je label_damagelimit
 		mov ecx, edi
 		push[esi]
-		call _CharacterStatSkin
-		label_ret :
+		call CharacterStatSkin
+		label_damagelimit :
+		test byte ptr[ebp + 0x0A], 0x80
+			je label_ret
+			mov ecx, edi
+			push[esi]
+			call CharacterStatDamageLimit
+			label_ret :
 		mov eax, [ebp + 0x08]
 			pop edi
 			pop esi
 			pop ebx
 			pop ebp
-			jmp dword ptr[CharacterStatSkinRet]
+			jmp dword ptr[CharacterStatRet]
 	}
 }
 
@@ -544,6 +559,7 @@ __declspec(naked) void fixMaxMp() {
 void CharacterEx::Init()
 {
 	Memory::SetHook(true, reinterpret_cast<void**>(&CUIStatusBar__SetNumberValue_t), CUIStatusBar__SetNumberValue_Hook);
+	Memory::CodeCave(CharacterStat, 0x004F28B4, 7);
 	Memory::CodeCave(fixMaxHP, 0x008DF651, 6);
 	Memory::CodeCave(fixMaxMp, 0x008DF97C, 6);
 	Memory::CodeCave(changerMapCleart, 0x005348FA, 5);
@@ -647,7 +663,6 @@ void CharacterEx::InitDamageSkinOverride(BOOL bEnable)
 	//Memory::PatchCall(0x0097FAD3, CUserPoolOnUserRemotePacket_DecodeID);
 	Memory::CodeCave(GuildNameDecode, 0x0098CE5E, 5);
 	Memory::CodeCave(GuildNameDecode2, 0x009912E7, 5);
-	Memory::CodeCave(CharacterStatSkin, 0x004F28B4, 7);
 	Memory::WriteByte(0x00437D44 + 1, 0x60);  // 0x39->0x60  57 -> 96  expand display range
 	Memory::WriteByte(0x0043803A + 1, 0x60);
 	Memory::WriteByte(0x006978DD + 2, 0xCA);  //0xF1

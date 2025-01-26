@@ -45,6 +45,7 @@ For both methods, copy the config.ini from the project’s root directory to the
 - Supports new hairstyles and faces.
 - Support partial inlink and outlink nodes (Default using the new method, set linkNodeNew=false in case of startup issues)
 - Supports effects in ItemEff.img (activatable via 0xAA packet header or ItemEffect).
+- Supports dynamic modification of damage limit (adding `DAMAGELIMIT(8388608)` enum type in `MapleStat`, reference damage skin Stat)
 - Supports memory anti-crash.
 - Support Quick Double Jump (Double-Tap Jump Key) / Upward Double Jump (Hold Up Arrow Key).
 - Support the wearing of new pet equipment (replacing the wearing verification algorithm)
