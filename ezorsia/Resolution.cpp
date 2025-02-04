@@ -439,10 +439,6 @@ void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 	Memory::WriteInt(0x0045B1A6 + 1, nScreenWidth);    // RelMove? //->079 0045B1A6 900
 	//Memory::WriteInt(0x004E7AF7 + 1, nScreenWidth);                        //->079 004E7AF7 800   会导致商城选项卡点击失效
 
-
-	Memory::WriteInt(0x00575D78 + 1, nScreenHeight);                     //->079 00575D78 600
-	Memory::WriteInt(0x00575D7D + 1, nScreenWidth);                     //->079 00575D7D 800
-	Memory::WriteInt(0x00575DF4 + 1, nScreenWidth);    // RelMove? //->079 00575DF4 600
 	Memory::WriteInt(0x007F7C0E + 1, nScreenWidth);    // CreateWnd//->079 007F7C0E 800
 	Memory::WriteInt(0x007F7C09 + 1, nScreenHeight);                        //->079 007F7C09 600
 	Memory::WriteInt(0x007F7C0E + 1, nScreenWidth);    // CWnd::GetCanvas //->079 007F7C0E
@@ -516,8 +512,6 @@ void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 
 	Memory::WriteInt(0x00436F9C + 1, floor(-nScreenHeight / 2));            //->079 00436F9C
 	Memory::WriteInt(0x00436F9C + 1, floor(-nScreenWidth / 2));               // RelMove?                         //->079 00436F9C
-	Memory::WriteInt(0x0057609F + 1, floor(-nScreenHeight / 2));            //->079 0057609F
-	Memory::WriteInt(0x005760A5 + 1, floor(-nScreenWidth / 2));               // RelMove?                          //->079 005760A5
 	Memory::WriteInt(0x00436F97 + 1, floor(-nScreenHeight / 2));            //->079 00436F97
 	Memory::WriteInt(0x00436F9C + 1, floor(-nScreenWidth / 2));               // RelMove?                          //->079 00436F9C
 	Memory::WriteInt(0x006BF23E + 1, nScreenWidth);                            //->079 006BF23E
@@ -868,8 +862,13 @@ void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 	Memory::CodeCave(ccMuruengraidMonster1_2, dwMuruengraidMonster1_2, MuruengraidMonster1_2NOPs);
 
 	//黑暗地图
-	darkCircleX = nScreenWidth / 2 - 163;
-	darkCircleY = nScreenHeight / 2 - 190;
+	Memory::WriteInt(0x0057609F + 1, -540);
+	Memory::WriteInt(0x005760A5 + 1, -960);
+	Memory::WriteInt(0x00575D78 + 1, 1080);
+	Memory::WriteInt(0x00575D7D + 1, 1920);
+	Memory::WriteInt(0x00575DF4 + 1, 1080);
+	darkCircleX = 797;//nScreenWidth / 2 - 163
+	darkCircleY = 350;//nScreenHeight / 2 - 190
 	Memory::CodeCave(darkMap1cc, 0x00576456, 9);
 	Memory::CodeCave(darkMap2cc, 0x005765EF, 12);
 	Memory::CodeCave(darkMap3cc, 0x00576735, 13);
