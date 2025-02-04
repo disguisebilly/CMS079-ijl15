@@ -2,6 +2,7 @@
 #include "Utils.h"
 #include "psapi.h"
 #include <locale>
+#include <iostream>
 
 std::wstring StringToWString(const std::string& s) {
 	std::string curLocale = setlocale(LC_ALL, "chs");
@@ -125,4 +126,36 @@ StringList splitstr(const std::string& str, const std::string& pattern)
 	}
 
 	return li;
+}
+
+void SetWindowRefreshRate(HWND hwnd, int refreshRate) {
+	DEVMODE dm;
+	memset(&dm, 0, sizeof(dm));
+	dm.dmSize = sizeof(dm);
+	dm.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT | DM_DISPLAYFREQUENCY;
+	EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dm);
+	dm.dmDisplayFrequency = refreshRate;
+	LONG result = ChangeDisplaySettings(&dm, CDS_TEST);
+	if (result == DISP_CHANGE_SUCCESSFUL) {
+		result = ChangeDisplaySettings(&dm, CDS_UPDATEREGISTRY);
+		if (result == DISP_CHANGE_SUCCESSFUL) {
+			std::cout << "Set Refresh Rate: " << refreshRate << " Hz" << std::endl;
+		}
+		else {
+			std::cout << "Set Refresh Rate Error" << std::endl;
+		}
+	}
+	else {
+		std::cout << "Set Refresh Rate Error" << std::endl;
+	}
+}
+
+void CheckMonitorRefreshRate() {
+	HDC hdc = GetDC(NULL);
+	int refreshRate = GetDeviceCaps(hdc, VREFRESH);
+	ReleaseDC(NULL, hdc);
+	std::cout << "CheckMonitorRefreshRate: " << refreshRate << " Hz" << std::endl;
+	if (refreshRate < 60) {
+		SetWindowRefreshRate(getMapleStoryHWND(), 60);
+	}
 }

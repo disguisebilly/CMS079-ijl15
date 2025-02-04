@@ -90,6 +90,7 @@ void Init()
 	if (Client::crashAutoDump) {
 		autoDump = new CAutoDump();
 	}
+	CheckMonitorRefreshRate();
 	Hook_CreateMutexA(true); //multiclient //ty darter, angel, and alias!
 	HookCreateWindowExA(true);
 	HeapCreateEx::HOOK_HeapCreate();

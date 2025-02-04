@@ -386,8 +386,8 @@ void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 	Memory::CodeCave(AdjustStatusBarBG, dwStatusBarBackgroundVPos, 5);
 	Memory::CodeCave(AdjustStatusBarInput, dwStatusBarInputVPos, 11);
 
-	Memory::WriteInt(dwApplicationHeight + 1, nScreenHeight);//push 600
-	Memory::WriteInt(dwApplicationWidth + 1, nScreenWidth);	//push 800 ; CWvsApp::InitializeGr2D
+	//Memory::WriteInt(dwApplicationHeight + 1, nScreenHeight);//push 600
+	//Memory::WriteInt(dwApplicationWidth + 1, nScreenWidth);	//push 800 ; CWvsApp::InitializeGr2D
 	Memory::WriteInt(dwCursorVectorVPos + 2, (unsigned int)floor(-nScreenHeight / 2));//push -300				!!moves all interactable UI elements!!
 	Memory::WriteInt(dwCursorVectorHPos + 2, (unsigned int)floor(-nScreenWidth / 2));	//push -400 ; CInputSystem::SetCursorVectorPos				!!moves all interactable UI elements!!
 	Memory::WriteInt(dwUpdateMouseLimitVPos + 1, nScreenHeight);//mov ecx,600
@@ -444,8 +444,6 @@ void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 	Memory::WriteInt(0x007F7C0E + 1, nScreenWidth);    // CWnd::GetCanvas //->079 007F7C0E
 	//Memory::WriteInt(0x008BB421 + 1, nScreenHeight);           //->079 008BB421    技能指导弹窗
 	//Memory::WriteInt(0x008BB426 + 1, nScreenWidth);    // CreateWnd           //->079 008BB426 技能指导弹窗
-	//Memory::WriteInt(0x00A00FA0 + 1, nScreenHeight);          //->079 00A00FA0
-	//Memory::WriteInt(0x00A00FA5 + 1, nScreenWidth);    // StringPool#1162 (MapleStoryClass) //->079 00A00FA5
 	Memory::WriteInt(0x005E0E32 + 1, nScreenHeight);               //->079 005E0E32                     
 	Memory::WriteInt(0x005E0E42 + 1, nScreenWidth);    // RelMove?     //->079 005E0E42
 	Memory::WriteInt(0x005E1C80 + 1, nScreenHeight);                     //->079 005E1C80

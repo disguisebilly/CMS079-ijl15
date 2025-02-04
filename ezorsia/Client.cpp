@@ -8,7 +8,7 @@
 
 int Client::DefaultResolution = 2;
 int Client::MsgAmount = 10;
-bool Client::WindowedMode = true;
+bool Client::WindowedMode = false;
 bool Client::RemoveLogos = true;
 bool Client::SkipWorldSelect = true;
 bool Client::RemoveSystemMsg = true;
@@ -108,15 +108,17 @@ void Client::UpdateGameStartup() {
 	if (Client::ServerIP_Address_hook)
 		Memory::CodeCave(changerPort, 0x0075F186, 5);
 	//Memory::WriteInt(0x0075F142 + 1, serverIP_Port);
+
+	unsigned char fixed_window_crash[] = { 0xB8, 0x00, 0x00, 0x00, 0x00 };  //fix fullscreen startup crash
+	Memory::WriteByteArray(0x00A00EF2, fixed_window_crash, sizeof(fixed_window_crash));
 	if (WindowedMode) {
-		unsigned char forced_window[] = { 0xB8, 0x00, 0x00, 0x00, 0x00 }; //force window mode	//thanks stelmo for showing me how to do this
-		Memory::WriteByteArray(0x00A00EF2, forced_window, sizeof(forced_window));//force window mode
+		Memory::CodeCave(forcedWindowMode, 0x009ED7DC, 5);
 	}
 	if (RemoveLogos) {
 		Memory::FillBytes(0x0065A398, 0x90, 20);	//no Logo @launch
 	}
+	Memory::CodeCave(onWorldSelect, 0x005BB9C1, 5);
 	if (SkipWorldSelect) {
-		Memory::CodeCave(skipWorldSelect, 0x005BB9C1, 5);
 		Memory::CodeCave(skipWorldSConnectError, 0x004948BC, 5);
 	}
 	if (RemoveLoginNxIdDialog) {

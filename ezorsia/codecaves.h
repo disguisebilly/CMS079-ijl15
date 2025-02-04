@@ -371,10 +371,11 @@ void _updateBarBackgrndWidth();
 
 void gameRect();
 
-void skipWorldSelect();
-
+void onWorldSelect();
 
 void SaveD3D();
+
+void forcedWindowMode();
 
 void skipWorldSConnectError();
 

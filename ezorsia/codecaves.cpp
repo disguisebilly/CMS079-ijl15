@@ -1947,18 +1947,37 @@ __declspec(naked) void SaveD3D()
 	}
 }
 
-__declspec(naked) void skipWorldSelect() {
+__declspec(naked) void forcedWindowMode() {
+	__asm {
+		mov eax, 0x1
+		neg eax
+		sbb eax, eax
+		inc eax
+		push 0x009ED7E1
+		ret
+	}
+}
+
+__declspec(naked) void onWorldSelect() {
 	__asm {
 		mov eax, 0x005CAB91
 		call eax
+		pushad
+		pushfd
+		call Resolution::ResetResolution
+		popfd
+		popad
+		cmp Client::SkipWorldSelect, 0x0
+		je label_ret
 		mov ecx, [0x00BDD8A0]
 		mov ecx, [ecx]
 		mov eax, [ecx]
 		mov edx, 0x005BCDF4
 		push 0x000007D3  //0x000007D0ÏßÂ·1
 		call edx
+		label_ret :
 		mov edx, 0x005BB9C6
-		jmp edx
+			jmp edx
 	}
 }
 

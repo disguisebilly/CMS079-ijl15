@@ -43,6 +43,8 @@ void HookCreateWindowExA(bool bEnable) {
 	static auto create_window_ex_a = decltype(&CreateWindowExA)(GetProcAddress(LoadLibraryA("USER32"), "CreateWindowExA"));
 	static const decltype(&CreateWindowExA) hook = [](DWORD dwExStyle, LPCSTR lpClassName, LPCSTR lpWindowName, DWORD dwStyle, int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam) -> HWND {
 		dwStyle |= WS_MINIMIZEBOX; // enable minimize button
+		//if (Client::WindowedMode)
+		dwStyle &= ~WS_MAXIMIZEBOX;
 		//x = (GetSystemMetrics(SM_CXSCREEN) - nWidth) / 2;
 		//y = (GetSystemMetrics(SM_CYSCREEN) - nHeight) / 4;
 		return create_window_ex_a(dwExStyle, lpClassName, (Client::ServerName + " " + Client::ServerNameTips).c_str(), dwStyle, x, y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam);
