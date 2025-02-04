@@ -17,6 +17,6 @@ int MessageBoxPos(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType, int 
 typedef std::vector<std::string>  StringList;
 StringList splitstr(const std::string& str, const std::string& pattern);
 
-void SetWindowRefreshRate(HWND hwnd, int refreshRate);
+void SetMonitorRefreshRate(int refreshRate);
 
 void CheckMonitorRefreshRate();

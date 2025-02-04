@@ -128,7 +128,7 @@ StringList splitstr(const std::string& str, const std::string& pattern)
 	return li;
 }
 
-void SetWindowRefreshRate(HWND hwnd, int refreshRate) {
+void SetMonitorRefreshRate(int refreshRate) {
 	DEVMODE dm;
 	memset(&dm, 0, sizeof(dm));
 	dm.dmSize = sizeof(dm);
@@ -156,6 +156,6 @@ void CheckMonitorRefreshRate() {
 	ReleaseDC(NULL, hdc);
 	std::cout << "CheckMonitorRefreshRate: " << refreshRate << " Hz" << std::endl;
 	if (refreshRate < 60) {
-		SetWindowRefreshRate(getMapleStoryHWND(), 60);
+		SetMonitorRefreshRate(60);
 	}
 }
