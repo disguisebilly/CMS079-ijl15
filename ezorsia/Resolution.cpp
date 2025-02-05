@@ -706,6 +706,7 @@ void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 	Memory::WriteInt(0x005BBAE3 + 1, nScreenHeight);
 	Memory::WriteInt(0x005449E7 + 1, nScreenWidth / 2); //地图指示
 	Memory::WriteInt(0x005449E2 + 1, 230);
+	Memory::WriteInt(0x0048AC88 + 1, nScreenWidth);//怪物说话
 
 	Memory::WriteInt(0x008581D3 + 1, nScreenHeight - 198); //system menu pop up
 	Memory::WriteInt(0x008589E8 + 1, nScreenHeight - 281); //shortcuts pop up	//0x84A5BD -  System Options "X" Position. if needed
