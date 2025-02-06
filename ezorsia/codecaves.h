@@ -472,3 +472,5 @@ void fExit();
 void onExit();
 
 void changerPort();
+
+void setAtkOutCapPannelMax();

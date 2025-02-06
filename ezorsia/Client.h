@@ -26,8 +26,8 @@ public:
 	static int ResFlushTimeInterval;
 	static int ResManFlushCached;
 	static int SetWorkingSetSize;
-	static int setDamageCap;
-	static int setMAtkCap;
+	//static int setDamageCap;
+	//static int setMAtkCap;
 	static int setAccCap;
 	static int setAvdCap;
 	static double setAtkOutCap;

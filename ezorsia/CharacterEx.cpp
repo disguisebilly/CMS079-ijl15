@@ -384,13 +384,20 @@ void __fastcall CharacterStatSkin(CInPacket* pThis, void* edx, int userId)
 	CharacterEx::h_userSkin[userId] = pThis->Decode4();
 }
 
+void updateDamgeLimit(int damgeLimit) {
+	Client::setAtkOutCap = damgeLimit;
+	Memory::WriteDouble(0x00B064B8, damgeLimit);	// 输出显示上限
+	//Memory::WriteInt(0x008C8BAE + 1, damgeLimit); // 物攻面板
+	//Memory::WriteInt(0x00786A8F + 1, damgeLimit); // 魔法防御力面板
+	//Memory::WriteInt(0x0078876B + 1, damgeLimit); // 魔攻面板
+}
+
 void __fastcall CharacterStatDamageLimit(CInPacket* pThis, void* edx, int userId)
 {
 	int damgeLimit = pThis->Decode4();
-	Memory::WriteDouble(0x00B064B8, damgeLimit);	// 输出显示上限
-	Memory::WriteInt(0x008C8BAE + 1, damgeLimit); // 物攻面板
-	Memory::WriteInt(0x00786A8F + 1, damgeLimit); // 魔法防御力面板
-	Memory::WriteInt(0x0078876B + 1, damgeLimit); // 魔攻面板
+	if (damgeLimit > 0) {
+		updateDamgeLimit(damgeLimit);
+	}
 }
 
 const DWORD CharacterStatRet = 0x004F28BB;
@@ -420,6 +427,7 @@ __declspec(naked) void CharacterStat() {
 void __stdcall _exitcleart() {
 	CharacterEx::h_userSkin.clear();
 	CharacterDataEx::GetInstance()->h_liLevel.clear();
+	updateDamgeLimit(Client::setAtkOutCap);
 }
 
 _declspec(naked) void exitCleart()

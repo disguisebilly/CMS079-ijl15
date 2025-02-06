@@ -34,8 +34,8 @@ void Init()
 		Client::ResFlushTimeInterval = reader.GetInteger("general", "ResFlushTimeInterval", Client::ResFlushTimeInterval);
 		Client::ResManFlushCached = reader.GetInteger("general", "ResManFlushCached", Client::ResManFlushCached);
 		Client::SetWorkingSetSize = reader.GetInteger("general", "SetWorkingSetSize", Client::SetWorkingSetSize);
-		Client::setDamageCap = reader.GetReal("optional", "setDamageCap", Client::setDamageCap);
-		Client::setMAtkCap = reader.GetReal("optional", "setMAtkCap", Client::setMAtkCap);
+		//Client::setDamageCap = reader.GetReal("optional", "setDamageCap", Client::setDamageCap);//Îï¹¥Ãæ°å
+		//Client::setMAtkCap = reader.GetReal("optional", "setMAtkCap", Client::setMAtkCap);//Ä§¹¥Ä§·ÀÃæ°å
 		Client::setAccCap = reader.GetReal("optional", "setAccCap", Client::setAccCap);
 		Client::setAvdCap = reader.GetReal("optional", "setAvdCap", Client::setAvdCap);
 		Client::setAtkOutCap = reader.GetReal("optional", "setAtkOutCap", Client::setAtkOutCap);

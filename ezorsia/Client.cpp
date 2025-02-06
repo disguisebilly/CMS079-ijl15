@@ -18,8 +18,8 @@ int Client::ResCheckTime = 1000;
 int Client::ResFlushTimeInterval = 5;
 int Client::ResManFlushCached = 640;
 int Client::SetWorkingSetSize = 768;
-int Client::setDamageCap = 199999;
-int Client::setMAtkCap = 1999;
+//int Client::setDamageCap = 199999;物攻面板
+//int Client::setMAtkCap = 1999;魔攻魔防面板
 int Client::setAccCap = 999;
 int Client::setAvdCap = 999;
 double Client::setAtkOutCap = 199999;
@@ -86,9 +86,10 @@ void Client::UpdateGameStartup() {
 
 	Memory::WriteInt(0x007868CF + 1, 2147483646); // 物攻PAD 相关具体不明，默认值1999，int 4字节
 	Memory::WriteInt(0x007869A9 + 1, 2147483646); // 技能 相关具体不明，默认值1999，int 4字节
-	Memory::WriteInt(0x008C8BAE + 1, setDamageCap); // 物攻面板，默认值199999，int 4字节
-	Memory::WriteInt(0x00786A8F + 1, setMAtkCap); // 魔法防御力面板
-	Memory::WriteInt(0x0078876B + 1, setMAtkCap); // 魔攻面板
+	Memory::WriteInt(0x008C8BAE + 1, 2147483646); // 物攻面板，默认值199999，int 4字节
+	Memory::CodeCave(setAtkOutCapPannelMax, 0x008C8BC0, 10); //防止物攻面板超出上限显示1
+	Memory::WriteInt(0x00786A8F + 1, 2147483646); // 魔法防御力面板
+	Memory::WriteInt(0x0078876B + 1, 2147483646); // 魔攻面板
 	Memory::WriteInt(0x0078881B + 1, setAccCap); // 命中，默认999
 	Memory::WriteInt(0x0078884D + 1, setAvdCap); // 回避，默认999
 	Memory::WriteInt(0x0079617F + 1, 2147483646); // 计算物理伤害相关，意义不明，默认1999，int 4字节

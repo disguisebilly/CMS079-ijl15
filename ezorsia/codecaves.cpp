@@ -2721,3 +2721,17 @@ __declspec(naked) void changerPort()
 		ret
 	}
 }
+
+__declspec(naked) void setAtkOutCapPannelMax()
+{
+	__asm {
+		cmp ebx, 0x0
+		jge label_ret
+		push 0x7FFFFFFF
+		pop ebx
+		label_ret :
+		cmp ebx, eax
+			push 0x008C8BCA;
+		ret
+	}
+}
