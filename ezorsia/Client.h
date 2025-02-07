@@ -33,7 +33,7 @@ public:
 	static double setAtkOutCap;
 	static bool longEXP;
 	static std::string levelExpOverride;
-	static bool shortLevel;
+	static bool intLevel;
 	static bool useTubi;
 	static bool debug;
 	static bool crashAutoDump;

@@ -16,7 +16,7 @@ private:
 public:
 	LONGLONG m_liExp;
 	LONGLONG m_liExpMsg;
-	tsl::robin_map<int, short> h_liLevel;
+	tsl::robin_map<int, int> h_liLevel;
 
 	CharacterDataEx()
 	{
@@ -24,7 +24,7 @@ public:
 		m_liExpMsg = 0;
 	}
 
-	short GetCharLevel();
+	int GetCharLevel();
 
 	static CharacterDataEx* GetInstance()
 	{
@@ -51,7 +51,7 @@ auto _get_next_level_exp = (int(__cdecl*)(int level))0x00793711;
 
 LONGLONG get_next_level_exp()
 {
-	short level = CharacterDataEx::GetInstance()->GetCharLevel();
+	int level = CharacterDataEx::GetInstance()->GetCharLevel();
 	if (myArrayForCustomEXP.empty()) {
 		return _get_next_level_exp(level);
 	}
@@ -70,7 +70,7 @@ BYTE _GetCharLevel() {
 	return CUserLocal__GetCharacterLevel(CUserLocal__ms_pInstance, NULL);
 }
 
-short CharacterDataEx::GetCharLevel()
+int CharacterDataEx::GetCharLevel()
 {
 	return CharacterDataEx::GetInstance()->h_liLevel[CharacterEx::getLoginUserId()];
 }
@@ -82,7 +82,7 @@ char* __cdecl itoa_ExpSwap(int value, PCHAR buffer, int radix)
 	return buffer;
 }
 
-short __stdcall getUserlevel(int userId) {
+int __stdcall getUserlevel(int userId) {
 	return CharacterDataEx::GetInstance()->h_liLevel[userId];
 }
 
@@ -196,12 +196,12 @@ int __fastcall ExpSwap__Decode4To8(CInPacket* pThis, void* edx)
 	return liExp < INT_MAX ? (INT)liExp : INT_MAX;
 }
 
-char __fastcall LevelSwap__Decode1To2(CInPacket* pThis, void* edx, int userID)
+char __fastcall LevelSwap__Decode(CInPacket* pThis, void* edx, int userID)
 {
-	short level = 0;
+	int level = 0;
 
-	if (Client::shortLevel) {
-		level = pThis->Decode2();
+	if (Client::intLevel) {
+		level = pThis->Decode4();
 	}
 	else {
 		level = (unsigned char)pThis->Decode1();
@@ -264,8 +264,7 @@ const DWORD sub_429411 = 0x00429411;
 __declspec(naked) void drawLevelString() {
 	__asm {
 		call sub_429411
-		call  CharacterDataEx::GetCharLevel
-		movzx eax, ax
+		call CharacterDataEx::GetCharLevel
 		push eax
 		push 0x008DCE4B
 		ret
@@ -275,7 +274,7 @@ __declspec(naked) void drawLevelString() {
 __declspec(naked) void decodeChangeStatStatDecode() {
 	__asm {
 		push[esi]
-		call LevelSwap__Decode1To2
+		call LevelSwap__Decode
 		push 0x004F26FD
 		ret
 	}
@@ -284,7 +283,7 @@ __declspec(naked) void decodeChangeStatStatDecode() {
 __declspec(naked) void characterLevelStatDecode() {
 	__asm {
 		push[esi]
-		call LevelSwap__Decode1To2
+		call LevelSwap__Decode
 		push 0x004F2269
 		ret
 	}
@@ -293,7 +292,7 @@ __declspec(naked) void characterLevelStatDecode() {
 __declspec(naked) void onCharacterInfoLevelStatDecode() {
 	__asm {
 		push[ebp - 0x30]
-		call LevelSwap__Decode1To2
+		call LevelSwap__Decode
 		push 0x00A2CE3F
 		ret
 	}
@@ -302,7 +301,7 @@ __declspec(naked) void onCharacterInfoLevelStatDecode() {
 __declspec(naked) void remoteInitLevelStatDecode() {
 	__asm {
 		push[esi]
-		call LevelSwap__Decode1To2
+		call LevelSwap__Decode
 		push 0x0098CE22
 		ret
 	}
@@ -311,7 +310,6 @@ __declspec(naked) void remoteInitLevelStatDecode() {
 __declspec(naked) void onPartyCreateResultLevel() {
 	__asm {
 		call CharacterDataEx::GetCharLevel
-		movzx eax, ax
 		mov[ebx + 0x2E86], eax
 		push 0x00A485DC
 		ret
@@ -642,7 +640,7 @@ void CharacterEx::InitLevelOverride()
 
 	/* GW_CharacterStat::Decode */
 	Memory::CodeCave(characterLevelStatDecode, 0x004F2264, 5);
-	//Memory::PatchCall(0x004F2264, LevelSwap__Decode1To2);
+	//Memory::PatchCall(0x004F2264, LevelSwap__Decode);
 
 	///* CUIStat::Draw */
 	Memory::PatchCall(0x008CB2AF, ZXString_LevelString);

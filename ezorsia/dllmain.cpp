@@ -41,7 +41,7 @@ void Init()
 		Client::setAtkOutCap = reader.GetReal("optional", "setAtkOutCap", Client::setAtkOutCap);
 		Client::longEXP = reader.GetBoolean("optional", "longEXP", Client::longEXP);
 		Client::levelExpOverride = reader.GetString("optional", "levelExpOverride", Client::levelExpOverride);
-		Client::shortLevel = reader.GetBoolean("optional", "shortLevel", Client::shortLevel);
+		Client::intLevel = reader.GetBoolean("optional", "intLevel", Client::intLevel);
 		Client::useTubi = reader.GetBoolean("optional", "useTubi", Client::useTubi);
 		Client::speedMovementCap = reader.GetInteger("optional", "speedMovementCap", Client::speedMovementCap);
 		Client::jumpCap = reader.GetInteger("optional", "jumpCap", Client::jumpCap);
