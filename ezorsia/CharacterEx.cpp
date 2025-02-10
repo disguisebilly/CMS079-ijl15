@@ -200,11 +200,17 @@ char __fastcall LevelSwap__Decode(CInPacket* pThis, void* edx, int userID)
 {
 	int level = 0;
 
-	if (Client::intLevel) {
+	switch (Client::levelType)
+	{
+	case 1:
+		level = pThis->Decode2();
+		break;
+	case 2:
 		level = pThis->Decode4();
-	}
-	else {
+		break;
+	default:
 		level = (unsigned char)pThis->Decode1();
+		break;
 	}
 
 	CharacterDataEx::GetInstance()->h_liLevel[userID] = level;
