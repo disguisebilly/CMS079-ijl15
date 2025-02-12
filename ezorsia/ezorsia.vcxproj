@@ -352,7 +352,6 @@
     <ClInclude Include="PetEx.h" />
     <ClInclude Include="ReplacementFuncs.h" />
     <ClInclude Include="Memory.h" />
-    <ClInclude Include="NMCO.h" />
     <ClInclude Include="AutoTypes.h" />
     <ClInclude Include="Resman.h" />
     <ClInclude Include="resource.h" />
@@ -420,7 +419,6 @@
     <ClCompile Include="ZAllocEx.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Memory.cpp" />
-    <ClCompile Include="NMCO.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

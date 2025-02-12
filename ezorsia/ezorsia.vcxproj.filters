@@ -93,9 +93,6 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files\innerH</Filter>
     </ClInclude>
-    <ClInclude Include="NMCO.h">
-      <Filter>Header Files\innerH</Filter>
-    </ClInclude>
     <ClInclude Include="MapleClientCollectionTypes\ZRecyclable.h">
       <Filter>Header Files\MapleTypes\ZRecycleable</Filter>
     </ClInclude>
@@ -409,9 +406,6 @@
     </ClCompile>
     <ClCompile Include="ZAllocEx.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NMCO.cpp">
-      <Filter>Source Files\innerH</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files\innerH</Filter>

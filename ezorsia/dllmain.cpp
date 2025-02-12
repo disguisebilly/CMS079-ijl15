@@ -1,6 +1,5 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "stdafx.h"
-#include "NMCO.h"
 #include "ijl15.h"
 #include "INIReader.h"
 #include "ReplacementFuncs.h"
