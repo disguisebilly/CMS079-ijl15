@@ -50,7 +50,7 @@ For both methods, copy the config.ini from the project’s root directory to the
 - Support Quick Double Jump (Double-Tap Jump Key) / Upward Double Jump (Hold Up Arrow Key).
 - Support the wearing of new pet equipment (replacing the wearing verification algorithm)
 - Suppresses chatroom button pop-up, only sends data packet (can be used for unblocking).
-- Character level exceeds Int type, character experience exceeds Long type.
+- Character level exceeds type, character experience exceeds Long type.
 - Character panel width adapts (follows background image width).
 - Removes mount model restrictions: can climb ropes, double jump, and move quickly.
 - Fixes original SetEff.img effect confusion under specific conditions.
