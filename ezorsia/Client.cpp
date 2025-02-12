@@ -99,8 +99,8 @@ void Client::UpdateGameStartup() {
 	Memory::WriteInt(0x007948AF + 1, 2147483646); //CalcDamage::PDamage 999，意义不明，int 4字节
 	Memory::WriteInt(0x00796DE6 + 1, 2147483646); //CalcDamage::MDamage 999，意义不明，int 4字节
 
-	Memory::WriteDouble(0x00B064B8, setAtkOutCap);	// 输出显示上限，默认199999，double 8字节
-
+	//Memory::WriteDouble(0x00B064B8, setAtkOutCap);	// 输出显示上限，默认199999，double 8字节
+	CharacterEx::updateDamgeLimit(setAtkOutCap);
 
 	Memory::WriteInt(0x0078888E + 3, speedMovementCap); //set speed cap //ty ronan
 	Memory::WriteInt(0x008C9B1A + 1, speedMovementCap); //set speed cap //ty ronan

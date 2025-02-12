@@ -41,6 +41,7 @@ public:
 CharacterDataEx* CharacterDataEx::m_pInstance;
 int CharacterEx::m_maxHp = 0;
 int CharacterEx::m_maxMp = 0;
+double CharacterEx::m_atkOutCap = 199999;
 tsl::robin_map<int, int> CharacterEx::h_userSkin;
 
 std::vector<LONGLONG> myArrayForCustomEXP;
@@ -388,8 +389,8 @@ void __fastcall CharacterStatSkin(CInPacket* pThis, void* edx, int userId)
 	CharacterEx::h_userSkin[userId] = pThis->Decode4();
 }
 
-void updateDamgeLimit(int damgeLimit) {
-	Client::setAtkOutCap = damgeLimit;
+void CharacterEx::updateDamgeLimit(int damgeLimit) {
+	CharacterEx::m_atkOutCap = damgeLimit;
 	Memory::WriteDouble(0x00B064B8, damgeLimit);	// 输出显示上限
 	//Memory::WriteInt(0x008C8BAE + 1, damgeLimit); // 物攻面板
 	//Memory::WriteInt(0x00786A8F + 1, damgeLimit); // 魔法防御力面板
@@ -400,7 +401,7 @@ void __fastcall CharacterStatDamageLimit(CInPacket* pThis, void* edx, int userId
 {
 	int damgeLimit = pThis->Decode4();
 	if (damgeLimit > 0) {
-		updateDamgeLimit(damgeLimit);
+		CharacterEx::updateDamgeLimit(damgeLimit);
 	}
 }
 
@@ -431,7 +432,7 @@ __declspec(naked) void CharacterStat() {
 void __stdcall _exitcleart() {
 	CharacterEx::h_userSkin.clear();
 	CharacterDataEx::GetInstance()->h_liLevel.clear();
-	updateDamgeLimit(Client::setAtkOutCap);
+	CharacterEx::updateDamgeLimit(Client::setAtkOutCap);
 }
 
 _declspec(naked) void exitCleart()
