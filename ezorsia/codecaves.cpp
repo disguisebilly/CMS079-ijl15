@@ -1880,6 +1880,17 @@ __declspec(naked) void skillGuild() {
 	}
 }
 
+int nDiedDialogX = 252;
+int nDiedDialogY = 97;
+__declspec(naked) void diedDialog() {
+	__asm {
+		push nDiedDialogY
+		push nDiedDialogX
+		push 0x008A8FAE
+		ret
+	}
+}
+
 int nBarBackgrndWidth = 1008;
 int nBarBackgrndOpenWidth = 1008;
 int isInit = 1;

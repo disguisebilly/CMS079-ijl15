@@ -879,6 +879,15 @@ void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 	nSkillGuildX = nScreenWidth / 2 - 400;
 	nSkillGuildY = nScreenHeight / 2 - 300;
 	Memory::CodeCave(skillGuild, 0x008BB421, 12);
+
+	//死亡弹窗
+	nDiedDialogX = nScreenWidth / 2 - 143;
+	nDiedDialogY = nScreenHeight * 0.16;
+	Memory::CodeCave(diedDialog, 0x008A8FA7, 7);
+
+	//新手指南
+	Memory::WriteInt(0x004611CE + 1, (nScreenWidth / 2) - 210);  //190
+	Memory::WriteInt(0x004611C9 + 1, (nScreenHeight / 2) - 152);  //148
 }
 
 void Resolution::UpdateSlotPosition(int width) {

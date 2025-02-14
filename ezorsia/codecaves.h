@@ -363,6 +363,10 @@ extern int nSkillGuildX;
 extern int nSkillGuildY;
 void skillGuild();
 
+extern int nDiedDialogX;
+extern int nDiedDialogY;
+void diedDialog();
+
 extern int nBarBackgrndWidth;
 extern int nBarBackgrndOpenWidth;
 extern int isInit;
