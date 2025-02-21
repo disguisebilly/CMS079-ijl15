@@ -52,6 +52,7 @@
 - 支持内存防爆
 - 支持快捷二段跳（双击跳跃键）/向上二段跳（按住方向上键）
 - 支持新版宠物装备佩戴（替换佩戴校验算法）
+- 支持通过服务端减少装备佩戴等级（可用于修复五彩水晶等）
 - 屏蔽了聊天室按钮弹窗仅发数据包（可用作解卡）
 - 角色等级类型突破，角色经验突破为Long类型
 - 角色面板宽度自适应（跟随背景图宽度）
@@ -150,6 +151,7 @@ public static byte[] spawnPlayerMapobject(MapleCharacter chr) {
         }
         //……省略
 ```
+
 #### 心灵控制添加角色判断
 
 ```Java
@@ -164,6 +166,17 @@ if (buff.getStatus() == MonsterStatus.HYPNOTIZE) {
                     //添加结束
                     mplew.writeInt((buff.getSkill() > 0) ? buff.getSkill() : 0);
 }
+//……省略
+```
+
+#### 通过服务端减少装备佩戴等级
+
+```Java
+//……省略
+//addItemInfo内
+//plew.writeInt(equip.getViciousHammer()); 原金锤子int类型拆分为两个short
+mplew.writeShort(equip.getViciousHammer());
+mplew.writeShort(reduceLevel); //要减少的装备佩戴等级数reduceLevel
 //……省略
 ```
 

@@ -49,6 +49,7 @@ For both methods, copy the config.ini from the project’s root directory to the
 - Supports memory anti-crash.
 - Support Quick Double Jump (Double-Tap Jump Key) / Upward Double Jump (Hold Up Arrow Key).
 - Support the wearing of new pet equipment (replacing the wearing verification algorithm)
+- Support reducing equipment wearing levels through the server (can be used to repair colorful crystals, etc.)
 - Suppresses chatroom button pop-up, only sends data packet (can be used for unblocking).
 - Character level exceeds type, character experience exceeds Long type.
 - Character panel width adapts (follows background image width).
@@ -161,6 +162,17 @@ if (buff.getStatus() == MonsterStatus.HYPNOTIZE) {
                     mplew.writeInt((buff.getSkill() > 0) ? buff.getSkill() : 0);
 }
 //……omitted
+```
+
+#### Reduce equipment wearing levels through the server
+
+```Java
+//... Omit
+//AddItemInfo
+//plew.writeInt(equip.getViciousHammer());  Original gold hammer int type split into two short
+mplew.writeShort(equip.getViciousHammer());
+mplew.writeShort(reduceLevel); // Reduce the number of equipment wearing levels to be reduced
+//... Omit
 ```
 
 ## Reference Open Source Libraries
