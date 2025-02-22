@@ -94,6 +94,7 @@ void Init()
 	HookCreateWindowExA(true);
 	HeapCreateEx::HOOK_HeapCreate();
 	Hook_gethostbyname(true);
+	Hook_connect(Client::ServerIP_Address_hook);
 	TimerTask(CreateHook, 10);
 }
 

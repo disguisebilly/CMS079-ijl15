@@ -106,8 +106,8 @@ void Client::UpdateGameStartup() {
 	Memory::WriteInt(0x008C9B1A + 1, speedMovementCap); //set speed cap //ty ronan
 	Memory::WriteInt(0x00954534 + 1, speedMovementCap); //set speed cap //ty ronan
 
-	if (Client::ServerIP_Address_hook)
-		Memory::CodeCave(changerPort, 0x0075F186, 5);
+	//if (Client::ServerIP_Address_hook)
+	//	Memory::CodeCave(changerPort, 0x0075F186, 5);
 	//Memory::WriteInt(0x0075F142 + 1, serverIP_Port);
 
 	unsigned char fixed_window_crash[] = { 0xB8, 0x00, 0x00, 0x00, 0x00 };  //fix fullscreen startup crash

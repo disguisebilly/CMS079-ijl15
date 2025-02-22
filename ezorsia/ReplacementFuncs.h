@@ -34,6 +34,8 @@ bool Hook_htons(bool bEnable);
 
 bool Hook_gethostbyname(bool bEnable);
 
+bool Hook_connect(bool bEnable);
+
 struct KeyValuePair {
 	int key;
 	std::string value;

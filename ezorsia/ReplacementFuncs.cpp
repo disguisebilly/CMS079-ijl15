@@ -4,9 +4,11 @@
 #include "AutoTypes.h"
 #include "Memory.h"
 #include <WinSock2.h>
+#include <ws2tcpip.h>
 #include<iostream>
 #include<fstream>
 #include<sstream>
+#pragma comment(lib, "ws2_32.lib")
 
 //notes from my knowledge as i have not used these kinds of codes practically well
 //function replacement is when you replace the original function in the client with your own fake function, usually to add some extra functionality
@@ -123,21 +125,44 @@ bool Hook_gethostbyname(bool bEnable)
 				lock.unlock();
 				std::cout << "Injected initialized" << std::endl;
 			}
-			if (Client::ServerIP_Address_hook && strncmp(name, "mxdlogin", strlen("mxdlogin")) == 0)
-			{
-				if (strncmp(name, "mxdlogin.", strlen("mxdlogin.")) == 0) {
-					std::cout << "Hook_gethostbyname: " << name << " ignore" << std::endl;   //ingore first call
-				}
-				else {
-					const char* serverIP_Address = Client::ServerIP_AddressFromINI.c_str();
-					std::cout << "Hook_gethostbyname: " << name << " -> " << serverIP_Address << std::endl;
-					return _gethostbyname(serverIP_Address);
-				}
-			}
+			//if (Client::ServerIP_Address_hook && strncmp(name, "mxdlogin", strlen("mxdlogin")) == 0)
+			//{
+				//if (strncmp(name, "mxdlogin.", strlen("mxdlogin.")) == 0) {
+				//	std::cout << "Hook_gethostbyname: " << name << " ignore" << std::endl;   //ingore first call
+				//}
+				//else {
+			//	const char* serverIP_Address = Client::ServerIP_AddressFromINI.c_str();
+			//	std::cout << "Hook_gethostbyname: " << name << " -> " << serverIP_Address << std::endl;
+			//	return _gethostbyname(serverIP_Address);
+				//}
+			//}
 			return _gethostbyname(name);
 		};
 
 	return Memory::SetHook(bEnable, reinterpret_cast<void**>(&_gethostbyname), Hook);
+}
+
+bool Hook_connect(bool bEnable)
+{
+	static auto _connect = decltype(&connect)(GetFuncAddress("WS2_32.dll", "connect"));
+
+	decltype(&connect) Hook = [](SOCKET s, const struct sockaddr* name, int namelen) -> int
+		{
+			struct sockaddr_in* addr = (struct sockaddr_in*)name;
+			char ip_str[INET_ADDRSTRLEN];
+			if (inet_ntop(AF_INET, &(addr->sin_addr), ip_str, sizeof(ip_str)) != NULL) {
+				if (strcmp("255.255.255.255", ip_str) == 0) {
+					ULONG ipv4_bin;
+					if (inet_pton(AF_INET, Client::ServerIP_AddressFromINI.c_str(), &(ipv4_bin)) == 1) {
+						addr->sin_addr.S_un.S_addr = ipv4_bin;
+						addr->sin_port = htons(Client::serverIP_Port);
+					}
+				}
+			}
+			return _connect(s, name, namelen);
+		};
+
+	return Memory::SetHook(bEnable, reinterpret_cast<void**>(&_connect), Hook);
 }
 
 bool Hook_StringPool__GetString(bool bEnable)	//hook stringpool modification //ty !! popcorn //ty darter
