@@ -2013,8 +2013,20 @@ __declspec(naked) void skipWorldSConnectError() {
 		call sub_495C4A
 		cmp eax, 0x0
 		jne label_ret
-		call _skipWorldSConnectError
-		label_ret :
+		//call _skipWorldSConnectError
+		mov dword ptr[ebp + 0x28], 0x12
+		push eax
+		mov eax, 0x00BDD6F4
+		mov eax, [eax]
+		cmp eax, ebx
+		pop eax
+		je label_dailog
+		push 0x004948D5
+		ret
+		label_dailog :
+		push 0x004948C6
+			ret
+			label_ret :
 		push 0x004948C1
 			ret
 	}
