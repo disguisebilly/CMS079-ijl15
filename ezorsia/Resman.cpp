@@ -524,7 +524,7 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 	//}
 
 	if (pvargDest->vt == VT_EMPTY && (strT.find(L"ladder") != std::wstring::npos || strT.find(L"rope") != std::wstring::npos)) {
-		if (imgPath.find(This) != imgPath.end() && (imgPath[This]->name.find(L"TamingMob/0193") != std::wstring::npos || imgPath[This]->name.find(L"TamingMob/0198") != std::wstring::npos)) {
+		if (imgPath.find(This) != imgPath.end() && imgPath[This]->name.find(L"TamingMob/019") != std::wstring::npos) {
 			try {
 				std::wostringstream oss;
 				oss << GetImgFullPath(imgPath[This]->rootPath.c_str());
@@ -540,7 +540,7 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 
 	if (Client::tamingMob198Effect) {
 		if (pvargDest->vt == VT_EMPTY && strT.find(L"stand1") != std::wstring::npos) {
-			if (imgPath.find(This) != imgPath.end() && imgPath[This]->name.find(L"TamingMob/0198") != std::wstring::npos)
+			if (imgPath.find(This) != imgPath.end() && imgPath[This]->name.find(L"TamingMob/019") != std::wstring::npos)
 			{
 				try {
 					std::wostringstream oss;

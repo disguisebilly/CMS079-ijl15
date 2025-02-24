@@ -49,6 +49,8 @@ For both methods, copy the config.ini from the project’s root directory to the
 - Supports memory anti-crash.
 - Support Quick Double Jump (Double-Tap Jump Key) / Upward Double Jump (Hold Up Arrow Key).
 - Support the wearing of new pet equipment (replacing the wearing verification algorithm)
+- Support algorithm for replacing equipment scrolls (supports all scrolls starting with 204 and 261, pay attention to the verification of equipment type and scrolls on the server when enabling)
+- Support calling scripts for the `spec/script` node of props (with the same effect as the `reward` node using REWARD_ITEM)
 - Support reducing equipment wearing levels through the server (can be used to repair colorful crystals, etc.)
 - Suppresses chatroom button pop-up, only sends data packet (can be used for unblocking).
 - Character level exceeds type, character experience exceeds Long type.
