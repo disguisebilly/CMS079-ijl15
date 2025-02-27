@@ -521,7 +521,7 @@ void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 	Memory::WriteInt(0x009E9D8C + 1, nScreenWidth);                           //->079 009E9D8C
 	Memory::WriteInt(0x009E9F02 + 1, nScreenHeight);                          // IWzVector2D::RelMove         //->079 009E9F02
 	Memory::WriteInt(0x009FF84F + 1, floor(nScreenHeight / 2));               // MapleStoryClass               //->079 009FF84F
-	Memory::WriteInt(0x006E7F58 + 1, nScreenHeight);                          // 006E8BFF 006E9379 006EA459    /->079 006E7F58 || 006E72BD || 006E8849
+	//Memory::WriteInt(0x006E7F58 + 1, nScreenHeight);                          //豆豆屋 006E8BFF 006E9379 006EA459    /->079 006E7F58 || 006E72BD || 006E8849
 	Memory::WriteInt(0x0075930E + 1, nScreenHeight);                            //->079 0075930E
 	Memory::WriteInt(0x007591B6 + 1, nScreenHeight);                            //->079 007591B6
 	Memory::WriteInt(0x00758D04 + 1, nScreenHeight);                           //->079 00758D04
@@ -888,6 +888,11 @@ void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 	//新手指南
 	Memory::WriteInt(0x004611CE + 1, (nScreenWidth / 2) - 210);  //190
 	Memory::WriteInt(0x004611C9 + 1, (nScreenHeight / 2) - 152);  //148
+
+	//豆豆屋
+	nDoudouDialogX = nScreenWidth / 2 - 388;
+	nDoudouDialogY = nScreenHeight / 2 - 200;
+	Memory::CodeCave(doudouDialog, 0x006DED75, 6);
 }
 
 void Resolution::UpdateSlotPosition(int width) {

@@ -1891,6 +1891,18 @@ __declspec(naked) void diedDialog() {
 	}
 }
 
+int nDoudouDialogX = 12;
+int nDoudouDialogY = 100;
+__declspec(naked) void doudouDialog() {
+	__asm {
+		push nDoudouDialogY
+		push nDoudouDialogX
+		mov ecx, esi
+		push 0x006DED7B
+		ret
+	}
+}
+
 int nBarBackgrndWidth = 1008;
 int nBarBackgrndOpenWidth = 1008;
 int isInit = 1;

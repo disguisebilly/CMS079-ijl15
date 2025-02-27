@@ -367,6 +367,10 @@ extern int nDiedDialogX;
 extern int nDiedDialogY;
 void diedDialog();
 
+extern int nDoudouDialogX;
+extern int nDoudouDialogY;
+void doudouDialog();
+
 extern int nBarBackgrndWidth;
 extern int nBarBackgrndOpenWidth;
 extern int isInit;
