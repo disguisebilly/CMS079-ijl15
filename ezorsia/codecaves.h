@@ -371,6 +371,10 @@ extern int nDoudouDialogX;
 extern int nDoudouDialogY;
 void doudouDialog();
 
+extern int nCollegeDialogX;
+extern int nCollegeDialogY;
+void collegeDialog();
+
 extern int nBarBackgrndWidth;
 extern int nBarBackgrndOpenWidth;
 extern int isInit;

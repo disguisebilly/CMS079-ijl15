@@ -5,6 +5,7 @@
 #include <Resman.h>
 #include <PetEx.h>
 #include <CharacterEx.h>
+#include <chrono>
 
 int Client::DefaultResolution = 2;
 int Client::MsgAmount = 10;

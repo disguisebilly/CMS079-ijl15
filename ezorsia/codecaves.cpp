@@ -1903,6 +1903,18 @@ __declspec(naked) void doudouDialog() {
 	}
 }
 
+int nCollegeDialogX = 107;
+int nCollegeDialogY = 111;
+__declspec(naked) void collegeDialog() {
+	__asm {
+		push 0x242
+		push nCollegeDialogY
+		push nCollegeDialogX
+		push 0x008210D7
+		ret
+	}
+}
+
 int nBarBackgrndWidth = 1008;
 int nBarBackgrndOpenWidth = 1008;
 int isInit = 1;

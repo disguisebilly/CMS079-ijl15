@@ -107,10 +107,10 @@ __declspec(naked) void itoa_LevelSwap() {
 /* all arguments passed on the stack despite being a member function */
 void __cdecl FormatExpString_Hook(ZXString<char>* pThis, const char* originalstring, int curexp, int nextlevelexp)
 {
-	std::string s = std::to_string(CharacterDataEx::GetInstance()->m_liExp);
+	std::string s = "EXP : ";
+	s.append(std::to_string(CharacterDataEx::GetInstance()->m_liExp));
 	s.append(" / ");
 	s.append(std::to_string(get_next_level_exp()));
-
 	pThis->Assign(s.c_str(), s.length());
 }
 
@@ -323,6 +323,25 @@ __declspec(naked) void onPartyCreateResultLevel() {
 	}
 }
 
+__declspec(naked) void onFamilyLevelDecode() {
+	__asm {
+		push[ebx + 0xC]
+		call LevelSwap__Decode
+		push 0x00821C4D
+		ret
+	}
+}
+
+__declspec(naked) void familyLevel() {
+	__asm {
+		push [esi+0xC]
+		call getUserlevel
+		push eax
+		push 0x00822676
+		ret
+	}
+}
+
 unsigned char* __fastcall _guildName_Decode(CInPacket* pThis, void* edx, int userId, ZXString<char>* p)
 {
 	unsigned char* result = pThis->DecodeStr(p);
@@ -333,7 +352,7 @@ unsigned char* __fastcall _guildName_Decode(CInPacket* pThis, void* edx, int use
 
 	StringList res = splitstr(s, "$$");
 	if (res.size() == 2) {
-		if (res[0] == "#") {
+		if (res[0] == "#" || res[0] == "") {
 			p->Empty();
 		}
 		else {
@@ -667,6 +686,10 @@ void CharacterEx::InitLevelOverride()
 
 	//CWvsContext::OnPartyResult  create party
 	Memory::CodeCave(onPartyCreateResultLevel, 0x00A485D6, 5);
+
+	//Family  
+	Memory::CodeCave(onFamilyLevelDecode, 0x00821C48, 5);
+	Memory::CodeCave(familyLevel, 0x00822671, 5);
 }
 
 void CharacterEx::InitDamageSkinOverride(BOOL bEnable)

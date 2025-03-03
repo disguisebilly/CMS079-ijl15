@@ -103,10 +103,13 @@ StringList splitstr(const std::string& str, const std::string& pattern)
 			if (memcmp(&pattern[0], &str[i], patternLen) == 0)
 			{
 				i += patternLen - 1;
-				if (!subStr.empty())
-				{
+				//if (!subStr.empty())
+				//{
+				li.push_back(subStr);
+				subStr.clear();
+				//}
+				if (i == strLen - 1) {
 					li.push_back(subStr);
-					subStr.clear();
 				}
 			}
 			else

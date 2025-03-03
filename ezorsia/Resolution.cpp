@@ -893,6 +893,11 @@ void _UpdateResolution(int nScreenWidth, int nScreenHeight) {
 	nDoudouDialogX = nScreenWidth / 2 - 388;
 	nDoudouDialogY = nScreenHeight / 2 - 200;
 	Memory::CodeCave(doudouDialog, 0x006DED75, 6);
+
+	//ѧԺ
+	nCollegeDialogX = nScreenWidth / 2 - 289;
+	nCollegeDialogY = nScreenHeight / 2 - 193;
+	Memory::CodeCave(collegeDialog, 0x008210CE, 9);
 }
 
 void Resolution::UpdateSlotPosition(int width) {
