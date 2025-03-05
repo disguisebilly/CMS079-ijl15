@@ -42,8 +42,9 @@ For both methods, copy the config.ini from the project’s root directory to the
 - Support for Dynamic Damage Skin Loading (Display Only)
 - Supports Longslot (loads external files from [UI/QuickSlot.img](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/QuickSlot.img) or [Custom.wz](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/Custom.wz)， supports multiple key configurations)
 - Supports TamingMob starting with 198.
-- Supports new hairstyles and faces.
+- Supports high-version hairstyles and faces.
 - Support high-version weapon export for direct equipping (no need to delete extra job codes).
+- Supports the wearing and customization of weapons starting with ID 12 and 15 in higher versions (you need to modify the WZ profession to match the attack yourself, otherwise the attack will flash back or fail to attack)
 - Support partial inlink and outlink nodes (Default using the new method, set linkNodeNew=false in case of startup issues)
 - Supports effects in ItemEff.img (activatable via 0xAA packet header or ItemEffect).
 - Supports dynamic modification of damage limit (adding `DAMAGELIMIT(8388608)` enum type in `MapleStat`, reference damage skin Stat)
