@@ -125,17 +125,18 @@ bool Hook_gethostbyname(bool bEnable)
 				lock.unlock();
 				std::cout << "Injected initialized" << std::endl;
 			}
-			//if (Client::ServerIP_Address_hook && strncmp(name, "mxdlogin", strlen("mxdlogin")) == 0)
-			//{
+			if (strncmp(name, "mxdlogin", strlen("mxdlogin")) == 0)
+			{
+				return nullptr;
 				//if (strncmp(name, "mxdlogin.", strlen("mxdlogin.")) == 0) {
 				//	std::cout << "Hook_gethostbyname: " << name << " ignore" << std::endl;   //ingore first call
 				//}
 				//else {
-			//	const char* serverIP_Address = Client::ServerIP_AddressFromINI.c_str();
-			//	std::cout << "Hook_gethostbyname: " << name << " -> " << serverIP_Address << std::endl;
-			//	return _gethostbyname(serverIP_Address);
+				//	const char* serverIP_Address = Client::ServerIP_AddressFromINI.c_str();
+				//	std::cout << "Hook_gethostbyname: " << name << " -> " << serverIP_Address << std::endl;
+				//	return _gethostbyname(serverIP_Address);
 				//}
-			//}
+			}
 			return _gethostbyname(name);
 		};
 
