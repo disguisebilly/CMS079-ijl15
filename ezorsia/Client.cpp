@@ -313,8 +313,7 @@ void Client::MoreHook() {
 	}
 
 	if (Client::holdAttack) {
-		byte holdAttackBytes[] = { 0x0C ,0xEB };
-		Memory::WriteByteArray(0x0095C4F1, holdAttackBytes, sizeof(holdAttackBytes));
+		Memory::WriteByte(0x0095C4F2, 0xEB);
 	}
 
 	Memory::CodeCave(faceHairCave, 0x005FCEFF, 10);

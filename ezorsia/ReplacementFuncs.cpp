@@ -115,27 +115,29 @@ bool Hook_gethostbyname(bool bEnable)
 
 	decltype(&gethostbyname) Hook = [](const char* name) -> hostent*
 		{
-			if (!Client::canInjected) {
-				std::unique_lock<std::mutex> lock(Client::injected);
+			if ((int)_ReturnAddress() == 0x0049473F) {
 				if (!Client::canInjected) {
-					Client::canInjected = true;
-					Client::injectedCondition.notify_all();
-					Client::injectedCondition.wait(lock, [] {return Client::isInjected; });
+					std::unique_lock<std::mutex> lock(Client::injected);
+					if (!Client::canInjected) {
+						Client::canInjected = true;
+						Client::injectedCondition.notify_all();
+						Client::injectedCondition.wait(lock, [] {return Client::isInjected; });
+					}
+					lock.unlock();
+					std::cout << "Injected initialized" << std::endl;
 				}
-				lock.unlock();
-				std::cout << "Injected initialized" << std::endl;
-			}
-			if (strncmp(name, "mxdlogin", strlen("mxdlogin")) == 0)
-			{
-				return nullptr;
-				//if (strncmp(name, "mxdlogin.", strlen("mxdlogin.")) == 0) {
-				//	std::cout << "Hook_gethostbyname: " << name << " ignore" << std::endl;   //ingore first call
-				//}
-				//else {
-				//	const char* serverIP_Address = Client::ServerIP_AddressFromINI.c_str();
-				//	std::cout << "Hook_gethostbyname: " << name << " -> " << serverIP_Address << std::endl;
-				//	return _gethostbyname(serverIP_Address);
-				//}
+				if (strncmp(name, "mxdlogin", strlen("mxdlogin")) == 0)
+				{
+					return nullptr;
+					//if (strncmp(name, "mxdlogin.", strlen("mxdlogin.")) == 0) {
+					//	std::cout << "Hook_gethostbyname: " << name << " ignore" << std::endl;   //ingore first call
+					//}
+					//else {
+					//	const char* serverIP_Address = Client::ServerIP_AddressFromINI.c_str();
+					//	std::cout << "Hook_gethostbyname: " << name << " -> " << serverIP_Address << std::endl;
+					//	return _gethostbyname(serverIP_Address);
+					//}
+				}
 			}
 			return _gethostbyname(name);
 		};
