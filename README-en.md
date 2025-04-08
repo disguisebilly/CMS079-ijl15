@@ -41,6 +41,7 @@ For both methods, copy the config.ini from the project’s root directory to the
 - Supports display of damage skin and damage skin units(loads external files from [Effect/DamageSkin.img](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/DamageSkin.img) or [Custom.wz](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/Custom.wz)
 - Support for Dynamic Damage Skin Loading (Display Only)
 - Supports Longslot (loads external files from [UI/QuickSlot.img](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/QuickSlot.img) or [Custom.wz](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/Custom.wz)， supports multiple key configurations)
+- Supports buff duration display
 - Supports TamingMob starting with 198.
 - Supports high-version hairstyles and faces.
 - Support high-version weapon export for direct equipping (no need to delete extra job codes).
