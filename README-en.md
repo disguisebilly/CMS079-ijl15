@@ -47,7 +47,7 @@ For both methods, copy the config.ini from the project’s root directory to the
 - Support high-version weapon export for direct equipping (no need to delete extra job codes).
 - Supports the wearing and customization of weapons starting with ID 12 and 15 in higher versions (you need to modify the WZ profession to match the attack yourself, otherwise the attack will flash back or fail to attack)
 - Support partial inlink and outlink nodes (Default using the new method, set linkNodeNew=false in case of startup issues)
-- Supports effects in ItemEff.img (activatable via 0xAA packet header or ItemEffect).
+- Supports effects in ItemEff.img.
 - Supports dynamic modification of damage limit (adding `DAMAGELIMIT(8388608)` enum type in `MapleStat`, reference damage skin Stat)
 - Supports memory anti-crash.
 - Support Quick Double Jump (Double-Tap Jump Key) / Upward Double Jump (Hold Up Arrow Key).
