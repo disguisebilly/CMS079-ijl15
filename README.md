@@ -7,6 +7,9 @@
 	简体中文
 	</a>
 </p>
+<p align="center">
+  <img src="./screenshot/screenshot1.png">
+</p>
 
 ⚠️ 仅供学习交流使用，未经允许禁止用于商业用途
 ====
