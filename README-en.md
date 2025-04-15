@@ -8,7 +8,8 @@
 	</a>
 </p>
 <p align="center">
-  <img src="./screenshot/screenshot1.png">
+  <img src="./screenshot/screenshot2.gif" width="250">
+  <img src="./screenshot/screenshot1.png" width="265">
 </p>
 
 ijl15 for CMS-079
@@ -43,21 +44,22 @@ For both methods, copy the config.ini from the project’s root directory to the
 - Supports display of damage skin and damage skin units(loads external files from [Effect/DamageSkin.img](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/DamageSkin.img) or [Custom.wz](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/Custom.wz)
 - Support for Dynamic Damage Skin Loading (Display Only)
 - Supports Longslot (loads external files from [UI/QuickSlot.img](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/QuickSlot.img) or [Custom.wz](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/Custom.wz)， supports multiple key configurations)
-- Supports buff duration display
-- Support double-click teleportation on the world map
+- Supports buff duration display.
+- Support double-click teleportation on the world map.
 - Supports TamingMob starting with 198.
 - Supports high-version hairstyles and faces.
 - Support high-version weapon export for direct equipping (no need to delete extra job codes).
-- Supports the wearing and customization of weapons starting with ID 12 and 15 in higher versions (you need to modify the WZ profession to match the attack yourself, otherwise the attack will flash back or fail to attack)
-- Support partial inlink and outlink nodes (Default using the new method, set linkNodeNew=false in case of startup issues)
-- Supports effects in ItemEff.img.
-- Supports dynamic modification of damage limit (adding `DAMAGELIMIT(8388608)` enum type in `MapleStat`, reference damage skin Stat)
+- Supports the wearing and customization of weapons starting with ID 12 and 15 in higher versions (you need to modify the WZ profession to match the attack yourself, otherwise the attack will flash back or fail to attack).
+- Support partial inlink and outlink nodes (Default using the new method, set linkNodeNew=false in case of startup issues).
+- Supports effects in ItemEff.img(new version has been changed to activate equipment at specific type).
+- Support Cape/Ring/Medal Effect.
+- Supports dynamic modification of damage limit (adding `DAMAGELIMIT(8388608)` enum type in `MapleStat`, reference damage skin Stat).
 - Supports memory anti-crash.
 - Support Quick Double Jump (Double-Tap Jump Key) / Upward Double Jump (Hold Up Arrow Key).
-- Support the wearing of new pet equipment (replacing the wearing verification algorithm)
-- Support algorithm for replacing equipment scrolls (supports all scrolls starting with 204 and 261, pay attention to the verification of equipment type and scrolls on the server when enabling)
-- Support calling scripts for the `spec/script` node of props (with the same effect as the `reward` node using REWARD_ITEM)
-- Support reducing equipment wearing levels through the server (can be used to repair colorful crystals, etc.)
+- Support the wearing of new pet equipment (replacing the wearing verification algorithm).
+- Support algorithm for replacing equipment scrolls (supports all scrolls starting with 204 and 261, pay attention to the verification of equipment type and scrolls on the server when enabling).
+- Support calling scripts for the `spec/script` node of props (with the same effect as the `reward` node using REWARD_ITEM).
+- Support reducing equipment wearing levels through the server (can be used to repair colorful crystals, etc.).
 - Suppresses chatroom button pop-up, only sends data packet (can be used for unblocking).
 - Character level exceeds type, character experience exceeds Long type.
 - Character panel width adapts (follows background image width).

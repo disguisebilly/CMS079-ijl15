@@ -8,7 +8,8 @@
 	</a>
 </p>
 <p align="center">
-  <img src="./screenshot/screenshot1.png">
+  <img src="./screenshot/screenshot2.gif" width="250">
+  <img src="./screenshot/screenshot1.png" width="265">
 </p>
 
 ⚠️ 仅供学习交流使用，未经允许禁止用于商业用途
@@ -54,7 +55,8 @@
 - 支持高版本武器导出直接佩戴(无需删除多余职业代码)
 - 支持高版本12跟15开头的武器佩戴与定制(需要自行修改WZ匹配职业攻击,否则会攻击闪退或无法攻击)
 - 支持部分inlink和outlink节点(默认使用新方法，如遇启动问题设置linkNodeNew=false)
-- 支持ItemEff.img里头的特效
+- 支持ItemEff.img里头的特效(新版已改为特定位置装备激活)
+- 支持披风/戒指/勋章特效
 - 支持伤害上限破功值动态修改(通过在`MapleStat`新增`DAMAGELIMIT(8388608)`枚举值,参考伤害皮肤状态实现)
 - 支持内存防爆(搭配4G客户端效果更佳[MapleStory4G.exe](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/MapleStory4G.exe))
 - 支持快捷二段跳（双击跳跃键）/向上二段跳（按住方向上键）
