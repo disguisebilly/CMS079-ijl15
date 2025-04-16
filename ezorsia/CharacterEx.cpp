@@ -701,7 +701,6 @@ void CharacterEx::InitDamageSkinOverride(BOOL bEnable)
 	Memory::CodeCave(GuildNameDecode2, 0x009912E7, 5);
 	Memory::WriteByte(0x00437D44 + 1, 0x60);  // 0x39->0x60  57 -> 96  expand display range
 	Memory::WriteByte(0x0043803A + 1, 0x60);
-	Memory::WriteByte(0x006978DD + 2, 0xCA);  //0xF1
 	Memory::WriteByte(0x006978E8 + 1, 0xCA);
 	Memory::WriteByte(0x00437F04 + 1, 0x27);  //0x00
 }
