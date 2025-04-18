@@ -318,7 +318,7 @@ void Client::MoreHook() {
 
 	Memory::CodeCave(faceHairCave, 0x005FCEFF, 10);
 	Memory::CodeCave(faceHairNpcCave, 0x009B7E99, 18);
-	Memory::CodeCave(canSendPkgTimeCave, 0x00485169, 10);
+	//Memory::CodeCave(canSendPkgTimeCave, 0x00485169, 10);
 
 	// Worldmap Center on open codecave
 	Memory::CodeCave(CodeCave_CWorldMapDlg__OnCreate, 0x009F51ED, 13);
