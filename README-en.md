@@ -193,6 +193,8 @@ https://github.com/Chronicle20/gms-83-dll
 
 https://github.com/v3921358/MapleRoot
 
+https://github.com/iw2d/kinoko_client
+
 ## Friendly Links
 
 UU Downloader：https://github.com/uuuu233/downloader
