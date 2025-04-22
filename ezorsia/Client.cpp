@@ -123,8 +123,9 @@ void Client::UpdateGameStartup() {
 	if (SkipWorldSelect) {
 		Memory::CodeCave(skipWorldSConnectError, 0x004948BC, 5);
 	}
-	if (RemoveLoginNxIdDialog) {
-		Memory::FillBytes(0x0062C650, 0x90, 5);	//ÆÁ±ÎµÇÂ¼À¶É«µ¯´°
+	if (RemoveLoginNxIdDialog) {	//ÆÁ±ÎµÇÂ¼À¶É«µ¯´°
+		Memory::WriteByte(0x0062C5FA, 0xEB);
+		//Memory::FillBytes(0x0062C650, 0x90, 5);
 	}
 	Memory::FillBytes(0x009FB8AD, 0x90, 5);     //ÒÆ³ýÆô¶¯¹ã¸æ(remove start ads )
 	Memory::WriteByte(0x009FC0CB, 0xEB);	//jz 009FC13A ; jmp ÒÆ³ýÍË³ö¹ã¸æ(remove exit ads)
